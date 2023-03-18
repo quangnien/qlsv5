@@ -1,10 +1,10 @@
 package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
-import com.qlsv5.dto.KhoaDto;
-import com.qlsv5.entity.KhoaEntity;
-import com.qlsv5.service.KhoaService;
-import com.qlsv5.validation.ValidatorKhoa;
+import com.qlsv5.dto.LopDto;
+import com.qlsv5.entity.LopEntity;
+import com.qlsv5.service.LopService;
+import com.qlsv5.validation.ValidatorLop;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,19 +22,19 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/admin")
-//@Api(value = "KhoaApi", description = "REST API for Khoa", tags = { "KhoaApi" })
+//@Api(value = "LopApi", description = "REST API for Lop", tags = { "LopApi" })
 public class LopApi {
     @Autowired
-    private KhoaService khoaService;
+    private LopService lopService;
 
     @Autowired
-    private ValidatorKhoa validatorKhoa;
+    private ValidatorLop validatorLop;
 
     /* CREATE */
-//    @ApiOperation(value = "Add Khoa.")
-    @PostMapping("/khoa")
+//    @ApiOperation(value = "Add Lop.")
+    @PostMapping("/lop")
 //    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> createKhoa(@Valid @RequestBody KhoaDto khoa, BindingResult bindingResult) {
+    public ResponseEntity<?> createLop(@Valid @RequestBody LopDto lop, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
 
@@ -44,14 +44,14 @@ public class LopApi {
             return ResponseEntity.ok(returnObject);
         }
         try {
-            log.info("Add Khoa!");
+            log.info("Add Lop!");
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            validatorKhoa.validateAddKhoa(khoa);
-            khoaService.addKhoa(khoa);
-            returnObject.setRetObj(khoa);
+            validatorLop.validateAddLop(lop);
+            lopService.addLop(lop);
+            returnObject.setRetObj(lop);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
@@ -62,8 +62,8 @@ public class LopApi {
     }
 
     /* UPDATE */
-    @PutMapping("/khoa")
-    public ResponseEntity<?> updateKhoa(@Valid @RequestBody KhoaDto khoa, BindingResult bindingResult) {
+    @PutMapping("/lop")
+    public ResponseEntity<?> updateLop(@Valid @RequestBody LopDto lop, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
         if (bindingResult.hasErrors()) {
@@ -72,15 +72,15 @@ public class LopApi {
             return ResponseEntity.ok(returnObject);
         }
         try {
-            log.info("Update Khoa!");
+            log.info("Update Lop!");
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            validatorKhoa.validateEditKhoa(khoa);
-            khoaService.updateKhoa(khoa);
+            validatorLop.validateEditLop(lop);
+            lopService.updateLop(lop);
 
-            returnObject.setRetObj(khoa);
+            returnObject.setRetObj(lop);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
@@ -91,17 +91,17 @@ public class LopApi {
     }
 
     /* DELETE */
-    @DeleteMapping("/khoa")
-    public ResponseEntity<?> deleteKhoa(@Valid @RequestBody List<String> lstKhoaId) {
+    @DeleteMapping("/lop")
+    public ResponseEntity<?> deleteLop(@Valid @RequestBody List<String> lstLopId) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
-            log.info("Delete List Khoa!");
+            log.info("Delete List Lop!");
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            List<String> deleteSuccess = khoaService.deleteLstKhoa(lstKhoaId);
+            List<String> deleteSuccess = lopService.deleteLstLop(lstLopId);
             returnObject.setRetObj(deleteSuccess);
         }
         catch (Exception ex){
@@ -113,18 +113,18 @@ public class LopApi {
     }
 
     /* GET ALL */
-    @GetMapping("/khoa")
-    public ResponseEntity<?> getAllKhoa() {
+    @GetMapping("/lop")
+    public ResponseEntity<?> getAllLop() {
 
         ReturnObject returnObject = new ReturnObject();
         try {
-            log.info("Get All Khoa!");
+            log.info("Get All Lop!");
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            List<KhoaEntity> listKhoa = khoaService.findAllKhoa();
-            returnObject.setRetObj(listKhoa);
+            List<LopEntity> listLop = lopService.findAllLop();
+            returnObject.setRetObj(listLop);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
@@ -135,19 +135,19 @@ public class LopApi {
     }
 
     /* GET BY ID */
-    @GetMapping("/khoa/{khoaId}")
-    public ResponseEntity<?> getKhoaById(@PathVariable String khoaId) {
+    @GetMapping("/lop/{lopId}")
+    public ResponseEntity<?> getLopById(@PathVariable String lopId) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
-            log.info("Get Khoa By Id!");
+            log.info("Get Lop By Id!");
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            validatorKhoa.validateGetKhoaById(khoaId);
-            KhoaEntity khoaEntity = khoaService.getKhoaById(khoaId);
-            returnObject.setRetObj(khoaEntity);
+            validatorLop.validateGetLopById(lopId);
+            LopEntity lopEntity = lopService.getLopById(lopId);
+            returnObject.setRetObj(lopEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

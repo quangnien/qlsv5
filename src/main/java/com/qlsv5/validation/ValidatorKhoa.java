@@ -56,6 +56,10 @@ public class ValidatorKhoa implements Validator {
     public void validateEditKhoa(Object target) throws BusinessException {
         KhoaDto khoaDto = (KhoaDto) target;
 
+        if(khoaDto.getId() == null){
+            throw new BusinessException(MasterDataExceptionConstant.E_KHOA_NOT_FOUND_KHOA);
+        }
+
         Optional<KhoaEntity> khoaEntity = khoaRepository.findById(khoaDto.getId());
 
         if (khoaEntity.isPresent() == false) {

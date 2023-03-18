@@ -14,6 +14,9 @@ public class MasterDataExceptionConstant {
     public static final String E_KHOA_NOT_FOUND_KHOA = "Khoa does not exist!";
     public static final String E_KHOA_DUPLICATE_MA_KHOA = "Ma khoa exists, please input another one!";
 
+    /* Lop */
+    public static final String E_LOP_NOT_FOUND_LOP = "Lop does not exist!";
+    public static final String E_LOP_DUPLICATE_MA_LOP = "Ma lop exists, please input another one!";
 
 
 }

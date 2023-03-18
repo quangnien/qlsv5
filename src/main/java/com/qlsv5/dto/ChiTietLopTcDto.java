@@ -24,9 +24,11 @@ public class ChiTietLopTcDto {
 
 	@NotBlank(message = "Vui Lòng Nhập Phòng")
 	@Length(min = 2 , message = "Phòng chỉ chứa ít nhất 2 ký tự!")
-	private String Phong;
+	private String phong;
 
 	/* FOREIGN KEY */
+	@NotBlank(message = "Vui Lòng Nhập Mã Lớp Tín Chỉ")
+	@Length(min = 4 , message = "Mã lớp tín chỉ chứa ít nhất 4 ký tự!")
 	private String maLopTc;
 	
 }

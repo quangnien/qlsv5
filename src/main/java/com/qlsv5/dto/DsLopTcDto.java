@@ -32,7 +32,15 @@ public class DsLopTcDto {
 	private Date timeKt;
 
 	/* FOREIGN KEY */
+	@NotBlank(message = "Vui Lòng Nhập Mã Môn Học")
+	@Length(min = 4 , message = "Mã môn học chỉ chứa ít nhất 4 ký tự!")
 	private String maMh;
+
+	@NotBlank(message = "Vui Lòng Nhập Mã Giáo Viên")
+	@Length(min = 4 , message = "Mã giáo viên chỉ chứa ít nhất 4 ký tự!")
 	private String maGv;
+
+	@NotBlank(message = "Vui Lòng Nhập Mã Lớp")
+	@Length(min = 4 , message = "Mã lớp chứa ít nhất 4 ký tự!")
 	private String maLop;
 }

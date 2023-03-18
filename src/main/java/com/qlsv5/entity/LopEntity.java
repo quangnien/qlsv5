@@ -29,6 +29,8 @@ public class LopEntity {
 	private String tenLop;
 
 	/* FOREIGN KEY */
-	private String makhoa;
+	@NotBlank(message = "Vui Lòng Nhập Mã Khoa")
+	@Length(min = 4 , message = "Mã khoa chứa ít nhất 4 ký tự!")
+	private String maKhoa;
 
 }
