@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface KhoaService {
 
-    public KhoaEntity addKhoa(KhoaDto khoa);
-    public KhoaEntity updateKhoa(KhoaDto khoa);
+//    public KhoaEntity addKhoa(KhoaDto khoa);
+//    public KhoaEntity updateKhoa(KhoaDto khoa);
     public List<String> deleteLstKhoa(List<String> lstKhoaId);
 
     public List<KhoaEntity> findAllKhoa();

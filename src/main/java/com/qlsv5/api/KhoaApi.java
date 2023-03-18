@@ -3,6 +3,7 @@ package com.qlsv5.api;
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.KhoaDto;
 import com.qlsv5.entity.KhoaEntity;
+import com.qlsv5.service.CommonService;
 import com.qlsv5.service.KhoaService;
 import com.qlsv5.validation.ValidatorKhoa;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,8 @@ import java.util.List;
 @RequestMapping("/api/admin")
 //@Api(value = "KhoaApi", description = "REST API for Khoa", tags = { "KhoaApi" })
 public class KhoaApi {
+    @Autowired
+    private CommonService commonService;
     @Autowired
     private KhoaService khoaService;
 
@@ -50,7 +53,8 @@ public class KhoaApi {
             returnObject.setMessage("200");
 
             validatorKhoa.validateAddKhoa(khoa);
-            khoaService.addKhoa(khoa);
+//            khoaService.addKhoa(khoa);
+            commonService.addObject(khoa);
             returnObject.setRetObj(khoa);
         }
         catch (Exception ex){
@@ -78,7 +82,8 @@ public class KhoaApi {
             returnObject.setMessage("200");
 
             validatorKhoa.validateEditKhoa(khoa);
-            khoaService.updateKhoa(khoa);
+//            khoaService.updateKhoa(khoa);
+            commonService.updateObject(khoa);
 
             returnObject.setRetObj(khoa);
         }

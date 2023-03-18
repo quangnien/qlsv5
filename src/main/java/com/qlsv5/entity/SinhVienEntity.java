@@ -57,6 +57,8 @@ public class SinhVienEntity {
 	private String sdt;
 	
 	/* FOREIGN KEY */
+	@NotBlank(message = "Vui Lòng Mã Lớp")
+	@Length(min = 4 , message = "Mã lớp chứa ít nhất 4 ký tự!")
 	private String maLop;
 
 }

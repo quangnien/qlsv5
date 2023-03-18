@@ -23,22 +23,21 @@ public class LopServiceImpl implements LopService {
 
     //CRUD  CREATE , READ , UPDATE , DELETE
 
-    @Override
-    public LopEntity addLop(LopDto lop) {
-        LopEntity result = new LopEntity();
-        result.setId(UUID.randomUUID().toString().split("-")[0]);
-        result.setMaLop(lop.getMaLop());
-        result.setTenLop(lop.getTenLop());
-        result.setMaKhoa(lop.getMaKhoa());
-        return repository.save(result);
-    }
+//    @Override
+//    public LopEntity addLop(LopDto lopDto) {
+//        LopEntity result = new LopEntity();
+//        ModelMapper modelMapper = new ModelMapper();
+//        result = modelMapper.map(lopDto, LopEntity.class);
+//        result.setId(UUID.randomUUID().toString().split("-")[0]);
+//        return repository.save(result);
+//    }
 
-    @Override
-    public LopEntity updateLop(LopDto lopDto) {
-        ModelMapper modelMapper = new ModelMapper();
-        LopEntity lopEntity = modelMapper.map(lopDto, LopEntity.class);
-        return repository.save(lopEntity);
-    }
+//    @Override
+//    public LopEntity updateLop(LopDto lopDto) {
+//        ModelMapper modelMapper = new ModelMapper();
+//        LopEntity lopEntity = modelMapper.map(lopDto, LopEntity.class);
+//        return repository.save(lopEntity);
+//    }
 
     @Override
     public List<String> deleteLstLop(List<String> lstLopId) {

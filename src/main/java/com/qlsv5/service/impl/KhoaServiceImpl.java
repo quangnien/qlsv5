@@ -21,23 +21,23 @@ public class KhoaServiceImpl implements KhoaService {
 
     //CRUD  CREATE , READ , UPDATE , DELETE
 
-    @Override
-    public KhoaEntity addKhoa(KhoaDto khoa) {
-        KhoaEntity result = new KhoaEntity();
-        result.setId(UUID.randomUUID().toString().split("-")[0]);
-        result.setMaKhoa(khoa.getMaKhoa());
-        result.setTenKhoa(khoa.getTenKhoa());
-        result.setSdt(khoa.getSdt());
-        result.setEmail(khoa.getEmail());
-        return repository.save(result);
-    }
-
-    @Override
-    public KhoaEntity updateKhoa(KhoaDto khoaDto) {
-        ModelMapper modelMapper = new ModelMapper();
-        KhoaEntity khoaEntity = modelMapper.map(khoaDto, KhoaEntity.class);
-        return repository.save(khoaEntity);
-    }
+//    @Override
+//    public KhoaEntity addKhoa(KhoaDto khoa) {
+//        KhoaEntity result = new KhoaEntity();
+//        result.setId(UUID.randomUUID().toString().split("-")[0]);
+//        result.setMaKhoa(khoa.getMaKhoa());
+//        result.setTenKhoa(khoa.getTenKhoa());
+//        result.setSdt(khoa.getSdt());
+//        result.setEmail(khoa.getEmail());
+//        return repository.save(result);
+//    }
+//
+//    @Override
+//    public KhoaEntity updateKhoa(KhoaDto khoaDto) {
+//        ModelMapper modelMapper = new ModelMapper();
+//        KhoaEntity khoaEntity = modelMapper.map(khoaDto, KhoaEntity.class);
+//        return repository.save(khoaEntity);
+//    }
 
     @Override
     public List<String> deleteLstKhoa(List<String> lstKhoaId) {

@@ -3,6 +3,7 @@ package com.qlsv5.api;
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.LopDto;
 import com.qlsv5.entity.LopEntity;
+import com.qlsv5.service.CommonService;
 import com.qlsv5.service.LopService;
 import com.qlsv5.validation.ValidatorLop;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,9 @@ import java.util.List;
 @RequestMapping("/api/admin")
 //@Api(value = "LopApi", description = "REST API for Lop", tags = { "LopApi" })
 public class LopApi {
+
+    @Autowired
+    private CommonService commonService;
     @Autowired
     private LopService lopService;
 
@@ -50,7 +54,8 @@ public class LopApi {
             returnObject.setMessage("200");
 
             validatorLop.validateAddLop(lop);
-            lopService.addLop(lop);
+//            lopService.addLop(lop);
+            commonService.addObject(lop);
             returnObject.setRetObj(lop);
         }
         catch (Exception ex){
@@ -78,7 +83,8 @@ public class LopApi {
             returnObject.setMessage("200");
 
             validatorLop.validateEditLop(lop);
-            lopService.updateLop(lop);
+//            lopService.updateLop(lop);
+            commonService.updateObject(lop);
 
             returnObject.setRetObj(lop);
         }
