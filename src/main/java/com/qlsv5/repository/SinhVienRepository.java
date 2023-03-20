@@ -12,9 +12,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 public interface SinhVienRepository extends MongoRepository<SinhVienEntity, String> {
-//    int countSinhVienByMaSinhVien(String maSinhVien);
-//    int countSinhVienById(String id);
-//
-//    @Query(value = "{'maSinhVien': ?0, '_id': {$ne: ?1}}", count = true)
-//    Long countSinhVienByMaSinhVienAndNotId(String maSinhVien, String id);
+    int countSinhVienByMaSv(String maSinhVien);
+    int countSinhVienById(String id);
+
+    @Query(value = "{'maSinhVien': ?0, '_id': {$ne: ?1}}", count = true)
+    Long countSinhVienByMaSvAndNotId(String maSinhVien, String id);
 }

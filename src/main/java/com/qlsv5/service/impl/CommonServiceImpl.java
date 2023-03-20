@@ -12,6 +12,7 @@ import com.qlsv5.repository.SinhVienRepository;
 import com.qlsv5.service.CommonService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,13 +22,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class CommonServiceImpl implements CommonService {
-//    @Autowired
+    @Autowired
     private LopRepository lopRepository;
 
-//    @Autowired
+    @Autowired
     private KhoaRepository khoaRepository;
 
-//    @Autowired
+    @Autowired
     private SinhVienRepository sinhVienRepository;
 
     //CRUD  CREATE , READ , UPDATE , DELETE

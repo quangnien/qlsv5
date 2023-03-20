@@ -3,6 +3,9 @@ package com.qlsv5.swagger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
@@ -22,9 +25,22 @@ import java.util.Collections;
  * @project qlsv
  */
 @Configuration
-//@EnableSwagger2
+@EnableSwagger2
+@EnableWebMvc
 //@Import(BeanValidatorPluginsConfiguration.class)
-public class SwaggerConfig {
+public class SwaggerConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/api/*").addResourceLocations("com.qlsv5.api");
+        registry
+                .addResourceHandler(    "swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry
+                .addResourceHandler("/api/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
 
     @Bean
     public Docket filterAPI() {
