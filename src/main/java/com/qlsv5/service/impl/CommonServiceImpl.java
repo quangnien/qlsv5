@@ -1,17 +1,8 @@
 package com.qlsv5.service.impl;
 
-import com.qlsv5.dto.GiangVienDto;
-import com.qlsv5.dto.KhoaDto;
-import com.qlsv5.dto.LopDto;
-import com.qlsv5.dto.SinhVienDto;
-import com.qlsv5.entity.GiangVienEntity;
-import com.qlsv5.entity.KhoaEntity;
-import com.qlsv5.entity.LopEntity;
-import com.qlsv5.entity.SinhVienEntity;
-import com.qlsv5.repository.GiangVienRepository;
-import com.qlsv5.repository.KhoaRepository;
-import com.qlsv5.repository.LopRepository;
-import com.qlsv5.repository.SinhVienRepository;
+import com.qlsv5.dto.*;
+import com.qlsv5.entity.*;
+import com.qlsv5.repository.*;
 import com.qlsv5.service.CommonService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -40,6 +31,9 @@ public class CommonServiceImpl implements CommonService {
     @Autowired
     private GiangVienRepository giangVienRepository;
 
+    @Autowired
+    private MonHocRepository monHocRepository;
+
     //CRUD  CREATE , READ , UPDATE , DELETE
 
     @Override
@@ -61,6 +55,10 @@ public class CommonServiceImpl implements CommonService {
         else if(object instanceof GiangVienDto){
             GiangVienEntity giangVienEntity = modelMapper.map(object, GiangVienEntity.class);
             return giangVienRepository.save(giangVienEntity);
+        }
+        else if(object instanceof MonHocDto){
+            MonHocEntity monHocEntity = modelMapper.map(object, MonHocEntity.class);
+            return monHocRepository.save(monHocEntity);
         }
 
         return null;
@@ -93,6 +91,12 @@ public class CommonServiceImpl implements CommonService {
             result = modelMapper.map(object, GiangVienEntity.class);
             result.setId(UUID.randomUUID().toString().split("-")[0]);
             return giangVienRepository.save(result);
+        }
+        else if(object instanceof MonHocDto){
+            MonHocEntity result = new MonHocEntity();
+            result = modelMapper.map(object, MonHocEntity.class);
+            result.setId(UUID.randomUUID().toString().split("-")[0]);
+            return monHocRepository.save(result);
         }
 
         return null;
@@ -139,6 +143,15 @@ public class CommonServiceImpl implements CommonService {
                 }
             }
         }
+        else if(object instanceof MonHocDto){
+            for (String item : lstId) {
+                int countMaMonHoc = monHocRepository.countMonHocById(item);
+                if(countMaMonHoc > 0){
+                    lstSuccess.add(item);
+                    monHocRepository.deleteById(item);
+                }
+            }
+        }
 
         return lstSuccess;
     }
@@ -157,6 +170,9 @@ public class CommonServiceImpl implements CommonService {
         else if(object instanceof GiangVienDto){
             return Collections.singletonList(giangVienRepository.findAll());
         }
+        else if(object instanceof MonHocDto){
+            return Collections.singletonList(monHocRepository.findAll());
+        }
         return null;
     }
 
@@ -173,6 +189,9 @@ public class CommonServiceImpl implements CommonService {
         }
         else if(object instanceof GiangVienDto){
             return giangVienRepository.findById(taskId).get();
+        }
+        else if(object instanceof MonHocDto){
+            return monHocRepository.findById(taskId).get();
         }
         return null;
     }
