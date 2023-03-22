@@ -1,14 +1,17 @@
 package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
+import com.qlsv5.constant.ApiPath;
 import com.qlsv5.dto.SinhVienDto;
 import com.qlsv5.entity.SinhVienEntity;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.SinhVienService;
 import com.qlsv5.validation.ValidatorSinhVien;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +26,9 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/admin")
+@SecurityRequirement(name = "basicAuth")
+@RequestMapping(value = ApiPath.API_ADMIN, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+
 public class SinhVienApi {
     @Autowired
     private CommonService commonService;
