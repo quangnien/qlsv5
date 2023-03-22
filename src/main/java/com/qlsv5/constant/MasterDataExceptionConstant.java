@@ -22,5 +22,9 @@ public class MasterDataExceptionConstant {
     public static final String E_SINHVIEN_NOT_FOUND_SINHVIEN = "Sinh vien does not exist!";
     public static final String E_SINHVIEN_DUPLICATE_MA_SINHVIEN = "Ma sinh vien exists, please input another one!";
 
+    /* Giang Vien */
+    public static final String E_GIANGVIEN_NOT_FOUND_GIANGVIEN = "Giang vien does not exist!";
+    public static final String E_GIANGVIEN_DUPLICATE_MA_GIANGVIEN = "Ma giang vien exists, please input another one!";
+
 
 }

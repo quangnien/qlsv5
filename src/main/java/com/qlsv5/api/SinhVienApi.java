@@ -52,7 +52,6 @@ public class SinhVienApi {
             returnObject.setMessage("200");
 
             validatorSinhVien.validateAddSinhVien(sinhVien);
-//            sinhVienService.addSinhVien(sinhVien);
             commonService.addObject(sinhVien);
             returnObject.setRetObj(sinhVien);
         }
@@ -82,7 +81,6 @@ public class SinhVienApi {
             returnObject.setMessage("200");
 
             validatorSinhVien.validateEditSinhVien(sinhVien);
-//            sinhVienService.updateSinhVien(sinhVien);
             commonService.updateObject(sinhVien);
 
             returnObject.setRetObj(sinhVien);
@@ -107,7 +105,8 @@ public class SinhVienApi {
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            List<String> deleteSuccess = sinhVienService.deleteLstSinhVien(lstSinhVienId);
+//            List<String> deleteSuccess = sinhVienService.deleteLstSinhVien(lstSinhVienId);
+            List<String> deleteSuccess = commonService.deleteLstObject(lstSinhVienId, new SinhVienDto());
             returnObject.setRetObj(deleteSuccess);
         }
         catch (Exception ex){
@@ -130,7 +129,8 @@ public class SinhVienApi {
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            List<SinhVienEntity> listSinhVien = sinhVienService.findAllSinhVien();
+//            List<SinhVienEntity> listSinhVien = sinhVienService.findAllSinhVien();
+            List<Object> listSinhVien = commonService.findAllObject(new SinhVienDto());
             returnObject.setRetObj(listSinhVien);
         }
         catch (Exception ex){
@@ -154,7 +154,8 @@ public class SinhVienApi {
             returnObject.setMessage("200");
 
             validatorSinhVien.validateGetSinhVienById(sinhVienId);
-            SinhVienEntity sinhVienEntity = sinhVienService.getSinhVienById(sinhVienId);
+//            SinhVienEntity sinhVienEntity = sinhVienService.getSinhVienById(sinhVienId);
+            SinhVienEntity sinhVienEntity = (SinhVienEntity) commonService.getObjectById(sinhVienId, new SinhVienDto());
             returnObject.setRetObj(sinhVienEntity);
         }
         catch (Exception ex){

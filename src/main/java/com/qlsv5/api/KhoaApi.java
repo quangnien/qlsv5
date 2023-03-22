@@ -108,7 +108,8 @@ public class KhoaApi {
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            List<String> deleteSuccess = khoaService.deleteLstKhoa(lstKhoaId);
+//            List<String> deleteSuccess = khoaService.deleteLstKhoa(lstKhoaId);
+            List<String> deleteSuccess = commonService.deleteLstObject(lstKhoaId, new KhoaDto());
             returnObject.setRetObj(deleteSuccess);
         }
         catch (Exception ex){
@@ -131,7 +132,8 @@ public class KhoaApi {
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            List<KhoaEntity> listKhoa = khoaService.findAllKhoa();
+//            List<KhoaEntity> listKhoa = khoaService.findAllKhoa();
+            List<Object> listKhoa = commonService.findAllObject( new KhoaDto());
             returnObject.setRetObj(listKhoa);
         }
         catch (Exception ex){
@@ -155,7 +157,8 @@ public class KhoaApi {
             returnObject.setMessage("200");
 
             validatorKhoa.validateGetKhoaById(khoaId);
-            KhoaEntity khoaEntity = khoaService.getKhoaById(khoaId);
+//            KhoaEntity khoaEntity = khoaService.getKhoaById(khoaId);
+            KhoaEntity khoaEntity = (KhoaEntity) commonService.getObjectById(khoaId, new KhoaDto());
             returnObject.setRetObj(khoaEntity);
         }
         catch (Exception ex){

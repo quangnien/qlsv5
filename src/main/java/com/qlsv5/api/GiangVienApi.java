@@ -1,12 +1,11 @@
 package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
-import com.qlsv5.dto.KhoaDto;
-import com.qlsv5.dto.LopDto;
-import com.qlsv5.entity.LopEntity;
+import com.qlsv5.dto.GiangVienDto;
+import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.service.CommonService;
-import com.qlsv5.service.LopService;
-import com.qlsv5.validation.ValidatorLop;
+import com.qlsv5.service.GiangVienService;
+import com.qlsv5.validation.ValidatorGiangVien;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,27 +18,25 @@ import java.util.List;
 
 /**
  * @author NienNQ
- * @created 2023 - 03 - 18 6:20 AM
+ * @created 2023 - 03 - 05 6:20 AM
  * @project qlsv
  */
 @Slf4j
 @RestController
 @RequestMapping("/api/admin")
-//@Api(value = "LopApi", description = "REST API for Lop", tags = { "LopApi" })
-public class LopApi {
-
+public class GiangVienApi {
     @Autowired
     private CommonService commonService;
     @Autowired
-    private LopService lopService;
+    private GiangVienService giangVienService;
 
     @Autowired
-    private ValidatorLop validatorLop;
+    private ValidatorGiangVien validatorGiangVien;
 
     /* CREATE */
-    @Operation(summary = "Create Lop.")
-    @PostMapping("/lop")
-    public ResponseEntity<?> createLop(@Valid @RequestBody LopDto lop, BindingResult bindingResult) {
+    @Operation(summary = "Create Giang Vien.")
+    @PostMapping("/giangVien")
+    public ResponseEntity<?> createGiangVien(@Valid @RequestBody GiangVienDto giangVien, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
 
@@ -49,15 +46,14 @@ public class LopApi {
             return ResponseEntity.ok(returnObject);
         }
         try {
-            log.info("Add Lop!");
+            log.info("Add GiangVien!");
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            validatorLop.validateAddLop(lop);
-//            lopService.addLop(lop);
-            commonService.addObject(lop);
-            returnObject.setRetObj(lop);
+            validatorGiangVien.validateAddGiangVien(giangVien);
+            commonService.addObject(giangVien);
+            returnObject.setRetObj(giangVien);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
@@ -68,9 +64,9 @@ public class LopApi {
     }
 
     /* UPDATE */
-    @PutMapping("/lop")
-    @Operation(summary = "Update Lop.")
-    public ResponseEntity<?> updateLop(@Valid @RequestBody LopDto lop, BindingResult bindingResult) {
+    @Operation(summary = "Update Giang Vien.")
+    @PutMapping("/giangVien")
+    public ResponseEntity<?> updateGiangVien(@Valid @RequestBody GiangVienDto giangVien, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
         if (bindingResult.hasErrors()) {
@@ -79,16 +75,15 @@ public class LopApi {
             return ResponseEntity.ok(returnObject);
         }
         try {
-            log.info("Update Lop!");
+            log.info("Update GiangVien!");
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            validatorLop.validateEditLop(lop);
-//            lopService.updateLop(lop);
-            commonService.updateObject(lop);
+            validatorGiangVien.validateEditGiangVien(giangVien);
+            commonService.updateObject(giangVien);
 
-            returnObject.setRetObj(lop);
+            returnObject.setRetObj(giangVien);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
@@ -99,20 +94,19 @@ public class LopApi {
     }
 
     /* DELETE */
-    @DeleteMapping("/lop")
-    @Operation(summary = "Delete Lop by list id")
-    public ResponseEntity<?> deleteLop(@Valid @RequestBody List<String> lstLopId) {
+    @Operation(summary = "Delete Giang Vien by list id")
+    @DeleteMapping("/giangVien")
+    public ResponseEntity<?> deleteGiangVien(@Valid @RequestBody List<String> lstGiangVienId) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
-            log.info("Delete List Lop!");
+            log.info("Delete List GiangVien!");
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-
-//            List<String> deleteSuccess = lopService.deleteLstLop(lstLopId);
-            List<String> deleteSuccess = commonService.deleteLstObject(lstLopId, new LopDto());
+//            List<String> deleteSuccess = giangVienService.deleteLstGiangVien(lstGiangVienId);
+            List<String> deleteSuccess = commonService.deleteLstObject(lstGiangVienId, new GiangVienDto());
             returnObject.setRetObj(deleteSuccess);
         }
         catch (Exception ex){
@@ -124,20 +118,20 @@ public class LopApi {
     }
 
     /* GET ALL */
-    @Operation(summary = "Get all Lop.")
-    @GetMapping("/lop")
-    public ResponseEntity<?> getAllLop() {
+    @Operation(summary = "Get all Giang Vien.")
+    @GetMapping("/giangVien")
+    public ResponseEntity<?> getAllGiangVien() {
 
         ReturnObject returnObject = new ReturnObject();
         try {
-            log.info("Get All Lop!");
+            log.info("Get All GiangVien!");
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-//            List<LopEntity> listLop = lopService.findAllLop();
-            List<Object> listLop = commonService.findAllObject(new LopDto());
-            returnObject.setRetObj(listLop);
+//            List<GiangVienEntity> listGiangVien = giangVienService.findAllGiangVien();
+            List<Object> listGiangVien = commonService.findAllObject(new GiangVienDto());
+            returnObject.setRetObj(listGiangVien);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
@@ -148,21 +142,21 @@ public class LopApi {
     }
 
     /* GET BY ID */
-    @Operation(summary = "Get Lop by id.")
-    @GetMapping("/lop/{lopId}")
-    public ResponseEntity<?> getLopById(@PathVariable String lopId) {
+    @Operation(summary = "Get Giang Vien by id.")
+    @GetMapping("/giangVien/{giangVienId}")
+    public ResponseEntity<?> getGiangVienById(@PathVariable String giangVienId) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
-            log.info("Get Lop By Id!");
+            log.info("Get GiangVien By Id!");
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            validatorLop.validateGetLopById(lopId);
-//            LopEntity lopEntity = lopService.getLopById(lopId);
-            LopEntity lopEntity = (LopEntity) commonService.getObjectById(lopId, new LopDto());
-            returnObject.setRetObj(lopEntity);
+            validatorGiangVien.validateGetGiangVienById(giangVienId);
+//            GiangVienEntity giangVienEntity = giangVienService.getGiangVienById(giangVienId);
+            GiangVienEntity giangVienEntity = (GiangVienEntity) commonService.getObjectById(giangVienId, new GiangVienDto());
+            returnObject.setRetObj(giangVienEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
