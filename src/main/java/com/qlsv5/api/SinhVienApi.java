@@ -6,6 +6,7 @@ import com.qlsv5.entity.SinhVienEntity;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.SinhVienService;
 import com.qlsv5.validation.ValidatorSinhVien;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,6 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/admin")
-//@Api(value = "SinhVienApi", description = "REST API for SinhVien", tags = { "SinhVienApi" })
 public class SinhVienApi {
     @Autowired
     private CommonService commonService;
@@ -34,9 +34,8 @@ public class SinhVienApi {
     private ValidatorSinhVien validatorSinhVien;
 
     /* CREATE */
-//    @ApiOperation(value = "Add SinhVien.")
+    @Operation(summary = "Create Sinh Vien.")
     @PostMapping("/sinhVien")
-//    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createSinhVien(@Valid @RequestBody SinhVienDto sinhVien, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -66,6 +65,7 @@ public class SinhVienApi {
     }
 
     /* UPDATE */
+    @Operation(summary = "Update Sinh Vien.")
     @PutMapping("/sinhVien")
     public ResponseEntity<?> updateSinhVien(@Valid @RequestBody SinhVienDto sinhVien, BindingResult bindingResult) {
 
@@ -96,6 +96,7 @@ public class SinhVienApi {
     }
 
     /* DELETE */
+    @Operation(summary = "Delete Sinh Vien by list id")
     @DeleteMapping("/sinhVien")
     public ResponseEntity<?> deleteSinhVien(@Valid @RequestBody List<String> lstSinhVienId) {
 
@@ -118,6 +119,7 @@ public class SinhVienApi {
     }
 
     /* GET ALL */
+    @Operation(summary = "Get all Sinh Vien.")
     @GetMapping("/sinhVien")
     public ResponseEntity<?> getAllSinhVien() {
 
@@ -140,6 +142,7 @@ public class SinhVienApi {
     }
 
     /* GET BY ID */
+    @Operation(summary = "Get Sinh Vien by id.")
     @GetMapping("/sinhVien/{sinhVienId}")
     public ResponseEntity<?> getSinhVienById(@PathVariable String sinhVienId) {
 

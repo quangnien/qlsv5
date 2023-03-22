@@ -6,6 +6,7 @@ import com.qlsv5.entity.KhoaEntity;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.KhoaService;
 import com.qlsv5.validation.ValidatorKhoa;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +35,8 @@ public class KhoaApi {
     private ValidatorKhoa validatorKhoa;
 
     /* CREATE */
-//    @ApiOperation(value = "Add Khoa.")
+    @Operation(summary = "Create Khoa.")
     @PostMapping("/khoa")
-//    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createKhoa(@Valid @RequestBody KhoaDto khoa, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -66,6 +66,7 @@ public class KhoaApi {
     }
 
     /* UPDATE */
+    @Operation(summary = "Update Khoa.")
     @PutMapping("/khoa")
     public ResponseEntity<?> updateKhoa(@Valid @RequestBody KhoaDto khoa, BindingResult bindingResult) {
 
@@ -96,6 +97,7 @@ public class KhoaApi {
     }
 
     /* DELETE */
+    @Operation(summary = "Delete Khoa by list id")
     @DeleteMapping("/khoa")
     public ResponseEntity<?> deleteKhoa(@Valid @RequestBody List<String> lstKhoaId) {
 
@@ -118,6 +120,7 @@ public class KhoaApi {
     }
 
     /* GET ALL */
+    @Operation(summary = "Get all Khoa.")
     @GetMapping("/khoa")
     public ResponseEntity<?> getAllKhoa() {
 
@@ -140,6 +143,7 @@ public class KhoaApi {
     }
 
     /* GET BY ID */
+    @Operation(summary = "Get Khoa by id.")
     @GetMapping("/khoa/{khoaId}")
     public ResponseEntity<?> getKhoaById(@PathVariable String khoaId) {
 

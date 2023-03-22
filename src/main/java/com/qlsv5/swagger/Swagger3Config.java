@@ -1,23 +1,15 @@
 //package com.qlsv5.swagger;
 //
+//import io.swagger.v3.oas.models.OpenAPI;
+//import io.swagger.v3.oas.models.info.Contact;
+//import io.swagger.v3.oas.models.info.Info;
+//import io.swagger.v3.oas.models.info.License;
+//import io.swagger.v3.oas.models.servers.Server;
+//import org.modelmapper.internal.util.Lists;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
-//import org.springframework.web.bind.annotation.RequestMethod;
-//import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-//import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-//import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-//import springfox.documentation.builders.PathSelectors;
-//import springfox.documentation.builders.RequestHandlerSelectors;
-//import springfox.documentation.builders.ResponseMessageBuilder;
-//import springfox.documentation.schema.ModelRef;
-//import springfox.documentation.service.ApiInfo;
-//import springfox.documentation.service.Contact;
-//import springfox.documentation.spi.DocumentationType;
-//import springfox.documentation.spring.web.plugins.Docket;
-//import springfox.documentation.swagger2.annotations.EnableSwagger2;
+//import com.google.common.collect.Lists;
 //
-//import java.util.Arrays;
-//import java.util.Collections;
 //
 ///**
 // * @author NienNQ
@@ -25,15 +17,25 @@
 // * @project qlsv
 // */
 //@Configuration
-//@EnableSwagger2WebMvc
-//public class SwaggerConfig {
-//
+//public class OpenApiConfig {
 //    @Bean
-//    public Docket api() {
-//        return new Docket(DocumentationType.SWAGGER_2)
-//                .select()
-//                .apis(RequestHandlerSelectors.any())
-//                .paths(PathSelectors.any())
-//                .build();
+//    public OpenAPI customOpenAPI() {
+//        return new OpenAPI()
+//                // Thiết lập các server dùng để test api
+//                .servers(Lists.newArrayList(
+//                        new Server().url("http://localhost:9090"),
+//                        new Server().url("https://user.loda.me")
+//                ))
+//                // info
+//                .info(new Info().title("Loda Application API")
+//                        .description("Sample OpenAPI 3.0")
+//                        .contact(new Contact()
+//                                .email("quangnien24@gmail.com")
+//                                .name("loda")
+//                                .url("https://loda.me/"))
+//                        .license(new License()
+//                                .name("Apache 2.0")
+//                                .url("http://www.apache.org/licenses/LICENSE-2.0.html"))
+//                        .version("1.0.0"));
 //    }
 //}

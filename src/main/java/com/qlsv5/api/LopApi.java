@@ -6,6 +6,7 @@ import com.qlsv5.entity.LopEntity;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.LopService;
 import com.qlsv5.validation.ValidatorLop;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +36,8 @@ public class LopApi {
     private ValidatorLop validatorLop;
 
     /* CREATE */
-//    @ApiOperation(value = "Add Lop.")
+    @Operation(summary = "Create Lop.")
     @PostMapping("/lop")
-//    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createLop(@Valid @RequestBody LopDto lop, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -68,6 +68,7 @@ public class LopApi {
 
     /* UPDATE */
     @PutMapping("/lop")
+    @Operation(summary = "Update Lop.")
     public ResponseEntity<?> updateLop(@Valid @RequestBody LopDto lop, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -98,6 +99,7 @@ public class LopApi {
 
     /* DELETE */
     @DeleteMapping("/lop")
+    @Operation(summary = "Delete Lop by list id")
     public ResponseEntity<?> deleteLop(@Valid @RequestBody List<String> lstLopId) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -119,6 +121,7 @@ public class LopApi {
     }
 
     /* GET ALL */
+    @Operation(summary = "Get all Lop.")
     @GetMapping("/lop")
     public ResponseEntity<?> getAllLop() {
 
@@ -141,6 +144,7 @@ public class LopApi {
     }
 
     /* GET BY ID */
+    @Operation(summary = "Get Lop by id.")
     @GetMapping("/lop/{lopId}")
     public ResponseEntity<?> getLopById(@PathVariable String lopId) {
 
