@@ -30,5 +30,15 @@ public class MasterDataExceptionConstant {
     public static final String E_MONHOC_NOT_FOUND_MONHOC = "Mon hoc does not exist!";
     public static final String E_MONHOC_DUPLICATE_MA_MONHOC = "Ma mon hoc exists, please input another one!";
 
+    /* Ds Lop Tc */
+    public static final String E_DSLOPTC_NOT_FOUND_DSLOPTC = "Ds Lop Tc does not exist!";
+    public static final String E_DSLOPTC_DUPLICATE_MA_DSLOPTC = "Ma lop Tc exists, please input another one!";
 
+    /* Chi Tiet Lop Tc */
+    public static final String E_CHITIETLOPTC_NOT_FOUND_DSLOPTC = "Chi Tiet Lop Tc does not exist!";
+    public static final String E_CHITIETLOPTC_DUPLICATE_MA_LOPTC_TIET_THU = "(Ma lop Tc, Tiet, Thu) exists, please input another one!";
+
+    /* Diem */
+    public static final String E_DIEM_NOT_FOUND_DSLOPTC = "Diem does not exist!";
+    public static final String E_DIEM_DUPLICATE_MASV_MALOPTC = "(Ma sinh vien, Ma lop tin chi) exists, please input another one!";
 }

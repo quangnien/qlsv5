@@ -53,7 +53,9 @@ public class GiangVienEntity {
 	
 	private String hinhAnh;
 	
-	/* FOREIGN KEY */	
+	/* FOREIGN KEY */
+	@NotBlank(message = "Vui Lòng Nhập Mã Khoa")
+	@Length(min = 4 , message = "Mã khoa chứa ít nhất 4 ký tự!")
 	private String maKhoa;
 	
 }

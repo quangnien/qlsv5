@@ -33,6 +33,8 @@ public class ChiTietLopTcEntity {
 	private String Phong;
 	
 	/* FOREIGN KEY */
+	@NotBlank(message = "Vui Lòng Nhập Mã Lớp Tín Chỉ")
+	@Length(min = 4 , message = "Mã lớp tín chỉ chứa ít nhất 4 ký tự!")
 	private String maLopTc;
 
 }

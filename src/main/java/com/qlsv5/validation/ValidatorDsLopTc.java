@@ -1,0 +1,121 @@
+package com.qlsv5.validation;
+
+import com.qlsv5.common.FunctionCommon;
+import com.qlsv5.constant.MasterDataExceptionConstant;
+import com.qlsv5.dto.DsLopTcDto;
+import com.qlsv5.entity.DsLopTcEntity;
+import com.qlsv5.exception.BusinessException;
+import com.qlsv5.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+
+import java.util.Optional;
+
+/**
+ * @author NienNQ
+ * @created 2023 - 03 - 05 11:02 AM
+ * @project qlsv
+ */
+@Component
+public class ValidatorDsLopTc implements Validator {
+
+    @Autowired
+    private DsLopTcRepository dsLopTcRepository;
+
+    @Autowired
+    private KhoaRepository khoaRepository;
+
+    @Autowired
+    private GiangVienRepository giangVienRepository;
+
+    @Autowired
+    private LopRepository lopRepository;
+
+    @Autowired
+    private MonHocRepository monHocRepository;
+
+    @Autowired
+    private FunctionCommon functionCommon;
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return false;
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+
+    }
+
+    @Transactional
+    public void validateAddDsLopTc(Object target) throws BusinessException {
+        DsLopTcDto dsLopTcDto = (DsLopTcDto) target;
+
+        int countMaDsLopTc = dsLopTcRepository.countDsLopTcByMaLopTc(dsLopTcDto.getMaLopTc());
+        int countGvByMaGv = giangVienRepository.countGiangVienByMaGv(dsLopTcDto.getMaGv());
+        int countLopByMaLop = lopRepository.countLopByMaLop(dsLopTcDto.getMaLop());
+        int countMonHocByMaMh = monHocRepository.countMonHocByMaMh(dsLopTcDto.getMaMh());
+
+        if (countGvByMaGv == 0) {
+            throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
+        }
+        if (countLopByMaLop == 0) {
+            throw new BusinessException(MasterDataExceptionConstant.E_LOP_NOT_FOUND_LOP);
+        }
+        if (countMonHocByMaMh == 0) {
+            throw new BusinessException(MasterDataExceptionConstant.E_MONHOC_NOT_FOUND_MONHOC);
+        }
+        else if (countMaDsLopTc > 0) {
+            throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_DUPLICATE_MA_DSLOPTC);
+        }
+    }
+
+    @Transactional
+    public void validateEditDsLopTc(Object target) throws BusinessException {
+
+        DsLopTcDto dsLopTcDto = (DsLopTcDto) target;
+
+        if(dsLopTcDto.getId() == null){
+            throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_NOT_FOUND_DSLOPTC);
+        }
+
+        Optional<DsLopTcEntity> dsLopTcEntity = dsLopTcRepository.findById(dsLopTcDto.getId());
+        int countGvByMaGv = giangVienRepository.countGiangVienByMaGv(dsLopTcDto.getMaGv());
+        int countLopByMaLop = lopRepository.countLopByMaLop(dsLopTcDto.getMaLop());
+        int countMonHocByMaMh = monHocRepository.countMonHocByMaMh(dsLopTcDto.getMaMh());
+
+        if (dsLopTcEntity.isPresent() == false) {
+            throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_NOT_FOUND_DSLOPTC);
+        }
+        else if (countGvByMaGv == 0) {
+            throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
+        }
+        else if (countLopByMaLop == 0) {
+            throw new BusinessException(MasterDataExceptionConstant.E_LOP_NOT_FOUND_LOP);
+        }
+        else if (countMonHocByMaMh == 0) {
+            throw new BusinessException(MasterDataExceptionConstant.E_MONHOC_NOT_FOUND_MONHOC);
+        }
+        else {
+            Long countMaDsLopTc = dsLopTcRepository.countDsLopTcByMaLopTcAndNotId(dsLopTcDto.getMaLopTc(), dsLopTcDto.getId());
+            long countValue = countMaDsLopTc != null ? countMaDsLopTc : 0;
+            if (countValue > 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_DUPLICATE_MA_DSLOPTC);
+            }
+        }
+    }
+
+    @Transactional
+    public void validateGetDsLopTcById(String dsLopTcId) throws BusinessException {
+
+        int countMaDsLopTc = dsLopTcRepository.countDsLopTcById(dsLopTcId);
+
+        if (countMaDsLopTc == 0) {
+            throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_NOT_FOUND_DSLOPTC);
+        }
+    }
+
+}

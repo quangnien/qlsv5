@@ -21,18 +21,20 @@ import java.util.UUID;
 public class CommonServiceImpl implements CommonService {
     @Autowired
     private LopRepository lopRepository;
-
     @Autowired
     private KhoaRepository khoaRepository;
-
     @Autowired
     private SinhVienRepository sinhVienRepository;
-
     @Autowired
     private GiangVienRepository giangVienRepository;
-
     @Autowired
     private MonHocRepository monHocRepository;
+    @Autowired
+    private DsLopTcRepository dsLopTcRepository;
+    @Autowired
+    private ChiTietLopTcRepository chiTietLopTcRepository;
+    @Autowired
+    private DiemRepository diemRepository;
 
     //CRUD  CREATE , READ , UPDATE , DELETE
 
@@ -59,6 +61,18 @@ public class CommonServiceImpl implements CommonService {
         else if(object instanceof MonHocDto){
             MonHocEntity monHocEntity = modelMapper.map(object, MonHocEntity.class);
             return monHocRepository.save(monHocEntity);
+        }
+        else if(object instanceof DsLopTcDto){
+            DsLopTcEntity dsLopTcEntity = modelMapper.map(object, DsLopTcEntity.class);
+            return dsLopTcRepository.save(dsLopTcEntity);
+        }
+        else if(object instanceof ChiTietLopTcDto){
+            ChiTietLopTcEntity chiTietLopTcEntity = modelMapper.map(object, ChiTietLopTcEntity.class);
+            return chiTietLopTcRepository.save(chiTietLopTcEntity);
+        }
+        else if(object instanceof DiemDto){
+            DiemEntity diemEntity = modelMapper.map(object, DiemEntity.class);
+            return diemRepository.save(diemEntity);
         }
 
         return null;
@@ -97,6 +111,24 @@ public class CommonServiceImpl implements CommonService {
             result = modelMapper.map(object, MonHocEntity.class);
             result.setId(UUID.randomUUID().toString().split("-")[0]);
             return monHocRepository.save(result);
+        }
+        else if(object instanceof DsLopTcDto){
+            DsLopTcEntity result = new DsLopTcEntity();
+            result = modelMapper.map(object, DsLopTcEntity.class);
+            result.setId(UUID.randomUUID().toString().split("-")[0]);
+            return dsLopTcRepository.save(result);
+        }
+        else if(object instanceof ChiTietLopTcDto){
+            ChiTietLopTcEntity result = new ChiTietLopTcEntity();
+            result = modelMapper.map(object, ChiTietLopTcEntity.class);
+            result.setId(UUID.randomUUID().toString().split("-")[0]);
+            return chiTietLopTcRepository.save(result);
+        }
+        else if(object instanceof DiemDto){
+            DiemEntity result = new DiemEntity();
+            result = modelMapper.map(object, DiemEntity.class);
+            result.setId(UUID.randomUUID().toString().split("-")[0]);
+            return diemRepository.save(result);
         }
 
         return null;
@@ -152,6 +184,33 @@ public class CommonServiceImpl implements CommonService {
                 }
             }
         }
+        else if(object instanceof DsLopTcDto){
+            for (String item : lstId) {
+                int countMaDsLopTc = dsLopTcRepository.countDsLopTcById(item);
+                if(countMaDsLopTc > 0){
+                    lstSuccess.add(item);
+                    dsLopTcRepository.deleteById(item);
+                }
+            }
+        }
+        else if(object instanceof ChiTietLopTcDto){
+            for (String item : lstId) {
+                int countMaChiTietLopTc = chiTietLopTcRepository.countChiTietLopTcById(item);
+                if(countMaChiTietLopTc > 0){
+                    lstSuccess.add(item);
+                    chiTietLopTcRepository.deleteById(item);
+                }
+            }
+        }
+        else if(object instanceof DiemDto){
+            for (String item : lstId) {
+                int countMaDiem = diemRepository.countDiemById(item);
+                if(countMaDiem > 0){
+                    lstSuccess.add(item);
+                    diemRepository.deleteById(item);
+                }
+            }
+        }
 
         return lstSuccess;
     }
@@ -173,6 +232,15 @@ public class CommonServiceImpl implements CommonService {
         else if(object instanceof MonHocDto){
             return Collections.singletonList(monHocRepository.findAll());
         }
+        else if(object instanceof DsLopTcDto){
+            return Collections.singletonList(dsLopTcRepository.findAll());
+        }
+        else if(object instanceof ChiTietLopTcDto){
+            return Collections.singletonList(chiTietLopTcRepository.findAll());
+        }
+        else if(object instanceof DiemDto){
+            return Collections.singletonList(diemRepository.findAll());
+        }
         return null;
     }
 
@@ -192,6 +260,15 @@ public class CommonServiceImpl implements CommonService {
         }
         else if(object instanceof MonHocDto){
             return monHocRepository.findById(taskId).get();
+        }
+        else if(object instanceof DsLopTcDto){
+            return dsLopTcRepository.findById(taskId).get();
+        }
+        else if(object instanceof ChiTietLopTcDto){
+            return chiTietLopTcRepository.findById(taskId).get();
+        }
+        else if(object instanceof DiemDto){
+            return diemRepository.findById(taskId).get();
         }
         return null;
     }
