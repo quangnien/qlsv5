@@ -25,8 +25,8 @@ import org.springframework.context.annotation.Configuration;
                 license = @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0"), termsOfService = "${tos.uri}",
                 description = "${api.description}"),
         servers = {
-                @Server(url = "${bezkoder.openapi.dev-url}", description = "Development"),
-                @Server(url = "${bezkoder.openapi.prod-url}", description = "Production")})
+                @Server(url = "${niennq.openapi.dev-url}", description = "Development"),
+                @Server(url = "${niennq.openapi.prod-url}", description = "Production")})
 //@formatter:on
 public class OpenAPI30Configuration {
 

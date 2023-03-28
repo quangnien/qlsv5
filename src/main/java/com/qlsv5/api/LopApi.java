@@ -3,11 +3,17 @@ package com.qlsv5.api;
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.KhoaDto;
 import com.qlsv5.dto.LopDto;
+import com.qlsv5.entity.KhoaEntity;
 import com.qlsv5.entity.LopEntity;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.LopService;
 import com.qlsv5.validation.ValidatorLop;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +31,11 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/admin")
-//@Api(value = "LopApi", description = "REST API for Lop", tags = { "LopApi" })
+@Tag(name = "Lop", description = "Management APIs for LOP.")
 public class LopApi {
 
     @Autowired
     private CommonService commonService;
-    @Autowired
-    private LopService lopService;
 
     @Autowired
     private ValidatorLop validatorLop;
@@ -39,6 +43,15 @@ public class LopApi {
     /* CREATE */
     @Operation(summary = "Create Lop.")
     @PostMapping("/lop")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
     public ResponseEntity<?> createLop(@Valid @RequestBody LopDto lop, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -70,6 +83,15 @@ public class LopApi {
     /* UPDATE */
     @PutMapping("/lop")
     @Operation(summary = "Update Lop.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
     public ResponseEntity<?> updateLop(@Valid @RequestBody LopDto lop, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -101,6 +123,15 @@ public class LopApi {
     /* DELETE */
     @DeleteMapping("/lop")
     @Operation(summary = "Delete Lop by list id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
     public ResponseEntity<?> deleteLop(@Valid @RequestBody List<String> lstLopId) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -126,6 +157,15 @@ public class LopApi {
     /* GET ALL */
     @Operation(summary = "Get all Lop.")
     @GetMapping("/lop")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
     public ResponseEntity<?> getAllLop() {
 
         ReturnObject returnObject = new ReturnObject();
@@ -150,6 +190,15 @@ public class LopApi {
     /* GET BY ID */
     @Operation(summary = "Get Lop by id.")
     @GetMapping("/lop/{lopId}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
     public ResponseEntity<?> getLopById(@PathVariable String lopId) {
 
         ReturnObject returnObject = new ReturnObject();
