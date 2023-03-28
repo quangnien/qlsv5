@@ -1,41 +1,72 @@
 //package com.qlsv5.swagger;
 //
+//import io.swagger.v3.oas.models.Components;
+//import io.swagger.v3.oas.models.security.SecurityRequirement;
+//import io.swagger.v3.oas.models.security.SecurityScheme;
+//import org.springframework.context.annotation.Configuration;
+//
+//import java.util.Arrays;
+//
+//import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.context.annotation.Bean;
+//
 //import io.swagger.v3.oas.models.OpenAPI;
 //import io.swagger.v3.oas.models.info.Contact;
 //import io.swagger.v3.oas.models.info.Info;
 //import io.swagger.v3.oas.models.info.License;
 //import io.swagger.v3.oas.models.servers.Server;
-//import org.modelmapper.internal.util.Lists;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import com.google.common.collect.Lists;
-//
-//
-///**
-// * @author NienNQ
-// * @created 2023 - 03 - 05 3:55 PM
-// * @project qlsv
-// */
 //@Configuration
-//public class OpenApiConfig {
+//public class Swagger3Config {
+//
+//    @Value("${bezkoder.openapi.dev-url}")
+//    private String devUrl;
+//
+//    @Value("${bezkoder.openapi.prod-url}")
+//    private String prodUrl;
+//
 //    @Bean
-//    public OpenAPI customOpenAPI() {
+//    public OpenAPI myOpenAPI() {
+//        Server devServer = new Server();
+//        devServer.setUrl(devUrl);
+//        devServer.setDescription("Server URL in Development environment");
+//
+//        Server prodServer = new Server();
+//        prodServer.setUrl(prodUrl);
+//        prodServer.setDescription("Server URL in Production environment");
+//
+//        Contact contact = new Contact();
+//        contact.setEmail("quangnien24@gmail.com");
+//        contact.setName("NienNQ");
+//        contact.setUrl("https://www.facebook.com/quangnien0911");
+//
+//        License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
+//
+//        Info info = new Info()
+//                .title("Student Management API")
+//                .version("1.0")
+//                .contact(contact)
+//                .description("This API exposes endpoints to manage student.").termsOfService("https://www.facebook.com/quangnien0911")
+//                .license(mitLicense);
+//
+//        return new OpenAPI().info(info).servers(Arrays.asList(devServer, prodServer));
+//    }
+//
+//    @Bean
+//    public OpenAPI customizeOpenAPI() {
+//        //@formatter:off
+//        final String securitySchemeName = "bearerAuth";
 //        return new OpenAPI()
-//                // Thiết lập các server dùng để test api
-//                .servers(Lists.newArrayList(
-//                        new Server().url("http://localhost:9090"),
-//                        new Server().url("https://user.loda.me")
-//                ))
-//                // info
-//                .info(new Info().title("Loda Application API")
-//                        .description("Sample OpenAPI 3.0")
-//                        .contact(new Contact()
-//                                .email("quangnien24@gmail.com")
-//                                .name("loda")
-//                                .url("https://loda.me/"))
-//                        .license(new License()
-//                                .name("Apache 2.0")
-//                                .url("http://www.apache.org/licenses/LICENSE-2.0.html"))
-//                        .version("1.0.0"));
+//                .addSecurityItem(new SecurityRequirement()
+//                        .addList(securitySchemeName))
+//                .components(new Components()
+//                        .addSecuritySchemes(securitySchemeName, new SecurityScheme()
+//                                .name(securitySchemeName)
+//                                .type(SecurityScheme.Type.HTTP)
+//                                .scheme("bearer")
+//                                .description(
+//                                        "Provide the JWT token. JWT token can be obtained from the Login API. For testing, use the credentials <strong>john/password</strong>")
+//                                .bearerFormat("JWT")));
+//        //@formatter:on
+//
 //    }
 //}

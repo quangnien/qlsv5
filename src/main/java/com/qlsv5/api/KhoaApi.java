@@ -4,9 +4,14 @@ import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.KhoaDto;
 import com.qlsv5.entity.KhoaEntity;
 import com.qlsv5.service.CommonService;
-import com.qlsv5.service.KhoaService;
 import com.qlsv5.validation.ValidatorKhoa;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,19 +29,28 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/admin")
-//@Api(value = "KhoaApi", description = "REST API for Khoa", tags = { "KhoaApi" })
+@Tag(name = "Khoa", description = "Management APIs for KHOA.")
 public class KhoaApi {
     @Autowired
     private CommonService commonService;
-    @Autowired
-    private KhoaService khoaService;
-
     @Autowired
     private ValidatorKhoa validatorKhoa;
 
     /* CREATE */
     @Operation(summary = "Create Khoa.")
     @PostMapping("/khoa")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                    @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = KhoaEntity.class),
+                            examples = { @ExampleObject(value = "{ pong: '2022-06-17T18:30:33.465+02:00' }") }) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class), examples = { @ExampleObject(value = "{ pong: '2022-06-17T18:30:33.465+02:00' }") }) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "500", description = "Internal server error"),
+            @ApiResponse(responseCode = "4020702", description = "Error process get list role for item"), })
     public ResponseEntity<?> createKhoa(@Valid @RequestBody KhoaDto khoa, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();

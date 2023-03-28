@@ -11,6 +11,7 @@ import com.qlsv5.service.LopService;
 import com.qlsv5.validation.ValidatorChiTietLopTc;
 import com.qlsv5.validation.ValidatorLop;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/admin")
+@Tag(name = "Chi Tiet Lop Tin Chi", description = "Management APIs for Detailed Information of Credit Class.")
 public class ChiTietLopTcApi {
 
     @Autowired
