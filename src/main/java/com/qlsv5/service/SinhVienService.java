@@ -6,10 +6,6 @@ import java.util.List;
 
 public interface SinhVienService {
 
-    public List<String> deleteLstSinhVien(List<String> lstSinhVienId);
-
-    public List<SinhVienEntity> findAllSinhVien();
-
-    public SinhVienEntity getSinhVienById(String taskId);
+    public List<SinhVienEntity> getListSinhVienByMaLop(String maLop);
 
 }

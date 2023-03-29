@@ -43,13 +43,17 @@ public class ValidatorSinhVien implements Validator {
         SinhVienDto sinhVienDto = (SinhVienDto) target;
 
         int countMaSinhVien = sinhVienRepository.countSinhVienByMaSv(sinhVienDto.getMaSv());
+        int countEmail = sinhVienRepository.countSinhVienByEmail(sinhVienDto.getEmail());
         int countLopByMaLop = lopRepository.countLopByMaLop(sinhVienDto.getMaLop());
 
         if (countLopByMaLop == 0) {
-            throw new BusinessException(MasterDataExceptionConstant.E_KHOA_NOT_FOUND_KHOA);
+            throw new BusinessException(MasterDataExceptionConstant.E_LOP_NOT_FOUND_LOP);
         }
         else if (countMaSinhVien > 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_DUPLICATE_MA_SINHVIEN);
+        }
+        else if (countEmail > 0) {
+            throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_IS_EXIST);
         }
     }
 
@@ -71,10 +75,16 @@ public class ValidatorSinhVien implements Validator {
             throw new BusinessException(MasterDataExceptionConstant.E_KHOA_NOT_FOUND_KHOA);
         }
         else {
-            Long countMaSinhVien = sinhVienRepository.countSinhVienByMaSvAndNotId(sinhVienDto.getMaSv(), sinhVienDto.getId());
-            long countValue = countMaSinhVien != null ? countMaSinhVien : 0;
-            if (countValue > 0) {
+            Long countSinhVienByMaSv = sinhVienRepository.countSinhVienByMaSvAndNotId(sinhVienDto.getMaSv(), sinhVienDto.getId());
+            long countValueByMaSv = countSinhVienByMaSv != null ? countSinhVienByMaSv : 0;
+
+            Long countSinhVienByEmail = sinhVienRepository.countSinhVienByEmailAndNotId(sinhVienDto.getEmail(), sinhVienDto.getId());
+            long countValueByEmail = countSinhVienByEmail != null ? countSinhVienByEmail : 0;
+            if (countValueByMaSv > 0) {
                 throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_DUPLICATE_MA_SINHVIEN);
+            }
+            else if (countValueByEmail > 0) {
+                throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_IS_EXIST);
             }
         }
     }
@@ -87,6 +97,22 @@ public class ValidatorSinhVien implements Validator {
         if (countMaSinhVien == 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
         }
+    }
+
+    @Transactional
+    public void validateGetListSinhVienByMaLop(String maLop) throws BusinessException {
+
+        if(maLop == null || "".equals(maLop)){
+            throw new BusinessException(MasterDataExceptionConstant.E_LOP_NOT_FOUND_LOP);
+        }
+        else {
+            int countLopByMaLop = lopRepository.countLopByMaLop(maLop);
+
+            if (countLopByMaLop == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_LOP_NOT_FOUND_LOP);
+            }
+        }
+
     }
 
 }

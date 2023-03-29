@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
@@ -44,11 +45,15 @@ public class SinhVienDto {
 
 	private String hinhAnh;
 
-	@NotBlank(message = "Vui Lòng Nhập Mật Khẩu")
-	@Length(min = 4 , message = "Mật khẩu chứa ít nhất 4 ký tự!")
+//	@NotBlank(message = "Vui Lòng Nhập Mật Khẩu")
+//	@Length(min = 4 , message = "Mật khẩu chứa ít nhất 4 ký tự!")
 	private String matKhau;
 
 	private String sdt;
+
+	@NotBlank(message = "Vui lòng nhập Email!")
+	@Email(message = "Nhập đúng định dạng email!")
+	private String email;
 
 	/* FOREIGN KEY */
 	@NotBlank(message = "Vui Lòng Nhập Mã Lớp")

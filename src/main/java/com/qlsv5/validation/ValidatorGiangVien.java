@@ -4,6 +4,7 @@ import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.GiangVienDto;
 import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.exception.BusinessException;
+import com.qlsv5.repository.KhoaRepository;
 import com.qlsv5.repository.LopRepository;
 import com.qlsv5.repository.GiangVienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,10 @@ public class ValidatorGiangVien implements Validator {
 
     @Autowired
     private GiangVienRepository giangVienRepository;
-
     @Autowired
     private LopRepository lopRepository;
+    @Autowired
+    private KhoaRepository khoaRepository;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -43,13 +45,17 @@ public class ValidatorGiangVien implements Validator {
         GiangVienDto giangVienDto = (GiangVienDto) target;
 
         int countMaGiangVien = giangVienRepository.countGiangVienByMaGv(giangVienDto.getMaGv());
-        int countLopByMaLop = lopRepository.countLopByMaLop(giangVienDto.getMaKhoa());
+        int countKhoaByMaKhoa = khoaRepository.countKhoaByMaKhoa(giangVienDto.getMaKhoa());
+        int countEmail = giangVienRepository.countGiangVienByEmail(giangVienDto.getEmail());
 
-        if (countLopByMaLop == 0) {
+        if (countKhoaByMaKhoa == 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_KHOA_NOT_FOUND_KHOA);
         }
         else if (countMaGiangVien > 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_DUPLICATE_MA_GIANGVIEN);
+        }
+        else if (countEmail > 0) {
+            throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_IS_EXIST);
         }
     }
 
@@ -62,19 +68,26 @@ public class ValidatorGiangVien implements Validator {
         }
 
         Optional<GiangVienEntity> giangVienEntity = giangVienRepository.findById(giangVienDto.getId());
-        int countLopByMaLop = lopRepository.countLopByMaLop(giangVienDto.getMaKhoa());
+        int countKhoaByMaKhoa = khoaRepository.countKhoaByMaKhoa(giangVienDto.getMaKhoa());
 
         if (giangVienEntity.isPresent() == false) {
             throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
         }
-        else if (countLopByMaLop == 0) {
+        else if (countKhoaByMaKhoa == 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_KHOA_NOT_FOUND_KHOA);
         }
         else {
             Long countMaGiangVien = giangVienRepository.countGiangVienByMaGvAndNotId(giangVienDto.getMaGv(), giangVienDto.getId());
             long countValue = countMaGiangVien != null ? countMaGiangVien : 0;
+
+            Long countGiangVienByEmail = giangVienRepository.countGiangVienByEmailAndNotId(giangVienDto.getEmail(), giangVienDto.getId());
+            long countValueByEmail = countGiangVienByEmail != null ? countGiangVienByEmail : 0;
+
             if (countValue > 0) {
                 throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_DUPLICATE_MA_GIANGVIEN);
+            }
+            else if (countValueByEmail > 0) {
+                throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_IS_EXIST);
             }
         }
     }
@@ -87,6 +100,22 @@ public class ValidatorGiangVien implements Validator {
         if (countMaGiangVien == 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
         }
+    }
+
+    @Transactional
+    public void validateGetListGiangVienByMaKhoa(String maKhoa) throws BusinessException {
+
+        if(maKhoa == null || "".equals(maKhoa)){
+            throw new BusinessException(MasterDataExceptionConstant.E_KHOA_NOT_FOUND_KHOA);
+        }
+        else {
+            int countKhoaByMaKhoa = khoaRepository.countKhoaByMaKhoa(maKhoa);
+
+            if (countKhoaByMaKhoa == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_KHOA_NOT_FOUND_KHOA);
+            }
+        }
+
     }
 
 }

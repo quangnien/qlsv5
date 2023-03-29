@@ -1,19 +1,23 @@
 package com.qlsv5.service.impl;
 
+import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.*;
 import com.qlsv5.entity.*;
+import com.qlsv5.exception.BusinessException;
+import com.qlsv5.payload.request.SignupRequest;
+import com.qlsv5.payload.response.MessageResponse;
 import com.qlsv5.repository.*;
 import com.qlsv5.service.CommonService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -35,6 +39,12 @@ public class CommonServiceImpl implements CommonService {
     private ChiTietLopTcRepository chiTietLopTcRepository;
     @Autowired
     private DiemRepository diemRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    PasswordEncoder encoder;
+    @Autowired
+    RoleRepository roleRepository;
 
     //CRUD  CREATE , READ , UPDATE , DELETE
 
@@ -97,12 +107,120 @@ public class CommonServiceImpl implements CommonService {
         else if(object instanceof SinhVienDto){
             SinhVienEntity result = new SinhVienEntity();
             result = modelMapper.map(object, SinhVienEntity.class);
+
+            Date currentDate = result.getNgaySinh();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+            String dateString = dateFormat.format(currentDate);
+            result.setMatKhau(dateString);
+
+            /*_____________________________________________*/
+            /* BEGIN CREATE ACCOUNT USER WITH ROLE_SINHVIEN*/
+            SignupRequest signUpRequest = createUserAccountTemp(result);
+
+            // Create new user's account
+            UserEntity user = new UserEntity(signUpRequest.getUsername(),
+                    signUpRequest.getEmail(),
+                    encoder.encode(signUpRequest.getPassword()));
+
+            Set<String> strRoles = signUpRequest.getRoles();
+            Set<RoleEntity> roles = new HashSet<>();
+
+            if (strRoles == null) {
+                RoleEntity userRole = roleRepository.findByName(ERole.ROLE_USER)
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                roles.add(userRole);
+            } else {
+                strRoles.forEach(role -> {
+                    switch (role) {
+                        case "ADMIN":
+                            RoleEntity adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(adminRole);
+                            break;
+
+                        case "SINHVIEN":
+                            RoleEntity sinhvienRole = roleRepository.findByName(ERole.ROLE_SINHVIEN)
+                                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(sinhvienRole);
+                            break;
+
+                        case "GIANGVIEN":
+                            RoleEntity giangvienRole = roleRepository.findByName(ERole.ROLE_GIANGVIEN)
+                                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(giangvienRole);
+                            break;
+//
+//                        default:
+//                            RoleEntity userRole = roleRepository.findByName(ERole.ROLE_USER)
+//                                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+//                            roles.add(userRole);
+                    }
+                });
+            }
+
+            user.setRoles(roles);
+            userRepository.save(user);
+            /* END CREATE ACCOUNT USER WITH ROLE_SINHVIEN */
+            /*____________________________________________*/
+
             result.setId(UUID.randomUUID().toString().split("-")[0]);
             return sinhVienRepository.save(result);
         }
         else if(object instanceof GiangVienDto){
             GiangVienEntity result = new GiangVienEntity();
             result = modelMapper.map(object, GiangVienEntity.class);
+
+            Date currentDate = result.getNgaySinh();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+            String dateString = dateFormat.format(currentDate);
+            result.setMatKhau(dateString);
+
+            /*_____________________________________________*/
+            /* BEGIN CREATE ACCOUNT USER WITH ROLE_SINHVIEN*/
+            SignupRequest signUpRequest = createUserAccountTemp(result);
+
+            // Create new user's account
+
+            UserEntity user = new UserEntity(signUpRequest.getUsername(),
+                    signUpRequest.getEmail(),
+                    encoder.encode(signUpRequest.getPassword()));
+
+            Set<String> strRoles = signUpRequest.getRoles();
+            Set<RoleEntity> roles = new HashSet<>();
+
+            if (strRoles == null) {
+                RoleEntity userRole = roleRepository.findByName(ERole.ROLE_USER)
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                roles.add(userRole);
+            } else {
+                strRoles.forEach(role -> {
+                    switch (role) {
+                        case "ADMIN":
+                            RoleEntity adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(adminRole);
+                            break;
+
+                        case "SINHVIEN":
+                            RoleEntity sinhvienRole = roleRepository.findByName(ERole.ROLE_SINHVIEN)
+                                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(sinhvienRole);
+                            break;
+
+                        case "GIANGVIEN":
+                            RoleEntity giangvienRole = roleRepository.findByName(ERole.ROLE_GIANGVIEN)
+                                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(giangvienRole);
+                            break;
+                    }
+                });
+            }
+
+            user.setRoles(roles);
+            userRepository.save(user);
+            /* END CREATE ACCOUNT USER WITH ROLE_SINHVIEN */
+            /*____________________________________________*/
+
             result.setId(UUID.randomUUID().toString().split("-")[0]);
             return giangVienRepository.save(result);
         }
@@ -271,6 +389,35 @@ public class CommonServiceImpl implements CommonService {
             return diemRepository.findById(taskId).get();
         }
         return null;
+    }
+
+    /* common */
+    private SignupRequest createUserAccountTemp(Object object){
+        SignupRequest objectTemp = new SignupRequest();
+        ModelMapper modelMapper = new ModelMapper();
+        if(object instanceof SinhVienEntity){
+            SinhVienEntity result = new SinhVienEntity();
+            result = modelMapper.map(object, SinhVienEntity.class);
+            objectTemp.setUsername(result.getMaSv());
+            objectTemp.setPassword(result.getMatKhau());
+            objectTemp.setEmail(result.getEmail());
+
+            Set<String> roles = new HashSet<>();
+            roles.add("SINHVIEN");
+            objectTemp.setRole(roles);
+        }
+        else if(object instanceof GiangVienEntity){
+            GiangVienEntity result = new GiangVienEntity();
+            result = modelMapper.map(object, GiangVienEntity.class);
+            objectTemp.setUsername(result.getMaGv());
+            objectTemp.setPassword(result.getMatKhau());
+            objectTemp.setEmail(result.getEmail());
+
+            Set<String> roles = new HashSet<>();
+            roles.add("GIANGVIEN");
+            objectTemp.setRole(roles);
+        }
+        return objectTemp;
     }
 
 }

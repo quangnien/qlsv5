@@ -211,8 +211,40 @@ public class SinhVienApi {
             returnObject.setMessage("200");
 
             validatorSinhVien.validateGetSinhVienById(sinhVienId);
-//            SinhVienEntity sinhVienEntity = sinhVienService.getSinhVienById(sinhVienId);
             SinhVienEntity sinhVienEntity = (SinhVienEntity) commonService.getObjectById(sinhVienId, new SinhVienDto());
+            returnObject.setRetObj(sinhVienEntity);
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(ex.getMessage());
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
+
+    @Operation(summary = "Get Sinh Vien by maLop.")
+    @GetMapping("/sinhVien/lop/{maLop}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+    public ResponseEntity<?> getSinhVienByLopId(@PathVariable String maLop) {
+
+        ReturnObject returnObject = new ReturnObject();
+        try {
+            log.info("Get SinhVien By maLop!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            validatorSinhVien.validateGetListSinhVienByMaLop(maLop);
+            List<SinhVienEntity> sinhVienEntity = sinhVienService.getListSinhVienByMaLop(maLop);
             returnObject.setRetObj(sinhVienEntity);
         }
         catch (Exception ex){

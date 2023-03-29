@@ -4,6 +4,7 @@ import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.GiangVienDto;
 import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.entity.KhoaEntity;
+import com.qlsv5.entity.SinhVienEntity;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.GiangVienService;
 import com.qlsv5.validation.ValidatorGiangVien;
@@ -213,6 +214,39 @@ public class GiangVienApi {
             validatorGiangVien.validateGetGiangVienById(giangVienId);
 //            GiangVienEntity giangVienEntity = giangVienService.getGiangVienById(giangVienId);
             GiangVienEntity giangVienEntity = (GiangVienEntity) commonService.getObjectById(giangVienId, new GiangVienDto());
+            returnObject.setRetObj(giangVienEntity);
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(ex.getMessage());
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
+
+    @Operation(summary = "Get Giang Vien by maKhoa.")
+    @GetMapping("/giangVien/khoa/{maKhoa}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+    public ResponseEntity<?> getGiangVienByKhoaId(@PathVariable String maKhoa) {
+
+        ReturnObject returnObject = new ReturnObject();
+        try {
+            log.info("Get GiangVien By maKhoa!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            validatorGiangVien.validateGetListGiangVienByMaKhoa(maKhoa);
+            List<GiangVienEntity> giangVienEntity = giangVienService.getListGiangVienByMaKhoa(maKhoa);
             returnObject.setRetObj(giangVienEntity);
         }
         catch (Exception ex){

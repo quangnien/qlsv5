@@ -17,7 +17,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class UserEntity {
   @Id
   private String id;
 
@@ -35,9 +35,9 @@ public class User {
   private String password;
 
   @DBRef
-  private Set<Role> roles = new HashSet<>();
+  private Set<RoleEntity> roles = new HashSet<>();
 
-  public User(String username, String email, String password) {
+  public UserEntity(String username, String email, String password) {
     this.username = username;
     this.email = email;
     this.password = password;

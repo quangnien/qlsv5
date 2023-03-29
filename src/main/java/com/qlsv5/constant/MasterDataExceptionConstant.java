@@ -9,6 +9,8 @@ public class MasterDataExceptionConstant {
 
     /* Common */
     public static final String COMMON_EMAIL_WRONG_FORMAT = "You entered the wrong format for email@gmail.com!";
+    public static final String COMMON_EMAIL_IS_EXIST = "email is already in use!";
+
 
     /* Khoa */
     public static final String E_KHOA_NOT_FOUND_KHOA = "Khoa does not exist!";

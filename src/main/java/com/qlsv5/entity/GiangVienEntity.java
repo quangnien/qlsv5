@@ -45,8 +45,8 @@ public class GiangVienEntity {
 	@Email(message = "Nhập đúng định dạng email!")
 	private String email;
 	
-	@NotBlank(message = "Vui Lòng Nhập Mật Khẩu")
-	@Length(min = 4 , message = "Mật khẩu chứa ít nhất 4 ký tự!")
+//	@NotBlank(message = "Vui Lòng Nhập Mật Khẩu")
+//	@Length(min = 4 , message = "Mật khẩu chứa ít nhất 4 ký tự!")
 	private String matKhau;
 	
 	private int vaiTro;
