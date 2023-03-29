@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,7 @@ public class MonHocApi {
     /* CREATE */
     @Operation(summary = "Create MonHoc.")
     @PostMapping("/monHoc")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -84,6 +86,7 @@ public class MonHocApi {
     /* UPDATE */
     @Operation(summary = "Update MonHoc.")
     @PutMapping("/monHoc")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -125,6 +128,7 @@ public class MonHocApi {
     /* DELETE */
     @Operation(summary = "Delete MonHoc by list id")
     @DeleteMapping("/monHoc")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -159,6 +163,7 @@ public class MonHocApi {
     /* GET ALL */
     @Operation(summary = "Get all MonHoc.")
     @GetMapping("/monHoc")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -193,6 +198,7 @@ public class MonHocApi {
     /* GET BY ID */
     @Operation(summary = "Get MonHoc by id.")
     @GetMapping("/monHoc/{monHocId}")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {

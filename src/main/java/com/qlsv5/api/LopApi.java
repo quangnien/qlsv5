@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,7 @@ public class LopApi {
     /* CREATE */
     @Operation(summary = "Create Lop.")
     @PostMapping("/lop")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
@@ -83,6 +85,7 @@ public class LopApi {
     /* UPDATE */
     @PutMapping("/lop")
     @Operation(summary = "Update Lop.")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
@@ -123,6 +126,7 @@ public class LopApi {
     /* DELETE */
     @DeleteMapping("/lop")
     @Operation(summary = "Delete Lop by list id")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
@@ -157,6 +161,7 @@ public class LopApi {
     /* GET ALL */
     @Operation(summary = "Get all Lop.")
     @GetMapping("/lop")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
@@ -190,6 +195,7 @@ public class LopApi {
     /* GET BY ID */
     @Operation(summary = "Get Lop by id.")
     @GetMapping("/lop/{lopId}")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),

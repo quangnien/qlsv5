@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +45,7 @@ public class GiangVienApi {
     /* CREATE */
     @Operation(summary = "Create Giang Vien.")
     @PostMapping("/giangVien")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -84,6 +86,7 @@ public class GiangVienApi {
     /* UPDATE */
     @Operation(summary = "Update Giang Vien.")
     @PutMapping("/giangVien")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -124,6 +127,7 @@ public class GiangVienApi {
     /* DELETE */
     @Operation(summary = "Delete Giang Vien by list id")
     @DeleteMapping("/giangVien")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -158,6 +162,7 @@ public class GiangVienApi {
     /* GET ALL */
     @Operation(summary = "Get all Giang Vien.")
     @GetMapping("/giangVien")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -192,6 +197,7 @@ public class GiangVienApi {
     /* GET BY ID */
     @Operation(summary = "Get Giang Vien by id.")
     @GetMapping("/giangVien/{giangVienId}")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -226,6 +232,7 @@ public class GiangVienApi {
 
     @Operation(summary = "Get Giang Vien by maKhoa.")
     @GetMapping("/giangVien/khoa/{maKhoa}")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {

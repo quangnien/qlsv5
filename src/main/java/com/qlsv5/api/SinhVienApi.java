@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,7 @@ public class SinhVienApi {
     /* CREATE */
     @Operation(summary = "Create Sinh Vien.")
     @PostMapping("/sinhVien")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -83,6 +85,7 @@ public class SinhVienApi {
     /* UPDATE */
     @Operation(summary = "Update Sinh Vien.")
     @PutMapping("/sinhVien")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -123,6 +126,7 @@ public class SinhVienApi {
     /* DELETE */
     @Operation(summary = "Delete Sinh Vien by list id")
     @DeleteMapping("/sinhVien")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -157,6 +161,7 @@ public class SinhVienApi {
     /* GET ALL */
     @Operation(summary = "Get all Sinh Vien.")
     @GetMapping("/sinhVien")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -191,6 +196,7 @@ public class SinhVienApi {
     /* GET BY ID */
     @Operation(summary = "Get Sinh Vien by id.")
     @GetMapping("/sinhVien/{sinhVienId}")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -224,6 +230,7 @@ public class SinhVienApi {
 
     @Operation(summary = "Get Sinh Vien by maLop.")
     @GetMapping("/sinhVien/lop/{maLop}")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
