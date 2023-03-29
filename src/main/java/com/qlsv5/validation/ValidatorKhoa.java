@@ -78,7 +78,7 @@ public class ValidatorKhoa implements Validator {
 
             Long countKhoaByEmail = khoaRepository.countKhoaByEmailAndNotId(khoaDto.getEmail(), khoaDto.getId());
             long countValueByEmail = countKhoaByEmail != null ? countKhoaByEmail : 0;
-            
+
             if (countValue > 0) {
                 throw new BusinessException(MasterDataExceptionConstant.E_KHOA_DUPLICATE_MA_KHOA);
             }

@@ -1,5 +1,7 @@
 package com.qlsv5.api;
 
+import com.qlsv5.common.ReturnObject;
+import com.qlsv5.dto.SigninInfoDto;
 import com.qlsv5.entity.ERole;
 import com.qlsv5.entity.RoleEntity;
 import com.qlsv5.entity.UserEntity;
@@ -48,22 +50,41 @@ public class AuthApi {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		ReturnObject returnObject = new ReturnObject();
+		try {
+			Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
-		
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		List<String> roles = userDetails.getAuthorities().stream()
-				.map(item -> item.getAuthority())
-				.collect(Collectors.toList());
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			String jwt = jwtUtils.generateJwtToken(authentication);
 
-		return ResponseEntity.ok(new JwtResponse(jwt,
-												 userDetails.getId(), 
-												 userDetails.getUsername(), 
-												 userDetails.getEmail(), 
-												 roles));
+			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+			List<String> roles = userDetails.getAuthorities().stream()
+					.map(item -> item.getAuthority())
+					.collect(Collectors.toList());
+
+			returnObject.setStatus(ReturnObject.SUCCESS);
+			returnObject.setMessage("200");
+
+			SigninInfoDto results = new SigninInfoDto();
+			results.setJwt(jwt);
+			results.setRoles(roles);
+			results.setUserDetails(userDetails);
+
+			returnObject.setRetObj(results);
+		}
+		catch (Exception ex){
+			returnObject.setStatus(ReturnObject.ERROR);
+			returnObject.setMessage(ex.getMessage());
+		}
+
+		return ResponseEntity.ok(returnObject);
+
+//		return ResponseEntity.ok(new JwtResponse(jwt,
+//												 userDetails.getId(),
+//												 userDetails.getUsername(),
+//												 userDetails.getEmail(),
+//												 roles));
 	}
 
 //	@PostMapping("/signup")
