@@ -43,12 +43,16 @@ public class ValidatorKhoa implements Validator {
         KhoaDto khoaDto = (KhoaDto) target;
 
         int countMaKhoa = khoaRepository.countKhoaByMaKhoa(khoaDto.getMaKhoa());
+        int countEmail = khoaRepository.countKhoaByEmail(khoaDto.getEmail());
 
         if (countMaKhoa > 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_KHOA_DUPLICATE_MA_KHOA);
         }
         else if(functionCommon.isValidEmailFormat(khoaDto.getEmail()) == false){
             throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_WRONG_FORMAT);
+        }
+        else if (countEmail > 0) {
+            throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_IS_EXIST);
         }
     }
 
@@ -69,10 +73,17 @@ public class ValidatorKhoa implements Validator {
             throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_WRONG_FORMAT);
         }
         else {
-            Long countMaKhoa = khoaRepository.countKhoaByMaKhoaAndNotId(khoaDto.getMaKhoa(), khoaDto.getId());
-            long countValue = countMaKhoa != null ? countMaKhoa : 0;
+            Long countMaKhoaByMaKhoa = khoaRepository.countKhoaByMaKhoaAndNotId(khoaDto.getMaKhoa(), khoaDto.getId());
+            long countValue = countMaKhoaByMaKhoa != null ? countMaKhoaByMaKhoa : 0;
+
+            Long countKhoaByEmail = khoaRepository.countKhoaByEmailAndNotId(khoaDto.getEmail(), khoaDto.getId());
+            long countValueByEmail = countKhoaByEmail != null ? countKhoaByEmail : 0;
+            
             if (countValue > 0) {
                 throw new BusinessException(MasterDataExceptionConstant.E_KHOA_DUPLICATE_MA_KHOA);
+            }
+            else if (countValueByEmail > 0) {
+                throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_IS_EXIST);
             }
         }
     }
