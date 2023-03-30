@@ -7,7 +7,6 @@ import com.qlsv5.entity.RoleEntity;
 import com.qlsv5.entity.UserEntity;
 import com.qlsv5.payload.request.LoginRequest;
 import com.qlsv5.payload.request.SignupRequest;
-import com.qlsv5.payload.response.JwtResponse;
 import com.qlsv5.payload.response.MessageResponse;
 import com.qlsv5.repository.RoleRepository;
 import com.qlsv5.repository.TokenRefreshTokenPairRepository;
@@ -15,20 +14,15 @@ import com.qlsv5.repository.UserRepository;
 import com.qlsv5.security.jwt.JwtUtils;
 import com.qlsv5.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
@@ -134,90 +128,6 @@ public class AuthApi {
 
 		return ResponseEntity.ok(returnObject);
 	}
-
-
-
-
-//	@PostMapping("/logout")
-//	public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-//
-//		// Xóa thông tin liên quan đến người dùng khỏi phiên làm việc hiện tại
-//		SecurityContextHolder.clearContext();
-//
-//		// Lấy mã token (JWT) từ header Authorization
-//		String jwt = jwtUtils.parseJwtFromRequest(request);
-//
-//		if (jwt != null) {
-//			// Xóa mã thông báo truy cập và mã thông báo làm mới
-//			jwtUtils.deleteJwtTokens(jwt);
-//		}
-//
-//		// Xóa cookie liên quan đến phiên làm việc của người dùng
-//		CookieClearingLogoutHandler cookieClearingLogoutHandler = new CookieClearingLogoutHandler("JSESSIONID");
-//		cookieClearingLogoutHandler.logout(request, response, null);
-//
-//		return ResponseEntity.ok(new MessageResponse("Đăng xuất thành công!"));
-//	}
-
-//	@PostMapping("/logout/admin")
-//	public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-//
-//		ReturnObject returnObject = new ReturnObject();
-//		try {
-//			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//
-//			if (auth != null) {
-//				new SecurityContextLogoutHandler().logout(request, response, auth);
-//			}
-//
-//
-//			returnObject.setStatus(ReturnObject.SUCCESS);
-//			returnObject.setMessage("200");
-//			returnObject.setRetObj("Logout successful!");
-//		}
-//		catch (Exception ex){
-//			returnObject.setStatus(ReturnObject.ERROR);
-//			returnObject.setMessage(ex.getMessage());
-//		}
-//
-//
-//		return ResponseEntity.ok(returnObject);
-//	}
-
-//	@PostMapping("/signout")
-//	public ResponseEntity<?> logoutUser() {
-//		ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
-//		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-//				.body(new MessageResponse("You've been signed out!"));
-//	}
-
-//	@PostMapping("/logout")
-//	public ResponseEntity<?> logout() {
-//
-//		SecurityContextHolder.clearContext();
-//		return ResponseEntity.ok("Logout success!");
-//
-////		ReturnObject returnObject = new ReturnObject();
-////		try {
-////
-////			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-////			if (auth != null) {
-////				new SecurityContextLogoutHandler().logout(null, null, auth);
-////			}
-////
-////			returnObject.setStatus(ReturnObject.SUCCESS);
-////			returnObject.setMessage("200");
-////
-////			returnObject.setRetObj("Logout successful!");
-////		}
-////		catch (Exception ex){
-////			returnObject.setStatus(ReturnObject.ERROR);
-////			returnObject.setMessage(ex.getMessage());
-////		}
-////
-////		return ResponseEntity.ok(returnObject);
-//
-//	}
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {

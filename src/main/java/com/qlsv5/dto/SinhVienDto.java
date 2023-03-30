@@ -55,6 +55,8 @@ public class SinhVienDto {
 	@Email(message = "Nhập đúng định dạng email!")
 	private String email;
 
+	private String confirmPassword;
+
 	/* FOREIGN KEY */
 	@NotBlank(message = "Vui Lòng Nhập Mã Lớp")
 	@Length(min = 4 , message = "Mã lớp chứa ít nhất 4 ký tự!")

@@ -50,13 +50,13 @@ public class ChiTietLopTcApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) })})
     public ResponseEntity<?> createChiTietLopTc(@Valid @RequestBody ChiTietLopTcDto chiTietLopTc, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -91,13 +91,13 @@ public class ChiTietLopTcApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) })})
     public ResponseEntity<?> updateChiTietLopTc(@Valid @RequestBody ChiTietLopTcDto chiTietLopTc, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -132,13 +132,13 @@ public class ChiTietLopTcApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) })})
     public ResponseEntity<?> deleteChiTietLopTc(@Valid @RequestBody List<String> lstChiTietLopTcId) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -166,13 +166,13 @@ public class ChiTietLopTcApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) })})
     public ResponseEntity<?> getAllChiTietLopTc() {
 
         ReturnObject returnObject = new ReturnObject();
@@ -200,13 +200,13 @@ public class ChiTietLopTcApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ChiTietLopTcEntity.class)) })})
     public ResponseEntity<?> getChiTietLopTcById(@PathVariable String chiTietLopTcId) {
 
         ReturnObject returnObject = new ReturnObject();

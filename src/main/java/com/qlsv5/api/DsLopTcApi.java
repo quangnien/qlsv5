@@ -49,13 +49,13 @@ public class DsLopTcApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
     public ResponseEntity<?> createDsLopTc(@Valid @RequestBody DsLopTcDto dsLopTc, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -90,13 +90,13 @@ public class DsLopTcApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
     public ResponseEntity<?> updateDsLopTc(@Valid @RequestBody DsLopTcDto dsLopTc, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -131,13 +131,13 @@ public class DsLopTcApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
     public ResponseEntity<?> deleteDsLopTc(@Valid @RequestBody List<String> lstDsLopTcId) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -165,13 +165,13 @@ public class DsLopTcApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
     public ResponseEntity<?> getAllDsLopTc() {
 
         ReturnObject returnObject = new ReturnObject();
@@ -199,13 +199,13 @@ public class DsLopTcApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
     public ResponseEntity<?> getDsLopTcById(@PathVariable String dsLopTcId) {
 
         ReturnObject returnObject = new ReturnObject();

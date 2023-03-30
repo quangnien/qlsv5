@@ -2,11 +2,15 @@ package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.GiangVienDto;
+import com.qlsv5.dto.SinhVienDto;
+import com.qlsv5.dto.UpdatePasswordDto;
 import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.entity.KhoaEntity;
 import com.qlsv5.entity.SinhVienEntity;
+import com.qlsv5.entity.UserEntity;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.GiangVienService;
+import com.qlsv5.service.UserService;
 import com.qlsv5.validation.ValidatorGiangVien;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,9 +43,13 @@ public class GiangVienApi {
     private CommonService commonService;
     @Autowired
     private GiangVienService giangVienService;
-
     @Autowired
     private ValidatorGiangVien validatorGiangVien;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    PasswordEncoder encoder;
+
 
     /* CREATE */
     @Operation(summary = "Create Giang Vien.")
@@ -49,13 +58,13 @@ public class GiangVienApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) })})
     public ResponseEntity<?> createGiangVien(@Valid @RequestBody GiangVienDto giangVien, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -90,13 +99,13 @@ public class GiangVienApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) })})
     public ResponseEntity<?> updateGiangVien(@Valid @RequestBody GiangVienDto giangVien, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -131,13 +140,13 @@ public class GiangVienApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) })})
     public ResponseEntity<?> deleteGiangVien(@Valid @RequestBody List<String> lstGiangVienId) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -166,13 +175,13 @@ public class GiangVienApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) })})
     public ResponseEntity<?> getAllGiangVien() {
 
         ReturnObject returnObject = new ReturnObject();
@@ -201,13 +210,13 @@ public class GiangVienApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) })})
     public ResponseEntity<?> getGiangVienById(@PathVariable String giangVienId) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -236,13 +245,13 @@ public class GiangVienApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) })})
     public ResponseEntity<?> getGiangVienByKhoaId(@PathVariable String maKhoa) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -255,6 +264,56 @@ public class GiangVienApi {
             validatorGiangVien.validateGetListGiangVienByMaKhoa(maKhoa);
             List<GiangVienEntity> giangVienEntity = giangVienService.getListGiangVienByMaKhoa(maKhoa);
             returnObject.setRetObj(giangVienEntity);
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(ex.getMessage());
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
+
+    @Operation(summary = "Update password")
+    @PostMapping("/giangVien/updatePassword")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_GIANGVIEN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) })})
+    public ResponseEntity<?> updatePasswordGiangVien(@Valid @RequestBody UpdatePasswordDto updatePasswordDto, BindingResult bindingResult) {
+
+        ReturnObject returnObject = new ReturnObject();
+        if (bindingResult.hasErrors()) {
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(bindingResult.getFieldErrors().get(0).getDefaultMessage());
+            return ResponseEntity.ok(returnObject);
+        }
+        try {
+            log.info("Update password GiangVien By Id!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            validatorGiangVien.validateUpdatePasswordGiangVien(updatePasswordDto);
+
+            GiangVienEntity getGiangVienByDB = (GiangVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new GiangVienDto());
+
+            /* update PW GiangVienEntity*/
+            getGiangVienByDB.setMatKhau(updatePasswordDto.getConfirmPassword());
+            commonService.updateObject(getGiangVienByDB);
+
+            /* update PW UserEntity*/
+            UserEntity userEntity = userService.findByUsername(getGiangVienByDB.getMaGv());
+            userEntity.setPassword(encoder.encode(updatePasswordDto.getConfirmPassword()));
+            userService.updateUser(userEntity);
+
+            returnObject.setRetObj(getGiangVienByDB);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

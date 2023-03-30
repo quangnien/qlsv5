@@ -48,13 +48,13 @@ public class MonHocApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) })})
     public ResponseEntity<?> createMonHoc(@Valid @RequestBody MonHocDto monHoc, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -90,13 +90,13 @@ public class MonHocApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) })})
     public ResponseEntity<?> updateMonHoc(@Valid @RequestBody MonHocDto monHoc, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -132,13 +132,13 @@ public class MonHocApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) })})
     public ResponseEntity<?> deleteMonHoc(@Valid @RequestBody List<String> lstMonHocId) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -167,13 +167,13 @@ public class MonHocApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) })})
     public ResponseEntity<?> getAllMonHoc() {
 
         ReturnObject returnObject = new ReturnObject();
@@ -202,13 +202,13 @@ public class MonHocApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) })})
     public ResponseEntity<?> getMonHocById(@PathVariable String monHocId) {
 
         ReturnObject returnObject = new ReturnObject();

@@ -10,7 +10,9 @@ public class MasterDataExceptionConstant {
     /* Common */
     public static final String COMMON_EMAIL_WRONG_FORMAT = "You entered the wrong format for email@gmail.com!";
     public static final String COMMON_EMAIL_IS_EXIST = "email is already in use!";
-
+    public static final String E_COMMON_NOT_CONFIRM_PASSWORD = "Password is'nt equal with ConfirmPassword ";
+    public static final String E_COMMON_NOT_PASSWORD = "Password is'nt equal with ConfirmPassword ";
+    public static final String E_COMMON_NOT_EQUAL_CONFIRM_PASSWORD = "Password is'nt equal with ConfirmPassword ";
 
     /* Khoa */
     public static final String E_KHOA_NOT_FOUND_KHOA = "Khoa does not exist!";
