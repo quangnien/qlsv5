@@ -1,16 +1,28 @@
 package com.qlsv5.api;
 
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.ChiTietLopTcDto;
-import com.qlsv5.dto.LopDto;
 import com.qlsv5.entity.ChiTietLopTcEntity;
-import com.qlsv5.entity.KhoaEntity;
-import com.qlsv5.entity.LopEntity;
-import com.qlsv5.service.ChiTietLopTcService;
 import com.qlsv5.service.CommonService;
-import com.qlsv5.service.LopService;
 import com.qlsv5.validation.ValidatorChiTietLopTc;
-import com.qlsv5.validation.ValidatorLop;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,14 +30,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @author NienNQ
