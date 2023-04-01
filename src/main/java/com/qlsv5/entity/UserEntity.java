@@ -36,6 +36,8 @@ public class UserEntity {
   @Size(max = 120)
   private String password;
 
+  private String roleName;
+
   @DBRef
   private Set<RoleEntity> roles = new HashSet<>();
 

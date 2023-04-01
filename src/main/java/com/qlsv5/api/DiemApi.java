@@ -45,13 +45,13 @@ public class DiemApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
     public ResponseEntity<?> createDiem(@Valid @RequestBody DiemDto diem, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -86,13 +86,13 @@ public class DiemApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
     public ResponseEntity<?> updateDiem(@Valid @RequestBody DiemDto diem, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -127,13 +127,13 @@ public class DiemApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
     public ResponseEntity<?> deleteDiem(@Valid @RequestBody List<String> lstDiemId) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -161,13 +161,13 @@ public class DiemApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
     public ResponseEntity<?> getAllDiem() {
 
         ReturnObject returnObject = new ReturnObject();
@@ -195,13 +195,13 @@ public class DiemApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) })})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
     public ResponseEntity<?> getDiemById(@PathVariable String diemId) {
 
         ReturnObject returnObject = new ReturnObject();

@@ -1,13 +1,19 @@
 package com.qlsv5.security.jwt;
 
+import com.qlsv5.entity.TokenRefreshTokenPairEntity;
+import com.qlsv5.repository.TokenRefreshTokenPairRepository;
 import com.qlsv5.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Component
@@ -19,6 +25,9 @@ public class JwtUtils {
 
 	@Value("${niennq.app.jwtExpirationMs}")
 	private int jwtExpirationMs;
+
+	@Autowired
+	private TokenRefreshTokenPairRepository tokenRefreshTokenPairRepository;
 
 	public String generateJwtToken(Authentication authentication) {
 
@@ -53,5 +62,29 @@ public class JwtUtils {
 		}
 
 		return false;
+	}
+
+	public ResponseCookie getCleanJwtCookie() {
+		ResponseCookie cookie = ResponseCookie.from(jwtSecret, null).path("/api").build();
+		return cookie;
+	}
+
+	public String parseJwtFromRequest(HttpServletRequest request) {
+		String headerAuth = request.getHeader("Authorization");
+		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+			return headerAuth.substring(7);
+		}
+		return null;
+	}
+
+	public void deleteJwtTokens(String jwtToken) {
+		try {
+			Jws<Claims> claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwtToken);
+			String jti = claims.getBody().getId();
+			TokenRefreshTokenPairEntity tokens = tokenRefreshTokenPairRepository.findTokenRefreshTokenPairByJti(jti);
+			tokenRefreshTokenPairRepository.delete(tokens);
+		} catch (JwtException e) {
+			logger.error("Lỗi khi xóa JWT token: {}", e.getMessage());
+		}
 	}
 }
