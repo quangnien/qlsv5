@@ -1,6 +1,5 @@
 package com.qlsv5.dto;
 
-
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;

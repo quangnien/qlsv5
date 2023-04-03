@@ -1,6 +1,5 @@
 package com.qlsv5.dto;
 
-
 import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
