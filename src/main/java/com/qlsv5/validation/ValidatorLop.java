@@ -94,4 +94,20 @@ public class ValidatorLop implements Validator {
         }
     }
 
+    @Transactional
+    public void validateGetListLopByMaKhoa(String maKhoa) throws BusinessException {
+
+        if(maKhoa == null || "".equals(maKhoa)){
+            throw new BusinessException(MasterDataExceptionConstant.E_KHOA_NOT_FOUND_KHOA);
+        }
+        else {
+            int countKhoaByMaKhoa = khoaRepository.countKhoaByMaKhoa(maKhoa);
+
+            if (countKhoaByMaKhoa == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_KHOA_NOT_FOUND_KHOA);
+            }
+        }
+
+    }
+
 }

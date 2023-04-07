@@ -1,9 +1,7 @@
 package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
-import com.qlsv5.dto.KhoaDto;
 import com.qlsv5.dto.LopDto;
-import com.qlsv5.entity.KhoaEntity;
 import com.qlsv5.entity.LopEntity;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.LopService;
@@ -40,6 +38,9 @@ public class LopApi {
 
     @Autowired
     private ValidatorLop validatorLop;
+
+    @Autowired
+    private LopService lopService;
 
     /* CREATE */
     @Operation(summary = "Create Lop.")
@@ -217,6 +218,40 @@ public class LopApi {
             validatorLop.validateGetLopById(lopId);
 //            LopEntity lopEntity = lopService.getLopById(lopId);
             LopEntity lopEntity = (LopEntity) commonService.getObjectById(lopId, new LopDto());
+            returnObject.setRetObj(lopEntity);
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(ex.getMessage());
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
+
+    @Operation(summary = "Get danh sach lop by maKhoa")
+    @GetMapping("/lop/khoa/{maKhoa}")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = LopEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = LopEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = LopEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = LopEntity.class)) })})
+    public ResponseEntity<?> getLopByMaKhoa(@PathVariable String maKhoa) {
+
+        ReturnObject returnObject = new ReturnObject();
+        try {
+            log.info("Get Lop By maKhoa!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            validatorLop.validateGetListLopByMaKhoa(maKhoa);
+            List<LopEntity> lopEntity = lopService.getListLopByMaKhoa(maKhoa);
             returnObject.setRetObj(lopEntity);
         }
         catch (Exception ex){
