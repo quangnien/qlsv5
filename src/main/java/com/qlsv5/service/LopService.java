@@ -2,6 +2,7 @@ package com.qlsv5.service;
 
 import com.qlsv5.dto.LopDto;
 import com.qlsv5.entity.LopEntity;
+import com.qlsv5.entity.SinhVienEntity;
 
 import java.util.List;
 
@@ -13,5 +14,8 @@ public interface LopService {
     public List<LopEntity> findAllLop();
 
     public LopEntity getLopById(String taskId);
-	
+
+    public List<LopEntity> getListLopByMaKhoa(String maKhoa);
+
+
 }

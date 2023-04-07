@@ -1,25 +1,23 @@
 package com.qlsv5.service.impl;
 
-import com.qlsv5.dto.LopDto;
 import com.qlsv5.entity.LopEntity;
 import com.qlsv5.repository.LopRepository;
 import com.qlsv5.service.LopService;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class LopServiceImpl implements LopService {
+
     @Autowired
-    private LopRepository repository;
+    private LopRepository lopRepository;
 
     //CRUD  CREATE , READ , UPDATE , DELETE
 
@@ -43,10 +41,10 @@ public class LopServiceImpl implements LopService {
     public List<String> deleteLstLop(List<String> lstLopId) {
         List<String> lstSuccess = new ArrayList<>();
         for (String item : lstLopId) {
-            int countMaLop = repository.countLopById(item);
+            int countMaLop = lopRepository.countLopById(item);
             if(countMaLop > 0){
                 lstSuccess.add(item);
-                repository.deleteById(item);
+                lopRepository.deleteById(item);
             }
         }
         return lstSuccess;
@@ -54,11 +52,16 @@ public class LopServiceImpl implements LopService {
 
     @Override
     public List<LopEntity> findAllLop() {
-        return repository.findAll();
+        return lopRepository.findAll();
     }
 
     @Override
     public LopEntity getLopById(String lopId){
-        return repository.findById(lopId).get();
+        return lopRepository.findById(lopId).get();
+    }
+
+    @Override
+    public List<LopEntity> getListLopByMaKhoa(String maKhoa){
+        return lopRepository.getListLopByMaKhoa(maKhoa);
     }
 }
