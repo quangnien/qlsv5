@@ -8,8 +8,11 @@
 package com.qlsv5.repository;
 
 import com.qlsv5.entity.DiemEntity;
+import com.qlsv5.entity.LopEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+
+import java.util.List;
 
 public interface DiemRepository extends MongoRepository<DiemEntity, String> {
     int countDiemById(String id);
@@ -19,4 +22,7 @@ public interface DiemRepository extends MongoRepository<DiemEntity, String> {
 
     @Query(value = "{ _id: { $ne: ?0 }, maSv: ?1, maLopTc: ?2}", count = true)
     Long countByMaSvAndMaLopTcExcludingId(String id, String maSv, String maLopTc);
+
+    List<DiemEntity> getListDiemByMaLopTc(String maLopTc);
+
 }

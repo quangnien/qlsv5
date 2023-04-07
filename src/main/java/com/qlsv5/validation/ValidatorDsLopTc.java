@@ -118,4 +118,20 @@ public class ValidatorDsLopTc implements Validator {
         }
     }
 
+    @Transactional
+    public void validateGetListLopTcByMaLop(String maLop) throws BusinessException {
+
+        if(maLop == null || "".equals(maLop)){
+            throw new BusinessException(MasterDataExceptionConstant.E_LOP_NOT_FOUND_LOP);
+        }
+        else {
+            int countLopByMaLop = lopRepository.countLopByMaLop(maLop);
+
+            if (countLopByMaLop == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_LOP_NOT_FOUND_LOP);
+            }
+        }
+
+    }
+
 }
