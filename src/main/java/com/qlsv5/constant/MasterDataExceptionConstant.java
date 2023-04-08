@@ -37,6 +37,7 @@ public class MasterDataExceptionConstant {
     /* Ds Lop Tc */
     public static final String E_DSLOPTC_NOT_FOUND_DSLOPTC = "Ds Lop Tc does not exist!";
     public static final String E_DSLOPTC_DUPLICATE_MA_DSLOPTC = "Ma lop Tc exists, please input another one!";
+    public static final String E_DSLOPTC_FULL_SLOT = "Lop TC is full, please choose another one!";
 
     /* Chi Tiet Lop Tc */
     public static final String E_CHITIETLOPTC_NOT_FOUND_DSLOPTC = "Chi Tiet Lop Tc does not exist!";
@@ -45,4 +46,5 @@ public class MasterDataExceptionConstant {
     /* Diem */
     public static final String E_DIEM_NOT_FOUND_DSLOPTC = "Diem does not exist!";
     public static final String E_DIEM_DUPLICATE_MASV_MALOPTC = "(Ma sinh vien, Ma lop tin chi) exists, please input another one!";
+
 }

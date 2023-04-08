@@ -31,6 +31,11 @@ public class DsLopTcDto {
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")
 	private Date timeKt;
 
+	/* soluong */
+	private int soLuong;
+
+	private int soLuongCon;
+
 	/* FOREIGN KEY */
 	@NotBlank(message = "Vui Lòng Nhập Mã Môn Học")
 	@Length(min = 4 , message = "Mã môn học chỉ chứa ít nhất 4 ký tự!")

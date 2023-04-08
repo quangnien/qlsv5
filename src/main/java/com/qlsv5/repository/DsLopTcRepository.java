@@ -23,4 +23,6 @@ public interface DsLopTcRepository extends MongoRepository<DsLopTcEntity, String
 
     List<DsLopTcEntity> getListDsLopByMaLop(String maLop);
 
+    DsLopTcEntity getDsLopTcByMaLopTc(String maLopTc);
+
 }
