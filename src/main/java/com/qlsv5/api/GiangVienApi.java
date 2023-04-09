@@ -3,11 +3,13 @@ package com.qlsv5.api;
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.GiangVienDto;
 import com.qlsv5.dto.SinhVienDto;
+import com.qlsv5.dto.TkbDto;
 import com.qlsv5.dto.UpdatePasswordDto;
 import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.entity.KhoaEntity;
 import com.qlsv5.entity.SinhVienEntity;
 import com.qlsv5.entity.UserEntity;
+import com.qlsv5.security.services.UserDetailsImpl;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.GiangVienService;
 import com.qlsv5.service.UserService;
@@ -19,9 +21,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +54,9 @@ public class GiangVienApi {
     private UserService userService;
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
 
 
     /* CREATE */
@@ -323,4 +331,50 @@ public class GiangVienApi {
         return ResponseEntity.ok(returnObject);
     }
 
+    /* GET THỜI KHÓA BIỂU */
+    @Operation(summary = "Get TKB For Giang Vien.")
+    @GetMapping("/giangVien/tkb")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),
+            @ApiResponse(responseCode = "405", description = "Method not allowed",
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) })})
+    public ResponseEntity<?> getTKB(@Valid @RequestBody TkbDto tkbDto, BindingResult bindingResult) {
+
+        ReturnObject returnObject = new ReturnObject();
+        if (bindingResult.hasErrors()) {
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(bindingResult.getFieldErrors().get(0).getDefaultMessage());
+            return ResponseEntity.ok(returnObject);
+        }
+        try {
+            log.info("Get All TKB For GiangVien!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            validatorGiangVien.validateGetTKBForGiangVien(tkbDto);
+
+            /* get info user is logining*/
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = ((UserDetailsImpl)principal).getUsername();
+
+            List<TkbDto> listTkbDto = giangVienService.getListTKBForGiangVien(username, tkbDto);
+
+            returnObject.setRetObj(listTkbDto);
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(ex.getMessage());
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
 }

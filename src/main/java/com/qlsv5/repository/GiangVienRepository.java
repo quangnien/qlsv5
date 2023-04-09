@@ -7,11 +7,13 @@
  ******************************************************************************/
 package com.qlsv5.repository;
 
+import com.qlsv5.dto.TkbDto;
 import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.entity.SinhVienEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import java.util.Date;
 import java.util.List;
 
 public interface GiangVienRepository extends MongoRepository<GiangVienEntity, String> {
@@ -23,4 +25,5 @@ public interface GiangVienRepository extends MongoRepository<GiangVienEntity, St
     Long countGiangVienByMaGvAndNotId(String maGiangVien, String id);
     @Query(value = "{'email': ?0, '_id': {$ne: ?1}}", count = true)
     Long countGiangVienByEmailAndNotId(String email, String id);
+
 }

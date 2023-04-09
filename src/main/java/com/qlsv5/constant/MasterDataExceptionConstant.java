@@ -47,4 +47,8 @@ public class MasterDataExceptionConstant {
     public static final String E_DIEM_NOT_FOUND_DSLOPTC = "Diem does not exist!";
     public static final String E_DIEM_DUPLICATE_MASV_MALOPTC = "(Ma sinh vien, Ma lop tin chi) exists, please input another one!";
 
+    /* TKB */
+    public static final String E_TKB_NOT_FOUND_DATE_BEGIN = "Date begin is null!";
+    public static final String E_TKB_NOT_FOUND_DATE_END = "Date end is null!";
+
 }

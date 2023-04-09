@@ -8,8 +8,11 @@
 package com.qlsv5.repository;
 
 import com.qlsv5.entity.ChiTietLopTcEntity;
+import com.qlsv5.entity.LopEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+
+import java.util.List;
 
 public interface ChiTietLopTcRepository extends MongoRepository<ChiTietLopTcEntity, String> {
 //    int countLopByMaLop(String maLop);
@@ -20,6 +23,8 @@ public interface ChiTietLopTcRepository extends MongoRepository<ChiTietLopTcEnti
 
     @Query(value = "{ _id: { $ne: ?0 }, maLopTc: ?1, tiet: ?2, thu: ?3 }", count = true)
     Long countByMaLopTcAndTietAndThuExcludingId(String id, String maLopTc, int tiet, String thu);
+
+    List<ChiTietLopTcEntity> getListChiTietLopTcByMaLopTc(String maLopTc);
 
 //    @Query(value = "{'maLop': ?0, '_id': {$ne: ?1}}", count = true)
 //    Long countLopByMaLopAndNotId(String maLop, String id);
