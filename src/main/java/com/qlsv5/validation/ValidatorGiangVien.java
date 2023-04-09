@@ -3,6 +3,7 @@ package com.qlsv5.validation;
 import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.GiangVienDto;
 import com.qlsv5.dto.SinhVienDto;
+import com.qlsv5.dto.TkbDto;
 import com.qlsv5.dto.UpdatePasswordDto;
 import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.entity.SinhVienEntity;
@@ -153,6 +154,19 @@ public class ValidatorGiangVien implements Validator {
             else if (userEntity == null) {
                 throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
             }
+        }
+    }
+
+    @Transactional
+    public void validateGetTKBForGiangVien(Object target) throws BusinessException {
+
+        TkbDto tkbDto = (TkbDto) target;
+
+        if (tkbDto.getTimeInputBegin() == null) {
+            throw new BusinessException(MasterDataExceptionConstant.E_TKB_NOT_FOUND_DATE_BEGIN);
+        }
+        else if (tkbDto.getTimeInputEnd() == null) {
+            throw new BusinessException(MasterDataExceptionConstant.E_TKB_NOT_FOUND_DATE_END);
         }
     }
 

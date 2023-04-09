@@ -24,5 +24,8 @@ public interface DiemRepository extends MongoRepository<DiemEntity, String> {
     Long countByMaSvAndMaLopTcExcludingId(String id, String maSv, String maLopTc);
 
     List<DiemEntity> getListDiemByMaLopTc(String maLopTc);
+    DiemEntity getDiemById(String id);
+
+    List<DiemEntity> getListDiemByMaSv(String maSv);
 
 }
