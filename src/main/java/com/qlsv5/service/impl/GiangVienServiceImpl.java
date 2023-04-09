@@ -66,7 +66,6 @@ public class GiangVienServiceImpl implements GiangVienService {
     public List<TkbDto> getListTKBForGiangVien(String maGiangVien, TkbDto tkbDto) {
 
         List<TkbDto> tkbDtos = new ArrayList<>();
-        int countTkbDtos = 0;
 
         List<DsLopTcEntity> dsLopTcEntities = dsLopTcRepository.findByMaGvAndTimeBdLessThanEqualAndTimeKtGreaterThanEqual(maGiangVien,
                 tkbDto.getTimeInputBegin(), tkbDto.getTimeInputEnd());

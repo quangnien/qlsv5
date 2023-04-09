@@ -26,4 +26,6 @@ public interface DiemRepository extends MongoRepository<DiemEntity, String> {
     List<DiemEntity> getListDiemByMaLopTc(String maLopTc);
     DiemEntity getDiemById(String id);
 
+    List<DiemEntity> getListDiemByMaSv(String maSv);
+
 }
