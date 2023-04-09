@@ -44,7 +44,7 @@ public class DiemApi {
     private DiemService diemService;
 
     /* CREATE */
-    @Operation(summary = "Create Diem.")
+    /*@Operation(summary = "Create Diem.")
     @PostMapping("/diem")
     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
@@ -82,7 +82,7 @@ public class DiemApi {
         }
 
         return ResponseEntity.ok(returnObject);
-    }
+    }*/
 
     /* UPDATE */
     @PutMapping("/diem")
@@ -126,38 +126,38 @@ public class DiemApi {
     }
 
     /* DELETE */
-    @DeleteMapping("/diem")
-    @Operation(summary = "Delete Diem by list id")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success",
-                    content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
-            @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
-            @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
-    public ResponseEntity<?> deleteDiem(@Valid @RequestBody List<String> lstDiemId) {
-
-        ReturnObject returnObject = new ReturnObject();
-        try {
-            log.info("Delete List Diem!");
-
-            returnObject.setStatus(ReturnObject.SUCCESS);
-            returnObject.setMessage("200");
-
-            List<String> deleteSuccess = commonService.deleteLstObject(lstDiemId, new DiemDto());
-            returnObject.setRetObj(deleteSuccess);
-        }
-        catch (Exception ex){
-            returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
-        }
-
-        return ResponseEntity.ok(returnObject);
-    }
+//    @DeleteMapping("/diem")
+//    @Operation(summary = "Delete Diem by list id")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Success",
+//                    content = {
+//                            @Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
+//            @ApiResponse(responseCode = "401", description = "Unauthorized",
+//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
+//            @ApiResponse(responseCode = "403", description = "Forbidden",
+//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
+//            @ApiResponse(responseCode = "500", description = "Internal server error",
+//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
+//    public ResponseEntity<?> deleteDiem(@Valid @RequestBody List<String> lstDiemId) {
+//
+//        ReturnObject returnObject = new ReturnObject();
+//        try {
+//            log.info("Delete List Diem!");
+//
+//            returnObject.setStatus(ReturnObject.SUCCESS);
+//            returnObject.setMessage("200");
+//
+//            List<String> deleteSuccess = commonService.deleteLstObject(lstDiemId, new DiemDto());
+//            returnObject.setRetObj(deleteSuccess);
+//        }
+//        catch (Exception ex){
+//            returnObject.setStatus(ReturnObject.ERROR);
+//            returnObject.setMessage(ex.getMessage());
+//        }
+//
+//        return ResponseEntity.ok(returnObject);
+//    }
 
     /* GET ALL */
     @Operation(summary = "Get all Diem.")

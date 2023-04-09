@@ -22,7 +22,7 @@ public class DsLopTcDto {
 	@Length(min = 4 , message = "Mã lớp tín chỉ chứa ít nhất 4 ký tự!")
 	private String maLopTc;
 
-	private int nienKhoa;
+	private String nienKhoa;
 	private int ky;
 
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")
@@ -30,6 +30,11 @@ public class DsLopTcDto {
 
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")
 	private Date timeKt;
+
+	/* soluong */
+	private int soLuong;
+
+	private int soLuongCon;
 
 	/* FOREIGN KEY */
 	@NotBlank(message = "Vui Lòng Nhập Mã Môn Học")

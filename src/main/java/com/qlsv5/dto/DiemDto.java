@@ -20,7 +20,7 @@ public class DiemDto {
 	private float ck;
 	private float tb;
 
-	@NotBlank(message = "Vui Lòng Nhập Xếp Loại")
+//	@NotBlank(message = "Vui Lòng Nhập Xếp Loại")
 	private String xepLoai;
 
 	/* FOREIGN KEY */

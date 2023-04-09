@@ -1,18 +1,16 @@
 package com.qlsv5.entity;
 
-import java.util.Date;
-
-import javax.validation.constraints.NotBlank;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 @Document(collection = "ds_lop_tc")
 @Data
@@ -28,7 +26,7 @@ public class DsLopTcEntity {
 	@Indexed(unique = true)
 	private String maLopTc;
 	
-	private int nienKhoa;
+	private String nienKhoa;
 	private int ky;
 
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")
@@ -36,6 +34,12 @@ public class DsLopTcEntity {
 	
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")
 	private Date timeKt;
+
+	/* soluong */
+	@NotBlank(message = "Vui Lòng Nhập Số Lượng Sinh Viên")
+	private int soLuong;
+
+	private int soLuongCon;
 	
 	/* FOREIGN KEY */
 	@NotBlank(message = "Vui Lòng Nhập Mã Môn Học")
