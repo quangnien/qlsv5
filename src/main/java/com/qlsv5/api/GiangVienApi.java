@@ -333,7 +333,7 @@ public class GiangVienApi {
 
     /* GET THỜI KHÓA BIỂU */
     @Operation(summary = "Get TKB For Giang Vien.")
-    @GetMapping("/giangVien/tkb")
+    @PostMapping("/giangVien/tkb")
     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
