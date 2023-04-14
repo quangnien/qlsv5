@@ -47,4 +47,9 @@ public class TkbDto {
 	private String thu;
 	private int soTiet;
 	private String phong;
+
+	public TkbDto(Date timeInputBegin, Date timeInputEnd) {
+		this.timeInputBegin = timeInputBegin;
+		this.timeInputEnd = timeInputEnd;
+	}
 }

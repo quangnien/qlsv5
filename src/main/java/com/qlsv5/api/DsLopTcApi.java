@@ -259,6 +259,10 @@ public class DsLopTcApi {
             returnObject.setMessage(ex.getMessage());
         }
 
+        String s1 = "welcome";
+        String s2 = new String("welcome");
+        System.out.print("s1 == s2: " + (s1 == s2));
+
         return ResponseEntity.ok(returnObject);
     }
 
