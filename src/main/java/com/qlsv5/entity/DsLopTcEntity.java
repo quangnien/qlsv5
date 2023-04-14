@@ -28,7 +28,7 @@ public class DsLopTcEntity {
 	@Indexed(unique = true)
 	private String maLopTc;
 	
-	private int nienKhoa;
+	private String nienKhoa;
 	private int ky;
 
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")
@@ -36,6 +36,12 @@ public class DsLopTcEntity {
 	
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")
 	private Date timeKt;
+
+	/* soluong */
+	@NotBlank(message = "Vui Lòng Nhập Số Lượng Sinh Viên")
+	private int soLuong;
+
+	private int soLuongCon;
 	
 	/* FOREIGN KEY */
 	@NotBlank(message = "Vui Lòng Nhập Mã Môn Học")

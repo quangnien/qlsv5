@@ -2,9 +2,11 @@ package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.SinhVienDto;
+import com.qlsv5.dto.TkbDto;
 import com.qlsv5.dto.UpdatePasswordDto;
 import com.qlsv5.entity.SinhVienEntity;
 import com.qlsv5.entity.UserEntity;
+import com.qlsv5.security.services.UserDetailsImpl;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.SinhVienService;
 import com.qlsv5.service.UserService;
@@ -19,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -313,6 +316,53 @@ public class SinhVienApi {
             userService.updateUser(userEntity);
 
             returnObject.setRetObj(getSinhVienByDB);
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(ex.getMessage());
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
+
+    /* GET THỜI KHÓA BIỂU */
+    @Operation(summary = "Get TKB For Sinh Vien.")
+    @PostMapping("/sinhVien/tkb")
+    @PreAuthorize("hasAuthority('ROLE_SINHVIEN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),
+            @ApiResponse(responseCode = "405", description = "Method not allowed",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) })})
+    public ResponseEntity<?> getTKForSinhVien(@Valid @RequestBody TkbDto tkbDto, BindingResult bindingResult) {
+
+        ReturnObject returnObject = new ReturnObject();
+        if (bindingResult.hasErrors()) {
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(bindingResult.getFieldErrors().get(0).getDefaultMessage());
+            return ResponseEntity.ok(returnObject);
+        }
+        try {
+            log.info("Get All TKB For SinhVien!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            validatorSinhVien.validateGetTKBForSinhVien(tkbDto);
+
+            /* get info user is logining*/
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = ((UserDetailsImpl)principal).getUsername();
+
+            List<TkbDto> listTkbDto = sinhVienService.getListTKBForSinhVien(username, tkbDto);
+
+            returnObject.setRetObj(listTkbDto);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

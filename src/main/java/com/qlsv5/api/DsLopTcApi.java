@@ -3,7 +3,7 @@ package com.qlsv5.api;
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.DsLopTcDto;
 import com.qlsv5.entity.DsLopTcEntity;
-import com.qlsv5.entity.KhoaEntity;
+import com.qlsv5.entity.LopEntity;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.DsLopTcService;
 import com.qlsv5.validation.ValidatorDsLopTc;
@@ -36,6 +36,7 @@ public class DsLopTcApi {
 
     @Autowired
     private CommonService commonService;
+
     @Autowired
     private DsLopTcService dsLopTcService;
 
@@ -223,6 +224,44 @@ public class DsLopTcApi {
             returnObject.setStatus(ReturnObject.ERROR);
             returnObject.setMessage(ex.getMessage());
         }
+
+        return ResponseEntity.ok(returnObject);
+    }
+
+    @Operation(summary = "Get danh sach lop tin chi by maLop")
+    @GetMapping("/dsLopTc/lop/{maLop}")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
+    public ResponseEntity<?> getDsLopTcByMaLop(@PathVariable String maLop) {
+
+        ReturnObject returnObject = new ReturnObject();
+        try {
+            log.info("Get Ds Lop Tin Chi By maLop!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            validatorDsLopTc.validateGetListLopTcByMaLop(maLop);
+            List<DsLopTcEntity> dsLopTcEntity = dsLopTcService.getListLopTcByMaLop(maLop);
+            returnObject.setRetObj(dsLopTcEntity);
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(ex.getMessage());
+        }
+
+        String s1 = "welcome";
+        String s2 = new String("welcome");
+        System.out.print("s1 == s2: " + (s1 == s2));
 
         return ResponseEntity.ok(returnObject);
     }
