@@ -146,7 +146,7 @@ public class AuthApi {
 		// Create new user's account
 		UserEntity user = new UserEntity(signUpRequest.getUsername(),
 							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()));
+							 encoder.encode(signUpRequest.getPassword()), null);
 
 		Set<String> strRoles = signUpRequest.getRoles();
 		Set<RoleEntity> roles = new HashSet<>();

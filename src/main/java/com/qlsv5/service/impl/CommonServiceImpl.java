@@ -115,12 +115,14 @@ public class CommonServiceImpl implements CommonService {
 
             /*_____________________________________________*/
             /* BEGIN CREATE ACCOUNT USER WITH ROLE_SINHVIEN*/
+            /*_____________________________________________*/
+
             SignupRequest signUpRequest = createUserAccountTemp(result);
 
             // Create new user's account
             UserEntity user = new UserEntity(signUpRequest.getUsername(),
                     signUpRequest.getEmail(),
-                    encoder.encode(signUpRequest.getPassword()));
+                    encoder.encode(signUpRequest.getPassword()), signUpRequest.getIdLogin());
 
             Set<String> strRoles = signUpRequest.getRoles();
             Set<RoleEntity> roles = new HashSet<>();
@@ -158,12 +160,15 @@ public class CommonServiceImpl implements CommonService {
                 });
             }
 
+            result.setId(UUID.randomUUID().toString().split("-")[0]);
+`
             user.setRoles(roles);
+            user.setIdLogin(result.getId());
             userRepository.save(user);
+            /*____________________________________________*/
             /* END CREATE ACCOUNT USER WITH ROLE_SINHVIEN */
             /*____________________________________________*/
 
-            result.setId(UUID.randomUUID().toString().split("-")[0]);
             return sinhVienRepository.save(result);
         }
         else if(object instanceof GiangVienDto){
@@ -177,13 +182,14 @@ public class CommonServiceImpl implements CommonService {
 
             /*_____________________________________________*/
             /* BEGIN CREATE ACCOUNT USER WITH ROLE_SINHVIEN*/
+            /*_____________________________________________*/
             SignupRequest signUpRequest = createUserAccountTemp(result);
 
             // Create new user's account
 
             UserEntity user = new UserEntity(signUpRequest.getUsername(),
                     signUpRequest.getEmail(),
-                    encoder.encode(signUpRequest.getPassword()));
+                    encoder.encode(signUpRequest.getPassword()), signUpRequest.getIdLogin());
 
             Set<String> strRoles = signUpRequest.getRoles();
             Set<RoleEntity> roles = new HashSet<>();
@@ -215,13 +221,15 @@ public class CommonServiceImpl implements CommonService {
                     }
                 });
             }
+            result.setId(UUID.randomUUID().toString().split("-")[0]);
 
             user.setRoles(roles);
+            user.setIdLogin(result.getId());
             userRepository.save(user);
+            /*____________________________________________*/
             /* END CREATE ACCOUNT USER WITH ROLE_SINHVIEN */
             /*____________________________________________*/
 
-            result.setId(UUID.randomUUID().toString().split("-")[0]);
             return giangVienRepository.save(result);
         }
         else if(object instanceof MonHocDto){
@@ -524,6 +532,7 @@ public class CommonServiceImpl implements CommonService {
             objectTemp.setUsername(result.getMaSv());
             objectTemp.setPassword(result.getMatKhau());
             objectTemp.setEmail(result.getEmail());
+            objectTemp.setIdLogin(result.getId());
 
             Set<String> roles = new HashSet<>();
             roles.add("SINHVIEN");
@@ -535,6 +544,7 @@ public class CommonServiceImpl implements CommonService {
             objectTemp.setUsername(result.getMaGv());
             objectTemp.setPassword(result.getMatKhau());
             objectTemp.setEmail(result.getEmail());
+            objectTemp.setIdLogin(result.getId());
 
             Set<String> roles = new HashSet<>();
             roles.add("GIANGVIEN");
