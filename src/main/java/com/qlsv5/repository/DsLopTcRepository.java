@@ -30,4 +30,8 @@ public interface DsLopTcRepository extends MongoRepository<DsLopTcEntity, String
     List<DsLopTcEntity> findByMaGvAndTimeBdLessThanEqualAndTimeKtGreaterThanEqual(String maGv, Date timeBegin, Date timeEnd);
     DsLopTcEntity findByMaLopTcAndTimeBdGreaterThanEqualAndTimeKtLessThanEqual(String maLopTc, Date timeBegin, Date timeEnd);
 
+    int countDsLopTcByMaLop(String maLop);
+    int countDsLopTcByMaGv(String maGv);
+    int countDsLopTcByMaMh(String maMh);
+
 }

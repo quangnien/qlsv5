@@ -1,6 +1,7 @@
 package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
+import com.qlsv5.dto.DangKyMonDto;
 import com.qlsv5.dto.DiemDto;
 import com.qlsv5.entity.DiemEntity;
 import com.qlsv5.service.CommonService;
@@ -20,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,7 +58,7 @@ public class DangKyMonApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
-    public ResponseEntity<?> createDangKyMon(@Valid @RequestBody DiemDto diem, BindingResult bindingResult) {
+    public ResponseEntity<?> createDangKyMon(@Valid @RequestBody DangKyMonDto dangKyMonDto, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
 
@@ -71,9 +73,24 @@ public class DangKyMonApi {
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            validatorDiem.validateDangKyMon(diem);
-            commonService.addObject(diem);
-            returnObject.setRetObj(diem);
+            List<DiemDto> listDiem = new ArrayList<>();
+            for(int i = 0 ; i < dangKyMonDto.getDiemDtoList().size() ; i++){
+                listDiem.add(dangKyMonDto.getDiemDtoList().get(i));
+            }
+
+            List<DiemDto> listDiemValid = new ArrayList<>();
+            for (DiemDto diemDto: listDiem) {
+                boolean checkValid = validatorDiem.validateDangKyMon(diemDto);
+                if(checkValid == true){
+                    listDiemValid.add(diemDto);
+                }
+            }
+
+            DangKyMonDto dangKyMonDtoValid = new DangKyMonDto();
+            dangKyMonDtoValid.setDiemDtoList(listDiemValid);
+
+            commonService.addObject(dangKyMonDtoValid);
+            returnObject.setRetObj(dangKyMonDtoValid);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

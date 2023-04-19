@@ -119,8 +119,34 @@ public class ValidatorDiem implements Validator {
 
     }
 
+//    @Transactional
+//    public void validateDangKyMon(Object target) throws BusinessException {
+//        DiemDto diemDto = (DiemDto) target;
+//
+//        Long countDiemByMaSvMaLopTc = diemRepository.countByMaSvAndMaLopTc(diemDto.getMaSv(), diemDto.getMaLopTc());
+//        int countSinhVienByMaSv = sinhVienRepository.countSinhVienByMaSv(diemDto.getMaSv());
+//        int countDsLopTcByMaLopTc = dsLopTcRepository.countDsLopTcByMaLopTc(diemDto.getMaLopTc());
+//
+//        if (countSinhVienByMaSv == 0) {
+//            throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
+//        }
+//        else if (countDsLopTcByMaLopTc == 0) {
+//            throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_NOT_FOUND_DSLOPTC);
+//        }
+//        else if (countDiemByMaSvMaLopTc > 0) {
+//            throw new BusinessException(MasterDataExceptionConstant.E_DIEM_DUPLICATE_MASV_MALOPTC);
+//        }
+//        else {
+//            DsLopTcEntity dsLopTcEntity = dsLopTcRepository.getDsLopTcByMaLopTc(diemDto.getMaLopTc());
+//            if(dsLopTcEntity.getSoLuongCon() <= 0){
+//                throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_FULL_SLOT);
+//            }
+//        }
+//
+//    }
+
     @Transactional
-    public void validateDangKyMon(Object target) throws BusinessException {
+    public boolean validateDangKyMon(Object target) throws BusinessException {
         DiemDto diemDto = (DiemDto) target;
 
         Long countDiemByMaSvMaLopTc = diemRepository.countByMaSvAndMaLopTc(diemDto.getMaSv(), diemDto.getMaLopTc());
@@ -128,20 +154,22 @@ public class ValidatorDiem implements Validator {
         int countDsLopTcByMaLopTc = dsLopTcRepository.countDsLopTcByMaLopTc(diemDto.getMaLopTc());
 
         if (countSinhVienByMaSv == 0) {
-            throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
+            return false;
         }
         else if (countDsLopTcByMaLopTc == 0) {
-            throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_NOT_FOUND_DSLOPTC);
+            return false;
         }
         else if (countDiemByMaSvMaLopTc > 0) {
-            throw new BusinessException(MasterDataExceptionConstant.E_DIEM_DUPLICATE_MASV_MALOPTC);
+            return false;
         }
         else {
             DsLopTcEntity dsLopTcEntity = dsLopTcRepository.getDsLopTcByMaLopTc(diemDto.getMaLopTc());
             if(dsLopTcEntity.getSoLuongCon() <= 0){
-                throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_FULL_SLOT);
+                return false;
             }
         }
+
+        return true;
 
     }
 
