@@ -22,4 +22,7 @@ public interface SinhVienRepository extends MongoRepository<SinhVienEntity, Stri
     Long countSinhVienByMaSvAndNotId(String maSinhVien, String id);
     @Query(value = "{'email': ?0, '_id': {$ne: ?1}}", count = true)
     Long countSinhVienByEmailAndNotId(String email, String id);
+
+    int countSinhVienByMaLop(String maLop);
+
 }
