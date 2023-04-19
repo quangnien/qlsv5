@@ -28,4 +28,6 @@ public interface ChiTietLopTcRepository extends MongoRepository<ChiTietLopTcEnti
 
 //    @Query(value = "{'maLop': ?0, '_id': {$ne: ?1}}", count = true)
 //    Long countLopByMaLopAndNotId(String maLop, String id);
+
+    int countChiTietLopTcByMaLopTc(String maLopTc);
 }
