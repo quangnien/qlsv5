@@ -20,6 +20,8 @@ public class SignupRequest {
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
+
+    private String idLogin;
   
     public String getUsername() {
         return username;
@@ -51,5 +53,13 @@ public class SignupRequest {
     
     public void setRole(Set<String> roles) {
       this.roles = roles;
+    }
+
+    public String getIdLogin() {
+        return idLogin;
+    }
+
+    public void setIdLogin(String idLogin) {
+        this.idLogin = idLogin;
     }
 }

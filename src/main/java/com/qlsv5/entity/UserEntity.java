@@ -38,13 +38,16 @@ public class UserEntity {
 
   private String roleName;
 
+  private String idLogin;
+
   @DBRef
   private Set<RoleEntity> roles = new HashSet<>();
 
-  public UserEntity(String username, String email, String password) {
+  public UserEntity(String username, String email, String password, String idLogin) {
     this.username = username;
     this.email = email;
     this.password = password;
+    this.idLogin = idLogin;
   }
 
 }
