@@ -161,7 +161,7 @@ public class CommonServiceImpl implements CommonService {
             }
 
             result.setId(UUID.randomUUID().toString().split("-")[0]);
-`
+
             user.setRoles(roles);
             user.setIdLogin(result.getId());
             userRepository.save(user);
