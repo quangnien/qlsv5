@@ -1,11 +1,13 @@
 package com.qlsv5.service.impl;
 
 import com.qlsv5.entity.DsLopTcEntity;
-import com.qlsv5.entity.LopEntity;
 import com.qlsv5.repository.DsLopTcRepository;
 import com.qlsv5.service.DsLopTcService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +22,10 @@ public class DsLopTcServiceImpl implements DsLopTcService {
     private DsLopTcRepository dsLopTcRepository;
 
     @Override
-    public List<DsLopTcEntity> getListLopTcByMaLop(String maLop){
-        return dsLopTcRepository.getListDsLopByMaLop(maLop);
+    public List<DsLopTcEntity> getListLopTcByMaLop(String maLop, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<DsLopTcEntity> resultPage = dsLopTcRepository.findAllByMaLop(maLop, pageable);
+        return resultPage.getContent();
     }
 
 }

@@ -17,4 +17,8 @@ public interface GiangVienService {
     public List<GiangVienEntity> getListGiangVienByMaKhoa(String maKhoa);
 
     public List<TkbDto> getListTKBForGiangVien(String maGiangVien, TkbDto tkbDto);
+
+    // paging
+    List<GiangVienEntity> getListGiangVienPaging(int page, int size);
+
 }

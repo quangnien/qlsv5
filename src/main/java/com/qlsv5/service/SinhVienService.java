@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SinhVienService {
 
-    public List<SinhVienEntity> getListSinhVienByMaLop(String maLop);
+    public List<SinhVienEntity> getListSinhVienByMaLop(String maLop, int page, int size);
 
     public List<TkbDto> getListTKBForSinhVien(String maSinhVien, TkbDto tkbDto);
 }

@@ -241,7 +241,9 @@ public class DsLopTcApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
-    public ResponseEntity<?> getDsLopTcByMaLop(@PathVariable String maLop) {
+    public ResponseEntity<?> getDsLopTcByMaLop(@PathVariable String maLop,
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "4") int size) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
@@ -251,8 +253,18 @@ public class DsLopTcApi {
             returnObject.setMessage("200");
 
             validatorDsLopTc.validateGetListLopTcByMaLop(maLop);
-            List<DsLopTcEntity> dsLopTcEntity = dsLopTcService.getListLopTcByMaLop(maLop);
+            List<DsLopTcEntity> dsLopTcEntity = dsLopTcService.getListLopTcByMaLop(maLop, page, size);
             returnObject.setRetObj(dsLopTcEntity);
+
+            /*for paging*/
+            List<DsLopTcEntity> dsLopTcEntityForPaging = dsLopTcService.getListLopTcByMaLop(maLop, 0, 100000);
+
+            double totalPageDouble = (double) dsLopTcEntityForPaging.size() / size;
+            int totalPageForPaging = (int) Math.ceil(totalPageDouble);
+
+            returnObject.setPage(page);
+            returnObject.setTotalRetObjs(dsLopTcEntityForPaging.size());
+            returnObject.setTotalPages(totalPageForPaging);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

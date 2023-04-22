@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface DsLopTcService {
 
-    public List<DsLopTcEntity> getListLopTcByMaLop(String maLop);
+    public List<DsLopTcEntity> getListLopTcByMaLop(String maLop, int page, int size);
 
 }

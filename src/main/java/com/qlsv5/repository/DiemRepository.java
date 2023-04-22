@@ -9,6 +9,9 @@ package com.qlsv5.repository;
 
 import com.qlsv5.entity.DiemEntity;
 import com.qlsv5.entity.LopEntity;
+import com.qlsv5.entity.SinhVienEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
@@ -31,4 +34,5 @@ public interface DiemRepository extends MongoRepository<DiemEntity, String> {
     int countDiemByMaSv(String maSv);
     int countDiemByMaLopTc(String maLopTc);
 
+    Page<DiemEntity> findAllByMaLopTc(String maLopTc, Pageable pageable);
 }
