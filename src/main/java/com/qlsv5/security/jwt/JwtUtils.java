@@ -15,6 +15,10 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 @Component
 public class JwtUtils {
@@ -87,4 +91,35 @@ public class JwtUtils {
 			logger.error("Lỗi khi xóa JWT token: {}", e.getMessage());
 		}
 	}
+
+	public String getTokenFromRequest(HttpServletRequest request) {
+		String bearerToken = request.getHeader("Authorization");
+		if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+			return bearerToken.substring(7);
+		}
+		return null;
+	}
+
+	public String getUsernameFromToken(String token) {
+		return getClaimFromToken(token, Claims::getSubject);
+	}
+
+	public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+		final Claims claims = getAllClaimsFromToken(token);
+		return claimsResolver.apply(claims);
+	}
+
+	private Claims getAllClaimsFromToken(String token) {
+		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+	}
+
+//	public void invalidateToken(String token) {
+//		// Add the token to the blacklist in Redis with a TTL of the token's expiration time
+//		JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(jwtSecret).build();
+//		Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
+//		Date expiration = claimsJws.getBody().getExpiration();
+//		long ttl = expiration.getTime() - System.currentTimeMillis();
+//		String key = "blacklist:" + token;
+//		redisTemplate.opsForValue().set(key, "invalid", ttl, TimeUnit.MILLISECONDS);
+//	}
 }
