@@ -10,6 +10,9 @@ package com.qlsv5.repository;
 import com.qlsv5.dto.TkbDto;
 import com.qlsv5.entity.DsLopTcEntity;
 import com.qlsv5.entity.LopEntity;
+import com.qlsv5.entity.SinhVienEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
@@ -33,5 +36,7 @@ public interface DsLopTcRepository extends MongoRepository<DsLopTcEntity, String
     int countDsLopTcByMaLop(String maLop);
     int countDsLopTcByMaGv(String maGv);
     int countDsLopTcByMaMh(String maMh);
+
+    Page<DsLopTcEntity> findAllByMaLop(String maLop, Pageable pageable);
 
 }

@@ -4,6 +4,7 @@ import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.DiemDto;
 import com.qlsv5.entity.DiemEntity;
 import com.qlsv5.entity.LopEntity;
+import com.qlsv5.entity.SinhVienEntity;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.DiemService;
 import com.qlsv5.validation.ValidatorDiem;
@@ -241,7 +242,9 @@ public class DiemApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
-    public ResponseEntity<?> getDsDiemByMaLopTc(@PathVariable String maLopTc) {
+    public ResponseEntity<?> getDsDiemByMaLopTc(@PathVariable String maLopTc,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "7") int size) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
@@ -251,8 +254,18 @@ public class DiemApi {
             returnObject.setMessage("200");
 
             validatorDiem.validateGetListDiemByMaLopTc(maLopTc);
-            List<DiemEntity> diemEntity = diemService.getListDiemByMaLopTc(maLopTc);
+            List<DiemEntity> diemEntity = diemService.getListDiemByMaLopTc(maLopTc, page, size);
             returnObject.setRetObj(diemEntity);
+
+            /*for paging*/
+            List<DiemEntity> diemEntityForPaging = diemService.getListDiemByMaLopTc(maLopTc,  0, 100000);
+
+            double totalPageDouble = (double) diemEntityForPaging.size() / size;
+            int totalPageForPaging = (int) Math.ceil(totalPageDouble);
+
+            returnObject.setPage(page);
+            returnObject.setTotalRetObjs(diemEntityForPaging.size());
+            returnObject.setTotalPages(totalPageForPaging);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

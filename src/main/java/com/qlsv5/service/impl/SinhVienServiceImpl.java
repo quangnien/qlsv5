@@ -12,6 +12,9 @@ import com.qlsv5.repository.SinhVienRepository;
 import com.qlsv5.service.SinhVienService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +39,12 @@ public class SinhVienServiceImpl implements SinhVienService {
     private DiemRepository diemRepository;
 
     @Override
-    public List<SinhVienEntity> getListSinhVienByMaLop(String maLop){
-        return sinhVienRepository.getListSinhVienByMaLop(maLop);
+    public List<SinhVienEntity> getListSinhVienByMaLop(String maLop, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<SinhVienEntity> resultPage = sinhVienRepository.findAllByMaLop(maLop, pageable);
+
+//        return sinhVienRepository.getListSinhVienByMaLop(maLop);
+        return resultPage.getContent();
     }
 
     @Override

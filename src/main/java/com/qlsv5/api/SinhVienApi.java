@@ -254,7 +254,9 @@ public class SinhVienApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SinhVienEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SinhVienEntity.class)) })})
-    public ResponseEntity<?> getSinhVienByLopId(@PathVariable String maLop) {
+    public ResponseEntity<?> getSinhVienByLopId(@PathVariable String maLop,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "7") int size) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
@@ -264,8 +266,18 @@ public class SinhVienApi {
             returnObject.setMessage("200");
 
             validatorSinhVien.validateGetListSinhVienByMaLop(maLop);
-            List<SinhVienEntity> sinhVienEntity = sinhVienService.getListSinhVienByMaLop(maLop);
+            List<SinhVienEntity> sinhVienEntity = sinhVienService.getListSinhVienByMaLop(maLop, page, size);
             returnObject.setRetObj(sinhVienEntity);
+
+            /*for paging*/
+            List<SinhVienEntity> dsLopTcEntityForPaging = sinhVienService.getListSinhVienByMaLop(maLop, 0, 100000);
+
+            double totalPageDouble = (double) dsLopTcEntityForPaging.size() / size;
+            int totalPageForPaging = (int) Math.ceil(totalPageDouble);
+
+            returnObject.setPage(page);
+            returnObject.setTotalRetObjs(dsLopTcEntityForPaging.size());
+            returnObject.setTotalPages(totalPageForPaging);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
