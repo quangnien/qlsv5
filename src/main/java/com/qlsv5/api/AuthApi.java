@@ -21,6 +21,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -29,9 +31,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.qlsv5.security.jwt.JwtUtils;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class AuthApi {
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -51,7 +55,7 @@ public class AuthApi {
 	@Autowired
 	private TokenRefreshTokenPairRepository tokenRefreshTokenPairRepository;
 
-	@PostMapping("/signin")
+	@PostMapping("/auth/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
 		ReturnObject returnObject = new ReturnObject();
@@ -114,6 +118,26 @@ public class AuthApi {
 			// Xóa mã thông báo làm mới khỏi cơ sở dữ liệu
 //			tokenRefreshTokenPairRepository.deleteByRefreshToken(refreshToken);
 
+			// Get the current user's token
+//			HttpServletRequest requestJWT = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+//			String authorizationHeader = request.getHeader("Authorization");
+//			String token = authorizationHeader.substring("Bearer ".length());
+//			jwtUtils.deleteJwtTokens(token);
+//
+//
+//			String authToken = jwtUtils.getTokenFromRequest(request);
+//
+//			if (authToken != null) {
+//				String username = jwtUtils.getUsernameFromToken(authToken);
+//				UserEntity user = userRepository.findByUsername(username).get();
+//
+//				if (user != null) {
+////					token.remove(authToken);
+////					userRepository.save(user);
+//					jwtUtils.invalidateToken(authToken);
+//				}
+//			}
+
 			// Xóa đối tượng xác thực trong bảo mật context
 			SecurityContextHolder.getContext().setAuthentication(null);
 
@@ -129,7 +153,7 @@ public class AuthApi {
 		return ResponseEntity.ok(returnObject);
 	}
 
-	@PostMapping("/signup")
+	@PostMapping("/auth/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
