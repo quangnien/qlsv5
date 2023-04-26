@@ -22,7 +22,8 @@ public class SignupRequest {
     private String password;
 
     private String idLogin;
-  
+    private String userFullName;
+
     public String getUsername() {
         return username;
     }
@@ -61,5 +62,13 @@ public class SignupRequest {
 
     public void setIdLogin(String idLogin) {
         this.idLogin = idLogin;
+    }
+
+    public String getUserFullName() {
+        return userFullName;
+    }
+
+    public void setUserFullName(String userFullName) {
+        this.userFullName = userFullName;
     }
 }

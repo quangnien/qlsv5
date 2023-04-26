@@ -122,7 +122,7 @@ public class CommonServiceImpl implements CommonService {
             // Create new user's account
             UserEntity user = new UserEntity(signUpRequest.getUsername(),
                     signUpRequest.getEmail(),
-                    encoder.encode(signUpRequest.getPassword()), signUpRequest.getIdLogin());
+                    encoder.encode(signUpRequest.getPassword()), signUpRequest.getIdLogin(), signUpRequest.getUserFullName());
 
             Set<String> strRoles = signUpRequest.getRoles();
             Set<RoleEntity> roles = new HashSet<>();
@@ -164,6 +164,7 @@ public class CommonServiceImpl implements CommonService {
 
             user.setRoles(roles);
             user.setIdLogin(result.getId());
+            user.setUserFullName(result.getHo() + " " + result.getTen());
             userRepository.save(user);
             /*____________________________________________*/
             /* END CREATE ACCOUNT USER WITH ROLE_SINHVIEN */
@@ -189,7 +190,7 @@ public class CommonServiceImpl implements CommonService {
 
             UserEntity user = new UserEntity(signUpRequest.getUsername(),
                     signUpRequest.getEmail(),
-                    encoder.encode(signUpRequest.getPassword()), signUpRequest.getIdLogin());
+                    encoder.encode(signUpRequest.getPassword()), signUpRequest.getIdLogin(), signUpRequest.getUserFullName());
 
             Set<String> strRoles = signUpRequest.getRoles();
             Set<RoleEntity> roles = new HashSet<>();
@@ -225,6 +226,7 @@ public class CommonServiceImpl implements CommonService {
 
             user.setRoles(roles);
             user.setIdLogin(result.getId());
+            user.setUserFullName(result.getHo() + " " + result.getTen());
             userRepository.save(user);
             /*____________________________________________*/
             /* END CREATE ACCOUNT USER WITH ROLE_SINHVIEN */
@@ -533,6 +535,7 @@ public class CommonServiceImpl implements CommonService {
             objectTemp.setPassword(result.getMatKhau());
             objectTemp.setEmail(result.getEmail());
             objectTemp.setIdLogin(result.getId());
+            objectTemp.setUserFullName(result.getHo() + " " + result.getTen());
 
             Set<String> roles = new HashSet<>();
             roles.add("SINHVIEN");
@@ -545,6 +548,7 @@ public class CommonServiceImpl implements CommonService {
             objectTemp.setPassword(result.getMatKhau());
             objectTemp.setEmail(result.getEmail());
             objectTemp.setIdLogin(result.getId());
+            objectTemp.setUserFullName(result.getHo() + " " + result.getTen());
 
             Set<String> roles = new HashSet<>();
             roles.add("GIANGVIEN");
