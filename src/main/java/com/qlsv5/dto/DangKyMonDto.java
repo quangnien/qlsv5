@@ -10,5 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DangKyMonDto {
-    List<DiemDto> diemDtoList;
+//    List<DiemDto> diemDtoList;
+    String maSv;
+    List<String> maLopTcList;
 }
