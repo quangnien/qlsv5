@@ -274,8 +274,13 @@ public class CommonServiceImpl implements CommonService {
             DangKyMonDto dangKyMonDto = modelMapper.map(object, DangKyMonDto.class);
 
             List<DiemDto> listDiem = new ArrayList<>();
-            for(int i = 0 ; i < dangKyMonDto.getDiemDtoList().size() ; i++){
-                listDiem.add(dangKyMonDto.getDiemDtoList().get(i));
+            for(int i = 0 ; i < dangKyMonDto.getMaLopTcList().size() ; i++){
+
+                DiemDto diemDto = new DiemDto();
+                diemDto.setMaSv(dangKyMonDto.getMaSv());
+                diemDto.setMaLopTc(dangKyMonDto.getMaLopTcList().get(i));
+
+                listDiem.add(diemDto);
             }
 
             for(int i = 0 ; i < listDiem.size() ; i++){
