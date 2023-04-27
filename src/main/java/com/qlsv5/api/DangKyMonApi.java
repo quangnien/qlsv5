@@ -74,20 +74,28 @@ public class DangKyMonApi {
             returnObject.setMessage("200");
 
             List<DiemDto> listDiem = new ArrayList<>();
-            for(int i = 0 ; i < dangKyMonDto.getDiemDtoList().size() ; i++){
-                listDiem.add(dangKyMonDto.getDiemDtoList().get(i));
+            for(int i = 0 ; i < dangKyMonDto.getMaLopTcList().size() ; i++){
+
+                DiemDto diemDto = new DiemDto();
+                diemDto.setMaSv(dangKyMonDto.getMaSv());
+                diemDto.setMaLopTc(dangKyMonDto.getMaLopTcList().get(i));
+
+                listDiem.add(diemDto);
             }
 
-            List<DiemDto> listDiemValid = new ArrayList<>();
+            List<String> listMaLopTcValid = new ArrayList<>();
             for (DiemDto diemDto: listDiem) {
                 boolean checkValid = validatorDiem.validateDangKyMon(diemDto);
                 if(checkValid == true){
-                    listDiemValid.add(diemDto);
+                    listMaLopTcValid.add(diemDto.getMaLopTc());
                 }
             }
 
             DangKyMonDto dangKyMonDtoValid = new DangKyMonDto();
-            dangKyMonDtoValid.setDiemDtoList(listDiemValid);
+            if(listMaLopTcValid.size() > 0 ){
+                dangKyMonDtoValid.setMaSv(dangKyMonDto.getMaSv());
+                dangKyMonDtoValid.setMaLopTcList(listMaLopTcValid);
+            }
 
             commonService.addObject(dangKyMonDtoValid);
             returnObject.setRetObj(dangKyMonDtoValid);
