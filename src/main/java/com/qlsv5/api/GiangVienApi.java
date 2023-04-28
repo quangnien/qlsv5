@@ -32,6 +32,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -203,7 +204,10 @@ public class GiangVienApi {
 //            List<GiangVienEntity> listGiangVien = giangVienService.findAllGiangVien();
 //            List<Object> listGiangVien = commonService.findAllObject(new GiangVienDto());
             List<GiangVienEntity> listGiangVien = giangVienService.getListGiangVienPaging(page, size);
-            returnObject.setRetObj(listGiangVien);
+
+            List<Object> returnObjectListInList = new ArrayList<>();
+            returnObjectListInList.add(listGiangVien);
+            returnObject.setRetObj(returnObjectListInList);
 
             /*for paging*/
             List<GiangVienEntity> dsLopTcEntityForPaging = giangVienService.getListGiangVienPaging(0, 100000);
