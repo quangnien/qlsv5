@@ -2,6 +2,7 @@ package com.qlsv5.dto;
 
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 
 import lombok.AllArgsConstructor;
