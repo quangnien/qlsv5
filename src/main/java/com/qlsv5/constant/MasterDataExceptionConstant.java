@@ -35,6 +35,9 @@ public class MasterDataExceptionConstant {
     public static final String E_GIANGVIEN_DUPLICATE_MA_GIANGVIEN = "Ma giang vien exists, please input another one!";
     public static final String E_GIANGVIEN_IS_USED = "Giang Vien is used!";
 
+    /* Sinh Vien */
+    public static final String E_ADMIN_NOT_FOUND_ADMIN = "Admin does not exist!";
+
     /* Mon Hoc */
     public static final String E_MONHOC_NOT_FOUND_MONHOC = "Mon hoc does not exist!";
     public static final String E_MONHOC_DUPLICATE_MA_MONHOC = "Ma mon hoc exists, please input another one!";

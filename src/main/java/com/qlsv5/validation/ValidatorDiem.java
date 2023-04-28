@@ -153,6 +153,9 @@ public class ValidatorDiem implements Validator {
         int countSinhVienByMaSv = sinhVienRepository.countSinhVienByMaSv(diemDto.getMaSv());
         int countDsLopTcByMaLopTc = dsLopTcRepository.countDsLopTcByMaLopTc(diemDto.getMaLopTc());
 
+        /* DK: 1 MONHOC 1 - n LOPTINCHI -> only đk 1 LOPTINCHI thuộc về 1 môn học đó*/
+//        Hiện tại không bắt đk này, vì 1 list truyền cả 2 cái đó vô thì sao kiểm soát được
+
         if (countSinhVienByMaSv == 0) {
             return false;
         }
