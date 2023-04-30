@@ -10,9 +10,11 @@ public class MasterDataExceptionConstant {
     /* Common */
     public static final String COMMON_EMAIL_WRONG_FORMAT = "You entered the wrong format for email@gmail.com!";
     public static final String COMMON_EMAIL_IS_EXIST = "email is already in use!";
-    public static final String E_COMMON_NOT_CONFIRM_PASSWORD = "Password is'nt equal with ConfirmPassword ";
-    public static final String E_COMMON_NOT_PASSWORD = "Password is'nt equal with ConfirmPassword ";
-    public static final String E_COMMON_NOT_EQUAL_CONFIRM_PASSWORD = "Password is'nt equal with ConfirmPassword ";
+    public static final String E_COMMON_NOT_CONFIRM_PASSWORD = "ConfirmPassword mustn't null!";
+    public static final String E_COMMON_NOT_PASSWORD_OLD= "Old password mustn't null!";
+    public static final String E_COMMON_NOT_PASSWORD_NEW = "New password mustn't null!";
+    public static final String E_COMMON_NOT_MATCH_PASSWORD = "Incorrect password!";
+    public static final String E_COMMON_NOT_EQUAL_CONFIRM_PASSWORD = "Password is'nt equal with ConfirmPassword!";
 
     /* Khoa */
     public static final String E_KHOA_NOT_FOUND_KHOA = "Khoa does not exist!";
@@ -53,7 +55,6 @@ public class MasterDataExceptionConstant {
     public static final String E_CHITIETLOPTC_NOT_FOUND_DSLOPTC = "Chi Tiet Lop Tc does not exist!";
     public static final String E_CHITIETLOPTC_DUPLICATE_MA_LOPTC_TIET_THU = "(Ma lop Tc, Tiet, Thu) exists, please input another one!";
     public static final String E_CHITIETLOPTC_IS_USED = "Chi Tiet Lop TC is used!";
-
 
     /* Diem */
     public static final String E_DIEM_NOT_FOUND_DSLOPTC = "Diem does not exist!";
