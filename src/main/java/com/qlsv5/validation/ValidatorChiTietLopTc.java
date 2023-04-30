@@ -49,7 +49,7 @@ public class ValidatorChiTietLopTc implements Validator {
         int countDsLopTcByMaLopTc = dsLopTcRepository.countDsLopTcByMaLopTc(chiTietLopTcDto.getMaLopTc());
 
         if (countDsLopTcByMaLopTc == 0) {
-            throw new BusinessException(MasterDataExceptionConstant.E_CHITIETLOPTC_NOT_FOUND_DSLOPTC);
+            throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_NOT_FOUND_DSLOPTC);
         }
         else if (countChiTietLopTcByMaLopTcTietThu > 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_CHITIETLOPTC_DUPLICATE_MA_LOPTC_TIET_THU);

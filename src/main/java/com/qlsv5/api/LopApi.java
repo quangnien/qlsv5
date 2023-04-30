@@ -127,7 +127,7 @@ public class LopApi {
     /* DELETE */
     @DeleteMapping("/lop")
     @Operation(summary = "Delete Lop by list id")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = LopEntity.class)) }),
@@ -145,7 +145,6 @@ public class LopApi {
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
-
 
 //            List<String> deleteSuccess = lopService.deleteLstLop(lstLopId);
             List<String> deleteSuccess = commonService.deleteLstObject(lstLopId, new LopDto());
