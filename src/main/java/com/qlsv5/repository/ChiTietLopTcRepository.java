@@ -30,4 +30,5 @@ public interface ChiTietLopTcRepository extends MongoRepository<ChiTietLopTcEnti
 //    Long countLopByMaLopAndNotId(String maLop, String id);
 
     int countChiTietLopTcByMaLopTc(String maLopTc);
+
 }

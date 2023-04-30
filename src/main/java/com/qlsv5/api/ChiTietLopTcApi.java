@@ -2,15 +2,11 @@ package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.ChiTietLopTcDto;
-import com.qlsv5.dto.LopDto;
 import com.qlsv5.entity.ChiTietLopTcEntity;
-import com.qlsv5.entity.KhoaEntity;
-import com.qlsv5.entity.LopEntity;
+import com.qlsv5.entity.DsLopTcEntity;
 import com.qlsv5.service.ChiTietLopTcService;
 import com.qlsv5.service.CommonService;
-import com.qlsv5.service.LopService;
 import com.qlsv5.validation.ValidatorChiTietLopTc;
-import com.qlsv5.validation.ValidatorLop;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -42,6 +38,9 @@ public class ChiTietLopTcApi {
     private CommonService commonService;
     @Autowired
     private ValidatorChiTietLopTc validatorChiTietLopTc;
+
+    @Autowired
+    private ChiTietLopTcService chiTietLopTcService;
 
     /* CREATE */
     @Operation(summary = "Create ChiTietLopTc.")
@@ -219,6 +218,42 @@ public class ChiTietLopTcApi {
             validatorChiTietLopTc.validateGetChiTietLopTcById(chiTietLopTcId);
             ChiTietLopTcEntity chiTietLopTcEntity = (ChiTietLopTcEntity) commonService.getObjectById(chiTietLopTcId, new ChiTietLopTcDto());
             returnObject.setRetObj(chiTietLopTcEntity);
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(ex.getMessage());
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
+
+    @Operation(summary = "Get danh sach chi tiet lop tin chi by maLopTc")
+    @GetMapping("/chiTietLopTc/lopTc/{maLopTc}")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
+    public ResponseEntity<?> getDsLopTcByMaLop(@PathVariable String maLopTc,
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "7") int size) {
+
+        ReturnObject returnObject = new ReturnObject();
+        try {
+            log.info("Get Ds Chi Tiet Lop Tin Chi By maLopTc!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            validatorChiTietLopTc.validateGetListChiTietLopTcByMaLopTc(maLopTc);
+            List<ChiTietLopTcEntity> chiTietLopTcEntityList = chiTietLopTcService.getListChiTietLopTcByMaLopTc(maLopTc);
+            returnObject.setRetObj(chiTietLopTcEntityList);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

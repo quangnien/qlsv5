@@ -1,5 +1,6 @@
 package com.qlsv5.validation;
 
+import com.qlsv5.common.FunctionCommon;
 import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.SinhVienDto;
 import com.qlsv5.dto.TkbDto;
@@ -36,6 +37,9 @@ public class ValidatorSinhVien implements Validator {
     @Autowired
     private CommonService commonService;
 
+    @Autowired
+    private FunctionCommon functionCommon;
+
     @Override
     public boolean supports(Class<?> clazz) {
         return false;
@@ -62,6 +66,9 @@ public class ValidatorSinhVien implements Validator {
         }
         else if (countEmail > 0) {
             throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_IS_EXIST);
+        }
+        else if(functionCommon.isValidEmailFormat(sinhVienDto.getEmail()) == false){
+            throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_WRONG_FORMAT);
         }
     }
 
@@ -93,6 +100,9 @@ public class ValidatorSinhVien implements Validator {
             }
             else if (countValueByEmail > 0) {
                 throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_IS_EXIST);
+            }
+            else if(functionCommon.isValidEmailFormat(sinhVienDto.getEmail()) == false){
+                throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_WRONG_FORMAT);
             }
         }
     }

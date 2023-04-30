@@ -93,4 +93,20 @@ public class ValidatorChiTietLopTc implements Validator {
         }
     }
 
+    @Transactional
+    public void validateGetListChiTietLopTcByMaLopTc(String maLopTc) throws BusinessException {
+
+        if(maLopTc == null || "".equals(maLopTc)){
+            throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_NOT_FOUND_DSLOPTC);
+        }
+        else {
+            int countLopTcByMaLopTc = dsLopTcRepository.countDsLopTcByMaLopTc(maLopTc);
+
+            if (countLopTcByMaLopTc == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_NOT_FOUND_DSLOPTC);
+            }
+        }
+
+    }
+
 }
