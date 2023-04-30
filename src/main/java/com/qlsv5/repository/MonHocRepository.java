@@ -7,6 +7,7 @@
  ******************************************************************************/
 package com.qlsv5.repository;
 
+import com.qlsv5.entity.DsLopTcEntity;
 import com.qlsv5.entity.MonHocEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -17,4 +18,6 @@ public interface MonHocRepository extends MongoRepository<MonHocEntity, String> 
 
     @Query(value = "{'maMonHoc': ?0, '_id': {$ne: ?1}}", count = true)
     Long countMonHocByMaMhAndNotId(String maMonHoc, String id);
+
+    MonHocEntity getMonHocByMaMh(String maMh);
 }

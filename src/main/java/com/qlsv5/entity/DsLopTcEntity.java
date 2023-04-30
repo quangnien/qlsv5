@@ -26,14 +26,14 @@ public class DsLopTcEntity {
 	@Indexed(unique = true)
 	private String maLopTc;
 	
-	private String nienKhoa;
-	private int ky;
-
-	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeBd;
-	
-	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeKt;
+//	private String nienKhoa;
+//	private int ky;
+//
+//	@DateTimeFormat(pattern =  "yyyy-MM-dd")
+//	private Date timeBd;
+//
+//	@DateTimeFormat(pattern =  "yyyy-MM-dd")
+//	private Date timeKt;
 
 	/* soluong */
 	@NotBlank(message = "Vui Lòng Nhập Số Lượng Sinh Viên")
