@@ -114,9 +114,10 @@ public class DiemApi {
             returnObject.setMessage("200");
 
             validatorDiem.validateEditDiem(diem);
-            commonService.updateObject(diem);
 
-            returnObject.setRetObj(diem);
+            DiemEntity diemEntity = (DiemEntity) commonService.updateObject(diem);
+
+            returnObject.setRetObj(diemEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

@@ -51,43 +51,43 @@ public class SinhVienServiceImpl implements SinhVienService {
     public List<TkbDto> getListTKBForSinhVien(String maSinhVien, TkbDto tkbDto) {
 
         List<TkbDto> tkbDtos = new ArrayList<>();
-
-        /* get list Diem (cotain list maLopTC) */
-        List<DiemEntity> listDiemEntities = diemRepository.getListDiemByMaSv(maSinhVien);
-
-        List<DsLopTcEntity> dsLopTcEntities = new ArrayList<>();
-
-        for(DiemEntity diemEntity : listDiemEntities){
-            DsLopTcEntity lopTcEntity =  dsLopTcRepository.findByMaLopTcAndTimeBdGreaterThanEqualAndTimeKtLessThanEqual(diemEntity.getMaLopTc(),
-                    tkbDto.getTimeInputBegin(), tkbDto.getTimeInputEnd());
-            if(lopTcEntity != null){
-                dsLopTcEntities.add(lopTcEntity);
-            }
-        }
-
-        for (DsLopTcEntity lopTcEntity : dsLopTcEntities) {
-            List<ChiTietLopTcEntity> listChiTietLopTcEntity = chiTietLopTcRepository.getListChiTietLopTcByMaLopTc(lopTcEntity.getMaLopTc());
-            for(ChiTietLopTcEntity chiTietLopTcEntity : listChiTietLopTcEntity){
-
-                TkbDto itemTkb = new TkbDto();
-
-                itemTkb.setKy(lopTcEntity.getKy());
-                itemTkb.setIdLopTc(lopTcEntity.getId());
-                itemTkb.setMaGv(lopTcEntity.getMaGv());
-                itemTkb.setMaLop(lopTcEntity.getMaLop());
-                itemTkb.setMaLopTc(lopTcEntity.getMaLopTc());
-                itemTkb.setMaMh(lopTcEntity.getMaMh());
-                itemTkb.setNienKhoa(lopTcEntity.getNienKhoa());
-                itemTkb.setSoLuong(lopTcEntity.getSoLuong());
-
-                itemTkb.setThu(chiTietLopTcEntity.getThu());
-                itemTkb.setTiet(chiTietLopTcEntity.getTiet());
-                itemTkb.setSoTiet(chiTietLopTcEntity.getSoTiet());
-                itemTkb.setPhong(chiTietLopTcEntity.getPhong());
-
-                tkbDtos.add(itemTkb);
-            }
-        }
+//
+//        /* get list Diem (cotain list maLopTC) */
+//        List<DiemEntity> listDiemEntities = diemRepository.getListDiemByMaSv(maSinhVien);
+//
+//        List<DsLopTcEntity> dsLopTcEntities = new ArrayList<>();
+//
+//        for(DiemEntity diemEntity : listDiemEntities){
+//            DsLopTcEntity lopTcEntity =  dsLopTcRepository.findByMaLopTcAndTimeBdGreaterThanEqualAndTimeKtLessThanEqual(diemEntity.getMaLopTc(),
+//                    tkbDto.getTimeInputBegin(), tkbDto.getTimeInputEnd());
+//            if(lopTcEntity != null){
+//                dsLopTcEntities.add(lopTcEntity);
+//            }
+//        }
+//
+//        for (DsLopTcEntity lopTcEntity : dsLopTcEntities) {
+//            List<ChiTietLopTcEntity> listChiTietLopTcEntity = chiTietLopTcRepository.getListChiTietLopTcByMaLopTc(lopTcEntity.getMaLopTc());
+//            for(ChiTietLopTcEntity chiTietLopTcEntity : listChiTietLopTcEntity){
+//
+//                TkbDto itemTkb = new TkbDto();
+//
+////                itemTkb.setKy(lopTcEntity.getKy());
+//                itemTkb.setIdLopTc(lopTcEntity.getId());
+//                itemTkb.setMaGv(lopTcEntity.getMaGv());
+//                itemTkb.setMaLop(lopTcEntity.getMaLop());
+//                itemTkb.setMaLopTc(lopTcEntity.getMaLopTc());
+//                itemTkb.setMaMh(lopTcEntity.getMaMh());
+////                itemTkb.setNienKhoa(lopTcEntity.getNienKhoa());
+//                itemTkb.setSoLuong(lopTcEntity.getSoLuong());
+//
+//                itemTkb.setThu(chiTietLopTcEntity.getThu());
+//                itemTkb.setTiet(chiTietLopTcEntity.getTiet());
+//                itemTkb.setSoTiet(chiTietLopTcEntity.getSoTiet());
+//                itemTkb.setPhong(chiTietLopTcEntity.getPhong());
+//
+//                tkbDtos.add(itemTkb);
+//            }
+//        }
 
         return tkbDtos;
     }

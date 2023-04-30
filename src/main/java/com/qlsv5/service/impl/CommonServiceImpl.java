@@ -3,6 +3,7 @@ package com.qlsv5.service.impl;
 import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.*;
 import com.qlsv5.entity.*;
+import com.qlsv5.enumdef.XepLoaiEnum;
 import com.qlsv5.exception.BusinessException;
 import com.qlsv5.payload.request.SignupRequest;
 import com.qlsv5.payload.response.MessageResponse;
@@ -85,7 +86,37 @@ public class CommonServiceImpl implements CommonService {
         }
         else if(object instanceof DiemDto){
             DiemEntity diemEntity = modelMapper.map(object, DiemEntity.class);
-            return diemRepository.save(diemEntity);
+
+            /* Vì TB là 1 field được sinh tự động khi edit */
+            DsLopTcEntity dsLopTcEntity = dsLopTcRepository.getDsLopTcByMaLopTc(diemEntity.getMaLopTc());
+            MonHocEntity monHocEntity = monHocRepository.getMonHocByMaMh(dsLopTcEntity.getMaMh());
+
+            float tb = (float) (diemEntity.getCc()*monHocEntity.getPercentCc()
+                    + diemEntity.getGk()*monHocEntity.getPercentGk()
+                    + diemEntity.getCk()*monHocEntity.getPercentCk()) / 100;
+
+            float tbRound = Math.round(tb * 10.0f) / 10.0f;
+
+            diemEntity.setTb(tbRound);
+            /* ______________________________________ */
+
+            if(tb >=9 ){
+                diemEntity.setXepLoai(XepLoaiEnum.XUAT_SAC.getName());
+            }
+            else if(tb >= 8){
+                diemEntity.setXepLoai(XepLoaiEnum.GIOI.getName());
+            }
+            else if(tb >= 6.5){
+                diemEntity.setXepLoai(XepLoaiEnum.KHA.getName());
+            }
+            else if(tb >= 4){
+                diemEntity.setXepLoai(XepLoaiEnum.TRUNG_BINH.getName());
+            }
+            else {
+                diemEntity.setXepLoai(XepLoaiEnum.YEU.getName());
+            }
+            diemRepository.save(diemEntity);
+            return diemEntity;
         }
 
         return null;

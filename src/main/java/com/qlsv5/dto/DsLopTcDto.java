@@ -22,14 +22,14 @@ public class DsLopTcDto {
 	@Length(min = 4 , message = "Mã lớp tín chỉ chứa ít nhất 4 ký tự!")
 	private String maLopTc;
 
-	private String nienKhoa;
-	private int ky;
-
-	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeBd;
-
-	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeKt;
+//	private String nienKhoa;
+//	private int ky;
+//
+//	@DateTimeFormat(pattern =  "yyyy-MM-dd")
+//	private Date timeBd;
+//
+//	@DateTimeFormat(pattern =  "yyyy-MM-dd")
+//	private Date timeKt;
 
 	/* soluong */
 	private int soLuong;
