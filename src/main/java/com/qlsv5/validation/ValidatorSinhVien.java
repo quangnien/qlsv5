@@ -159,24 +159,26 @@ public class ValidatorSinhVien implements Validator {
 //            throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_CONFIRM_PASSWORD);
 //        }
         else {
-            int countMaSinhVien = sinhVienRepository.countSinhVienById(updatePasswordDto.getId());
 
-            SinhVienEntity getSinhVienByDB = (SinhVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new SinhVienDto());
-            UserEntity userEntity = userService.findByUsername(getSinhVienByDB.getMaSv());
+            UserEntity userEntity = userService.findById(updatePasswordDto.getId());
 
-            if (countMaSinhVien == 0) {
-                throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
-            }
-//            else if(updatePasswordDto.getConfirmPassword().equals(updatePasswordDto.getMatKhau()) == false){
-//                throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_EQUAL_CONFIRM_PASSWORD);
-//            }
-            else if (userEntity == null) {
+            if(userEntity == null){
                 throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
             }
             else {
-                String decodedPassword = encoder.encode(updatePasswordDto.getMatKhauCu());
-                if (! encoder.matches(userEntity.getPassword(), decodedPassword)) {
-                    throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_MATCH_PASSWORD);
+                // maSV
+                String userName = userEntity.getUsername();
+
+                SinhVienEntity getSinhVienByDB = (SinhVienEntity) sinhVienRepository.findByMaSv(userName);
+
+                if(getSinhVienByDB == null){
+                    throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
+                }
+                else {
+                    String decodedPassword = updatePasswordDto.getMatKhauCu();
+                    if (! encoder.matches(decodedPassword, userEntity.getPassword())) {
+                        throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_MATCH_PASSWORD);
+                    }
                 }
             }
         }

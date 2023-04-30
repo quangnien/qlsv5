@@ -9,6 +9,8 @@ import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.entity.SinhVienEntity;
 import com.qlsv5.entity.UserEntity;
 import com.qlsv5.payload.request.SignupRequest;
+import com.qlsv5.repository.GiangVienRepository;
+import com.qlsv5.repository.SinhVienRepository;
 import com.qlsv5.security.services.UserDetailsImpl;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.SinhVienService;
@@ -64,6 +66,12 @@ public class DoiMatKhauApi {
     PasswordEncoder encoder;
 
     @Autowired
+    private SinhVienRepository sinhVienRepository;
+
+    @Autowired
+    private GiangVienRepository giangVienRepository;
+
+    @Autowired
     private ValidatorSinhVien validatorSinhVien;
 
     @Autowired
@@ -74,7 +82,7 @@ public class DoiMatKhauApi {
 
 
     @Operation(summary = "Update password")
-    @PostMapping("/updatePassword")
+    @PutMapping("/updatePassword")
     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
@@ -122,30 +130,55 @@ public class DoiMatKhauApi {
             else if(roleList.get(0).equals("ROLE_GIANGVIEN")){
                 validatorGiangVien.validateUpdatePasswordGiangVien(updatePasswordDto);
 
-                GiangVienEntity getGiangVienByDB = (GiangVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new GiangVienDto());
+//                GiangVienEntity getGiangVienByDB = (GiangVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new GiangVienDto());
+
+                UserEntity userEntity = userService.findById(updatePasswordDto.getId());
+                // maSV
+                String userName = userEntity.getUsername();
+                GiangVienEntity getGiangVienByDB = (GiangVienEntity) giangVienRepository.findByMaGv(userName);
 
                 /* update PW GiangVienEntity*/
                 getGiangVienByDB.setMatKhau(updatePasswordDto.getMatKhauMoi());
                 commonService.updateObject(getGiangVienByDB);
 
                 /* update PW UserEntity*/
-                UserEntity userEntity = userService.findByUsername(getGiangVienByDB.getMaGv());
+//                UserEntity userEntity = userService.findByUsername(getGiangVienByDB.getMaSv());
                 userEntity.setPassword(encoder.encode(updatePasswordDto.getMatKhauMoi()));
                 userService.updateUser(userEntity);
 
                 returnObject.setRetObj(getGiangVienByDB);
+
+//                validatorGiangVien.validateUpdatePasswordGiangVien(updatePasswordDto);
+////
+////                GiangVienEntity getGiangVienByDB = (GiangVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new GiangVienDto());
+////
+////                /* update PW GiangVienEntity*/
+////                getGiangVienByDB.setMatKhau(updatePasswordDto.getMatKhauMoi());
+////                commonService.updateObject(getGiangVienByDB);
+////
+////                /* update PW UserEntity*/
+////                UserEntity userEntity = userService.findByUsername(getGiangVienByDB.getMaGv());
+////                userEntity.setPassword(encoder.encode(updatePasswordDto.getMatKhauMoi()));
+////                userService.updateUser(userEntity);
+////
+////                returnObject.setRetObj(getGiangVienByDB);
             }
             else if(roleList.get(0).equals("ROLE_SINHVIEN")){
                 validatorSinhVien.validateUpdatePasswordSinhVien(updatePasswordDto);
 
-                SinhVienEntity getSinhVienByDB = (SinhVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new SinhVienDto());
+//                SinhVienEntity getSinhVienByDB = (SinhVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new SinhVienDto());
+
+                UserEntity userEntity = userService.findById(updatePasswordDto.getId());
+                // maSV
+                String userName = userEntity.getUsername();
+                SinhVienEntity getSinhVienByDB = (SinhVienEntity) sinhVienRepository.findByMaSv(userName);
 
                 /* update PW SinhVienEntity*/
                 getSinhVienByDB.setMatKhau(updatePasswordDto.getMatKhauMoi());
                 commonService.updateObject(getSinhVienByDB);
 
                 /* update PW UserEntity*/
-                UserEntity userEntity = userService.findByUsername(getSinhVienByDB.getMaSv());
+//                UserEntity userEntity = userService.findByUsername(getSinhVienByDB.getMaSv());
                 userEntity.setPassword(encoder.encode(updatePasswordDto.getMatKhauMoi()));
                 userService.updateUser(userEntity);
 
