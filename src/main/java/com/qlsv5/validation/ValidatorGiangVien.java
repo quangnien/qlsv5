@@ -163,26 +163,47 @@ public class ValidatorGiangVien implements Validator {
 //            throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_CONFIRM_PASSWORD);
 //        }
         else {
-            int countMaGiangVien = giangVienRepository.countGiangVienById(updatePasswordDto.getId());
+            UserEntity userEntity = userService.findById(updatePasswordDto.getId());
 
-            GiangVienEntity getGiangVienByDB = (GiangVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new GiangVienDto());
-            UserEntity userEntity = userService.findByUsername(getGiangVienByDB.getMaGv());
-
-            if (countMaGiangVien == 0) {
-                throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
-            }
-//            else if(updatePasswordDto.getConfirmPassword().equals(updatePasswordDto.getMatKhau()) == false){
-//                throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_EQUAL_CONFIRM_PASSWORD);
-//            }
-            else if (userEntity == null) {
-                throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
+            if(userEntity == null){
+                throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
             }
             else {
-                String decodedPassword = bCryptPasswordEncoder.encode(updatePasswordDto.getMatKhauCu());
-                if (! bCryptPasswordEncoder.matches(userEntity.getPassword(), decodedPassword)) {
-                    throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_MATCH_PASSWORD);
+                // maSV
+                String userName = userEntity.getUsername();
+
+                GiangVienEntity getGiangVienByDB = (GiangVienEntity) giangVienRepository.findByMaGv(userName);
+
+                if(getGiangVienByDB == null){
+                    throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
+                }
+                else {
+                    String decodedPassword = updatePasswordDto.getMatKhauCu();
+                    if (! encoder.matches(decodedPassword, userEntity.getPassword())) {
+                        throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_MATCH_PASSWORD);
+                    }
                 }
             }
+//            int countMaGiangVien = giangVienRepository.countGiangVienById(updatePasswordDto.getId());
+//
+//            GiangVienEntity getGiangVienByDB = (GiangVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new GiangVienDto());
+//            UserEntity userEntity = userService.findByUsername(getGiangVienByDB.getMaGv());
+//
+//            if (countMaGiangVien == 0) {
+//                throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
+//            }
+////            else if(updatePasswordDto.getConfirmPassword().equals(updatePasswordDto.getMatKhau()) == false){
+////                throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_EQUAL_CONFIRM_PASSWORD);
+////            }
+//            else if (userEntity == null) {
+//                throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
+//            }
+//            else {
+//                String decodedPassword = bCryptPasswordEncoder.encode(updatePasswordDto.getMatKhauCu());
+//                if (! bCryptPasswordEncoder.matches(userEntity.getPassword(), decodedPassword)) {
+//                    throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_MATCH_PASSWORD);
+//                }
+//            }
         }
     }
 

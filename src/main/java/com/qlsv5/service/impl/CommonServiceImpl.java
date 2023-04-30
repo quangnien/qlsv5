@@ -46,6 +46,9 @@ public class CommonServiceImpl implements CommonService {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    private KeHoachNamRepository keHoachNamRepository;
+
     //CRUD  CREATE , READ , UPDATE , DELETE
 
     @Override
@@ -298,6 +301,12 @@ public class CommonServiceImpl implements CommonService {
             }
             return null;
         }
+        if(object instanceof KeHoachNamDto){
+            KeHoachNamEntity result = new KeHoachNamEntity();
+            result = modelMapper.map(object, KeHoachNamEntity.class);
+            result.setId(UUID.randomUUID().toString().split("-")[0]);
+            return keHoachNamRepository.save(result);
+        }
 
         return null;
     }
@@ -497,6 +506,9 @@ public class CommonServiceImpl implements CommonService {
         else if(object instanceof DiemDto){
             return Collections.singletonList(diemRepository.findAll());
         }
+        if(object instanceof KeHoachNamDto){
+            return Collections.singletonList(keHoachNamRepository.findAll());
+        }
         return null;
     }
 
@@ -525,6 +537,9 @@ public class CommonServiceImpl implements CommonService {
         }
         else if(object instanceof DiemDto){
             return diemRepository.findById(taskId).get();
+        }
+        if(object instanceof KeHoachNamDto){
+            return keHoachNamRepository.findById(taskId).get();
         }
         return null;
     }

@@ -30,5 +30,5 @@ public interface SinhVienRepository extends MongoRepository<SinhVienEntity, Stri
     List<SinhVienEntity> getListSinhVienByMaLop(String maLop);
     Page<SinhVienEntity> findAllByMaLop(String maLop, Pageable pageable);
 
-
+    SinhVienEntity findByMaSv(String maSv);
 }

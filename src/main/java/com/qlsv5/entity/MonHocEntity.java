@@ -28,6 +28,12 @@ public class MonHocEntity {
 	@NotBlank(message = "Vui Lòng Nhập Tên Môn Học")
 	@Length(min = 4 , message = "Tên môn học chứa ít nhất 4 ký tự!")
 	private String tenMh;
-	
+
+	private int percentCc;
+	private int percentGk;
+	private int percentCk;
+	private int soTietLt;
+	private int soTietTh;
+
 	private int soTc;
 }

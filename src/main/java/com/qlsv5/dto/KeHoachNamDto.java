@@ -24,12 +24,8 @@ public class KeHoachNamDto {
 	@Length(min = 2 , message = "Mã lớp chứa ít nhất 2 ký tự!")
 	private String maKeHoach;
 
-	@NotBlank(message = "Vui Lòng Nhập Kỳ")
-	@NotNull
 	private int ky;
 
-	@NotBlank(message = "Vui Lòng Nhập Năm")
-	@NotNull
 	private int nam;
 
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")

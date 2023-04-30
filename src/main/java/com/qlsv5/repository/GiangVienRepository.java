@@ -28,4 +28,6 @@ public interface GiangVienRepository extends MongoRepository<GiangVienEntity, St
 
     int countGiangVienByMaKhoa(String maKhoa);
 
+    GiangVienEntity findByMaGv(String maGv);
+
 }

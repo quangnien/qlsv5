@@ -21,7 +21,6 @@ public class MasterDataExceptionConstant {
     public static final String E_KHOA_DUPLICATE_MA_KHOA = "Ma khoa exists, please input another one!";
     public static final String E_KHOA_IS_USED = "Khoa is used!";
 
-
     /* Lop */
     public static final String E_LOP_NOT_FOUND_LOP = "Lop does not exist!";
     public static final String E_LOP_DUPLICATE_MA_LOP = "Ma lop exists, please input another one!";
@@ -65,4 +64,8 @@ public class MasterDataExceptionConstant {
     public static final String E_TKB_NOT_FOUND_DATE_BEGIN = "Date begin is null!";
     public static final String E_TKB_NOT_FOUND_DATE_END = "Date end is null!";
 
+    /* Ke Hoach Nam */
+    public static final String E_KEHOACHNAM_NOT_FOUND_KEHOACHNAM = "Ke Hoach Nam does not exist!";
+    public static final String E_KEHOACHNAM_DUPLICATE_MA_KEHOACHNAM = "Ma Ke Hoach Nam exists, please input another one!";
+    public static final String E_KEHOACHNAM_IS_USED = "Ke Hoach Nam is used!";
 }
