@@ -109,6 +109,7 @@ public class DoiMatKhauApi {
                         .collect(Collectors.toList()));
             }
 
+
             if(roleList.get(0).equals("ROLE_ADMIN")){
                 validatorAdmin.validateUpdatePasswordAdmin(updatePasswordDto);
 
