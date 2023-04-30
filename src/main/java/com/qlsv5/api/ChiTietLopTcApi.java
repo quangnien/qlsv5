@@ -240,9 +240,7 @@ public class ChiTietLopTcApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
-    public ResponseEntity<?> getDsLopTcByMaLop(@PathVariable String maLopTc,
-                                               @RequestParam(defaultValue = "0") int page,
-                                               @RequestParam(defaultValue = "7") int size) {
+    public ResponseEntity<?> getDsLopTcByMaLop(@PathVariable String maLopTc) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
