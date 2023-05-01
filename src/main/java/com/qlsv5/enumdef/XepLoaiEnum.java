@@ -12,7 +12,7 @@ import java.util.List;
 public enum XepLoaiEnum {
     XUAT_SAC("XUAT_SAC", "Xuất sắc"),
     GIOI("GIOI", "Giỏi"),
-    KHA("KHA", "Xuất sắc"),
+    KHA("KHA", "Khá"),
     TRUNG_BINH("TRUNG_BINH", "Trung bình"),
     YEU("YEU", "Yếu");
 
@@ -72,6 +72,16 @@ public enum XepLoaiEnum {
         list.add(new Select2Dto(String.valueOf(XepLoaiEnum.KHA.getValue()), XepLoaiEnum.KHA.getName(), XepLoaiEnum.KHA.getName()));
         list.add(new Select2Dto(String.valueOf(XepLoaiEnum.TRUNG_BINH.getValue()), XepLoaiEnum.TRUNG_BINH.getName(), XepLoaiEnum.TRUNG_BINH.getName()));
         list.add(new Select2Dto(String.valueOf(XepLoaiEnum.YEU.getValue()), XepLoaiEnum.YEU.getName(), XepLoaiEnum.YEU.getName()));
+        return list;
+    }
+
+    public static List<String> getComboList() {
+        List<String> list = new ArrayList<>();
+        list.add(XepLoaiEnum.XUAT_SAC.getName());
+        list.add(XepLoaiEnum.GIOI.getName());
+        list.add(XepLoaiEnum.KHA.getName());
+        list.add(XepLoaiEnum.TRUNG_BINH.getName());
+        list.add(XepLoaiEnum.YEU.getName());
         return list;
     }
 }

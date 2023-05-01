@@ -68,4 +68,8 @@ public class MasterDataExceptionConstant {
     public static final String E_KEHOACHNAM_NOT_FOUND_KEHOACHNAM = "Ke Hoach Nam does not exist!";
     public static final String E_KEHOACHNAM_DUPLICATE_MA_KEHOACHNAM = "Ma Ke Hoach Nam exists, please input another one!";
     public static final String E_KEHOACHNAM_IS_USED = "Ke Hoach Nam is used!";
+
+    /* Thong Ke */
+    public static final String E_THONGKEDIEM_NOT_FOUND_THONGKEDIEM = "Invalid input!";
+
 }
