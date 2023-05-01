@@ -145,4 +145,18 @@ public class ValidatorDsLopTc implements Validator {
 
     }
 
+    @Transactional
+    public void validateSearchThongKe(String idKeHoachNam, String keySearch) throws BusinessException {
+
+        if(idKeHoachNam == null || "".equals(idKeHoachNam)){
+            throw new BusinessException(MasterDataExceptionConstant.E_KEHOACHNAM_NOT_FOUND_KEHOACHNAM);
+        }
+        else {
+            int countKeHoachNam = keHoachNamRepository.countKeHoachNamById(idKeHoachNam);
+
+            if (countKeHoachNam == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_KEHOACHNAM_NOT_FOUND_KEHOACHNAM);
+            }
+        }
+    }
 }

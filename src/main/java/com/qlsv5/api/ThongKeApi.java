@@ -6,12 +6,15 @@ import com.qlsv5.dto.DsLopTcDto;
 import com.qlsv5.dto.ThongKeDiemDto;
 import com.qlsv5.entity.DiemEntity;
 import com.qlsv5.entity.DsLopTcEntity;
+import com.qlsv5.entity.MonHocEntity;
 import com.qlsv5.enumdef.XepLoaiEnum;
 import com.qlsv5.exception.BusinessException;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.DiemService;
 import com.qlsv5.service.DsLopTcService;
+import com.qlsv5.service.MonHocService;
 import com.qlsv5.validation.ValidatorDiem;
+import com.qlsv5.validation.ValidatorDsLopTc;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,7 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -46,10 +52,66 @@ public class ThongKeApi {
     private ValidatorDiem validatorDiem;
 
     @Autowired
+    private ValidatorDsLopTc validatorDsLopTc;
+
+    @Autowired
     private DiemService diemService;
 
     @Autowired
+    private MonHocService monHocService;
+
+    @Autowired
     private DsLopTcService dsLopTcService;
+
+    @Operation(summary = "Thong Ke.")
+    @GetMapping("/search/thong-ke")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
+    public ResponseEntity<?> searchLopTcByKeywordAndKeHoachNamId(@RequestParam(required = true) String idKeHoachNam, @RequestParam(required = false, defaultValue = "") String keySearch) throws BusinessException {
+
+        ReturnObject returnObject = new ReturnObject();
+
+        try {
+            log.info("Thong ke diem!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            validatorDsLopTc.validateSearchThongKe(idKeHoachNam, keySearch);
+
+            List<MonHocEntity> monHocEntityList = new ArrayList<>();
+            if(keySearch.equals("")){
+                monHocEntityList = monHocService.getAll();
+            }
+            else {
+                monHocEntityList = monHocService.findByTenMhContainingIgnoreCaseLike(keySearch);
+            }
+            List<DsLopTcEntity> dsLopTcEntityList = new ArrayList<>();
+            for (MonHocEntity monHocEntity : monHocEntityList) {
+                List<DsLopTcEntity> dsLopTcEntities = dsLopTcService.getListLopTcByMaMh(monHocEntity.getMaMh());
+                for (DsLopTcEntity dsLopTcEntity : dsLopTcEntities) {
+                    dsLopTcEntityList.add(dsLopTcEntity);
+                }
+            }
+
+            returnObject.setRetObj(dsLopTcEntityList);
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(ex.getMessage());
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
 
 //    /* CREATE */
     @Operation(summary = "Thong Ke.")
@@ -65,11 +127,9 @@ public class ThongKeApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
-    public ResponseEntity<?> thongKeDiem(@Valid String idLopTc, @Valid String col) throws BusinessException {
+    public ResponseEntity<?> thongKeDiem(@RequestParam(required = true) String idLopTc, @RequestParam(required = true) String col) {
 
         ReturnObject returnObject = new ReturnObject();
-
-        validatorDiem.validateThongKeDiem(idLopTc, col);
 
         List<ThongKeDiemDto> thongKeDiemDtos = new ArrayList<>();
 
@@ -78,6 +138,8 @@ public class ThongKeApi {
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
+
+            validatorDiem.validateThongKeDiem(idLopTc, col);
 
             /* list valid */
             DsLopTcEntity dsLopTcEntity = (DsLopTcEntity) commonService.getObjectById(idLopTc, new DsLopTcDto());
@@ -88,7 +150,6 @@ public class ThongKeApi {
                     diemDtoListValid.add(diemEntity);
                 }
             }
-
 
             if(col.toUpperCase().equals("CC")){
                 for(float i = 0; i <= 10; i += 0.5){
@@ -187,41 +248,5 @@ public class ThongKeApi {
 
         return ResponseEntity.ok(returnObject);
     }
-//
-//    /* DELETE */
-//    @DeleteMapping("/dang-ky-mon")
-//    @Operation(summary = "Delete Dang Ky Mon by list id")
-//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Success",
-//                    content = {
-//                            @Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
-//            @ApiResponse(responseCode = "401", description = "Unauthorized",
-//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
-//            @ApiResponse(responseCode = "403", description = "Forbidden",
-//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
-//            @ApiResponse(responseCode = "500", description = "Internal server error",
-//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
-//    public ResponseEntity<?> deleteDangKyMon(@Valid @RequestBody List<String> lstDiemId) {
-//
-//        ReturnObject returnObject = new ReturnObject();
-//        try {
-//            log.info("Delete List Diem!");
-//
-//            returnObject.setStatus(ReturnObject.SUCCESS);
-//            returnObject.setMessage("200");
-//
-//            List<String> deleteSuccess = commonService.deleteLstObject(lstDiemId, new DiemDto());
-//            returnObject.setRetObj(deleteSuccess);
-//        }
-//        catch (Exception ex){
-//            returnObject.setStatus(ReturnObject.ERROR);
-//            returnObject.setMessage(ex.getMessage());
-//        }
-//
-//        return ResponseEntity.ok(returnObject);
-//    }
-
-
 
 }

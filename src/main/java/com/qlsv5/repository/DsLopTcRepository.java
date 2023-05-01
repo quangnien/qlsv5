@@ -39,4 +39,7 @@ public interface DsLopTcRepository extends MongoRepository<DsLopTcEntity, String
 
     Page<DsLopTcEntity> findAllByMaLop(String maLop, Pageable pageable);
 
+    List<DsLopTcEntity> findAllByMaMh(String maMh);
+//    List<DsLopTcEntity> findByMaKeHoachAndTenLopContainingIgnoreCase(String maKeHoach, String keySearch);
+
 }

@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface MonHocService {
     public List<MonHocEntity> getListMonHocByMaKhoa(String maKhoa, int page, int size);
+
+    List<MonHocEntity> findByTenMhContainingIgnoreCaseLike(String keySearch);
+
+    List<MonHocEntity> getAll();
 }

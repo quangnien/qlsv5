@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import java.util.List;
+
 public interface MonHocRepository extends MongoRepository<MonHocEntity, String> {
     int countMonHocByMaMh(String maMonHoc);
     int countMonHocById(String id);
@@ -25,4 +27,7 @@ public interface MonHocRepository extends MongoRepository<MonHocEntity, String> 
     MonHocEntity getMonHocByMaMh(String maMh);
 
     Page<MonHocEntity> findAllByMaKhoa(String maKhoa, Pageable pageable);
+
+    List<MonHocEntity> findByTenMhLikeIgnoreCase(String keySearch);
+
 }
