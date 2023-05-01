@@ -9,4 +9,6 @@ public interface DsLopTcService {
 
     public List<DsLopTcEntity> getListLopTcByMaLop(String maLop, int page, int size);
 
+    public List<DsLopTcEntity> getListLopTcByMaMh(String maMh);
+
 }

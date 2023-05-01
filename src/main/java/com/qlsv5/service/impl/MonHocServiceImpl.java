@@ -1,7 +1,6 @@
 package com.qlsv5.service.impl;
 
 import com.qlsv5.entity.MonHocEntity;
-import com.qlsv5.repository.DsLopTcRepository;
 import com.qlsv5.repository.MonHocRepository;
 import com.qlsv5.service.MonHocService;
 import lombok.AllArgsConstructor;
@@ -30,5 +29,15 @@ public class MonHocServiceImpl implements MonHocService {
 //        return monHocRepository.getListMonHocByMaKhoa(maKhoa);
         return resultPage.getContent();
     }
-    
+
+    @Override
+    public List<MonHocEntity> findByTenMhContainingIgnoreCaseLike(String keySearch) {
+        return monHocRepository.findByTenMhLikeIgnoreCase(keySearch);
+    }
+
+    @Override
+    public List<MonHocEntity> getAll() {
+        return monHocRepository.findAll();
+    }
+
 }

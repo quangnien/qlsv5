@@ -28,4 +28,9 @@ public class DsLopTcServiceImpl implements DsLopTcService {
         return resultPage.getContent();
     }
 
+    @Override
+    public List<DsLopTcEntity> getListLopTcByMaMh(String maMh) {
+        return dsLopTcRepository.findAllByMaMh(maMh);
+    }
+
 }
