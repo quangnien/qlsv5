@@ -48,6 +48,9 @@ public class CommonServiceImpl implements CommonService {
     RoleRepository roleRepository;
 
     @Autowired
+    TuanRepository tuanRepository;
+
+    @Autowired
     private KeHoachNamRepository keHoachNamRepository;
 
     //CRUD  CREATE , READ , UPDATE , DELETE
@@ -539,6 +542,9 @@ public class CommonServiceImpl implements CommonService {
         }
         if(object instanceof KeHoachNamDto){
             return Collections.singletonList(keHoachNamRepository.findAll());
+        }
+        if(object instanceof TuanDto){
+            return Collections.singletonList(tuanRepository.findAll());
         }
         return null;
     }

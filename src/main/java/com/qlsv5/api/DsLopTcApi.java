@@ -2,10 +2,12 @@ package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.DsLopTcDto;
-import com.qlsv5.entity.DsLopTcEntity;
-import com.qlsv5.entity.LopEntity;
+import com.qlsv5.dto.DsLopTcMonHocGiangVienLopDto;
+import com.qlsv5.entity.*;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.DsLopTcService;
+import com.qlsv5.service.GiangVienService;
+import com.qlsv5.service.MonHocService;
 import com.qlsv5.validation.ValidatorDsLopTc;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +40,12 @@ public class DsLopTcApi {
 
     @Autowired
     private CommonService commonService;
+
+    @Autowired
+    private GiangVienService giangVienService;
+
+    @Autowired
+    private MonHocService monHocService;
 
     @Autowired
     private DsLopTcService dsLopTcService;
@@ -160,6 +170,7 @@ public class DsLopTcApi {
     }
 
     /* GET ALL */
+    /* GET ALL DSLOPTC BY MALOP & MAKEHOACH*/
     @Operation(summary = "Get all DsLopTc.")
     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @GetMapping("/dsLopTc")
@@ -173,7 +184,8 @@ public class DsLopTcApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
-    public ResponseEntity<?> getAllDsLopTc() {
+    public ResponseEntity<?> getAllDsLopTc(@RequestParam(required = false, defaultValue = "") String maLop,
+                                           @RequestParam(required = false, defaultValue = "") String maKeHoach) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
@@ -182,8 +194,47 @@ public class DsLopTcApi {
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            List<Object> listDsLopTc = commonService.findAllObject(new DsLopTcDto());
-            returnObject.setRetObj(listDsLopTc);
+            List<DsLopTcMonHocGiangVienLopDto> dsLopTcMonHocGiangVienLopDtos = new ArrayList<>();
+
+            List<Object> listDsLopTc = new ArrayList<>();
+            if(maLop.equals("") && maKeHoach.equals("")){
+                listDsLopTc = commonService.findAllObject(new DsLopTcDto());
+            }
+            else if(maLop.equals("") && !maKeHoach.equals("")){
+
+            }
+            else if(!maLop.equals("") && maKeHoach.equals("")){
+
+            }
+            else {
+                List<DsLopTcEntity> dsLopTcEntityList = dsLopTcService.findAllByMaLopAndMaKeHoach(maLop, maKeHoach);
+                for (DsLopTcEntity dsLopTcEntity: dsLopTcEntityList) {
+                    String maGv = dsLopTcEntity.getMaGv();
+                    String maMh = dsLopTcEntity.getMaMh();
+                    String tenGv = "";
+                    String tenMh = "";
+
+                    GiangVienEntity giangVienEntity = giangVienService.getGiangVienByMaGv(maGv);
+                    MonHocEntity monHocEntity = monHocService.getMonHocByMaMh(maMh);
+
+                    if(giangVienEntity != null){
+                        tenGv = giangVienEntity.getHo() + " " + giangVienEntity.getTen();
+                    }
+                    if(monHocEntity != null){
+                        tenMh = monHocEntity.getTenMh();
+                    }
+
+                    ModelMapper modelMapper = new ModelMapper();
+                    DsLopTcMonHocGiangVienLopDto dsLopTcMonHocGiangVienLopDto = new DsLopTcMonHocGiangVienLopDto();
+                    dsLopTcMonHocGiangVienLopDto = modelMapper.map(dsLopTcEntity, DsLopTcMonHocGiangVienLopDto.class);
+                    dsLopTcMonHocGiangVienLopDto.setTenGv(tenGv);
+                    dsLopTcMonHocGiangVienLopDto.setTenMh(tenMh);
+
+                    dsLopTcMonHocGiangVienLopDtos.add(dsLopTcMonHocGiangVienLopDto);
+                }
+            }
+
+            returnObject.setRetObj(dsLopTcMonHocGiangVienLopDtos);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
@@ -277,5 +328,6 @@ public class DsLopTcApi {
 
         return ResponseEntity.ok(returnObject);
     }
+
 
 }

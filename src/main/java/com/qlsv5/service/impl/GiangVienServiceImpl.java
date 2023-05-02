@@ -60,6 +60,11 @@ public class GiangVienServiceImpl implements GiangVienService {
     }
 
     @Override
+    public GiangVienEntity getGiangVienByMaGv(String taskId) {
+        return giangVienRepository.findByMaGv(taskId);
+    }
+
+    @Override
     public List<GiangVienEntity> getListGiangVienByMaKhoa(String maKhoa){
         return giangVienRepository.getListGiangVienByMaKhoa(maKhoa);
     }

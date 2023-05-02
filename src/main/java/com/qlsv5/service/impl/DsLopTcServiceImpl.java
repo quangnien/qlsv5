@@ -1,5 +1,6 @@
 package com.qlsv5.service.impl;
 
+import com.qlsv5.dto.DsLopTcMonHocGiangVienLopDto;
 import com.qlsv5.entity.DsLopTcEntity;
 import com.qlsv5.repository.DsLopTcRepository;
 import com.qlsv5.service.DsLopTcService;
@@ -31,6 +32,11 @@ public class DsLopTcServiceImpl implements DsLopTcService {
     @Override
     public List<DsLopTcEntity> getListLopTcByMaMh(String maMh) {
         return dsLopTcRepository.findAllByMaMh(maMh);
+    }
+
+    @Override
+    public List<DsLopTcEntity> findAllByMaLopAndMaKeHoach(String maLop, String maKeHoach) {
+        return dsLopTcRepository.findAllByMaLopAndMaKeHoach(maLop, maKeHoach);
     }
 
 }
