@@ -1,5 +1,6 @@
 package com.qlsv5.service;
 
+import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.entity.MonHocEntity;
 import com.qlsv5.entity.SinhVienEntity;
 
@@ -11,4 +12,7 @@ public interface MonHocService {
     List<MonHocEntity> findByTenMhContainingIgnoreCaseLike(String keySearch);
 
     List<MonHocEntity> getAll();
+
+    public MonHocEntity getMonHocByMaMh(String maMh);
+
 }

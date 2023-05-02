@@ -40,4 +40,9 @@ public class MonHocServiceImpl implements MonHocService {
         return monHocRepository.findAll();
     }
 
+    @Override
+    public MonHocEntity getMonHocByMaMh(String maMh) {
+        return monHocRepository.getMonHocByMaMh(maMh);
+    }
+
 }
