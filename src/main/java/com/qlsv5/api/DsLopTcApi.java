@@ -1,6 +1,7 @@
 package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
+import com.qlsv5.dto.DiemByMaSvAndMaKeHoachDto;
 import com.qlsv5.dto.DsLopTcDto;
 import com.qlsv5.dto.DsLopTcMonHocGiangVienLopDto;
 import com.qlsv5.entity.*;
@@ -322,12 +323,58 @@ public class DsLopTcApi {
             returnObject.setMessage(ex.getMessage());
         }
 
-        String s1 = "welcome";
-        String s2 = new String("welcome");
-        System.out.print("s1 == s2: " + (s1 == s2));
-
         return ResponseEntity.ok(returnObject);
     }
 
+    @Operation(summary = "Get danh sach lop tin chi by maGv and maKeHoach")
+    @PostMapping("/dsLopTc/giangVien/{maGv}")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
+    public ResponseEntity<?> getDsLopTcByMaGvAndMaKeHoach(@PathVariable(required = true) String maGv,
+                                               @RequestParam(required = true) String maKeHoach) {
+
+        ReturnObject returnObject = new ReturnObject();
+        try {
+            log.info("Get Ds Lop Tin Chi By maLop!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            validatorDsLopTc.validateGetListLopTcByMaGvAndMaKeHoach(maGv, maKeHoach);
+
+            List<DsLopTcEntity> dsLopTcEntityList = dsLopTcService.findAllByMaGvAndMaKeHoach(maGv, maKeHoach);
+
+            List<DsLopTcMonHocGiangVienLopDto> dsLopTcMonHocGiangVienLopDtoList = new ArrayList<>();
+
+            for (DsLopTcEntity dsLopTcEntity: dsLopTcEntityList) {
+
+                ModelMapper modelMapper = new ModelMapper();
+                DsLopTcMonHocGiangVienLopDto dsLopTcMonHocGiangVienLopDto = modelMapper.map(dsLopTcEntity, DsLopTcMonHocGiangVienLopDto.class);
+
+                MonHocEntity monHocEntity = monHocService.getMonHocByMaMh(dsLopTcEntity.getMaMh());
+                dsLopTcMonHocGiangVienLopDto.setTenMh(monHocEntity.getTenMh());
+
+                dsLopTcMonHocGiangVienLopDtoList.add(dsLopTcMonHocGiangVienLopDto);
+            }
+
+            returnObject.setRetObj(dsLopTcMonHocGiangVienLopDtoList);
+
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(ex.getMessage());
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
 
 }

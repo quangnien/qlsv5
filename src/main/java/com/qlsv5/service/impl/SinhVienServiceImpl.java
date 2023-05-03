@@ -92,4 +92,9 @@ public class SinhVienServiceImpl implements SinhVienService {
         return tkbDtos;
     }
 
+    @Override
+    public SinhVienEntity findByMaSv(String maSv) {
+        return sinhVienRepository.findByMaSv(maSv);
+    }
+
 }

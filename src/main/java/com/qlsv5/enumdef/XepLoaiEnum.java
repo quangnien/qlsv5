@@ -15,6 +15,13 @@ public enum XepLoaiEnum {
     KHA("KHA", "Khá"),
     TRUNG_BINH("TRUNG_BINH", "Trung bình"),
     YEU("YEU", "Yếu");
+//
+//    A_PLUS("A", "A"),
+//    A("GIOI", "Giỏi"),
+//    B_PLUS("KHA", "Khá"),
+//    B("TRUNG_BINH", "Trung bình"),
+//    C_PLUS("YEU", "Yếu"),
+//    C("YEU", "Yếu");
 
     private String value;
 
