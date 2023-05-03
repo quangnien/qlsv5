@@ -32,4 +32,5 @@ public class DiemByMaSvAndMaKeHoachDto {
 	private String maSv;
 
 	private String maLopTc;
+	private String tenSv;
 }

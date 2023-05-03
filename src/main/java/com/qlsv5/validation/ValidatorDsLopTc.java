@@ -159,4 +159,26 @@ public class ValidatorDsLopTc implements Validator {
             }
         }
     }
+
+    @Transactional
+    public void validateGetListLopTcByMaGvAndMaKeHoach(String maGv, String maKeHoach) throws BusinessException {
+
+        if(maGv == null || "".equals(maGv)){
+            throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
+        }
+        else if(maKeHoach == null || "".equals(maKeHoach)){
+            throw new BusinessException(MasterDataExceptionConstant.E_KEHOACHNAM_NOT_FOUND_KEHOACHNAM);
+        }
+        else {
+            int countGvMaGv = giangVienRepository.countGiangVienByMaGv(maGv);
+            int countByMaKeHoach = keHoachNamRepository.countKeHoachNamByMaKeHoach(maKeHoach);
+
+            if (countGvMaGv == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
+            }
+            else if (countByMaKeHoach == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_KEHOACHNAM_NOT_FOUND_KEHOACHNAM);
+            }
+        }
+    }
 }

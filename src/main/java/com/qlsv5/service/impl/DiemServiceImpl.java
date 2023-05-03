@@ -38,4 +38,9 @@ public class DiemServiceImpl implements DiemService {
         return diemRepository.findAllByMaSv(maSv);
     }
 
+    @Override
+    public List<DiemEntity> getListDiemByMaLopTc(String maLopTc) {
+        return diemRepository.findAllByMaLopTc(maLopTc);
+    }
+
 }

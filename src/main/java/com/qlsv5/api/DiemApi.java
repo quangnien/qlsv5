@@ -4,10 +4,7 @@ import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.DiemByMaSvAndMaKeHoachDto;
 import com.qlsv5.dto.DiemDto;
 import com.qlsv5.entity.*;
-import com.qlsv5.service.CommonService;
-import com.qlsv5.service.DiemService;
-import com.qlsv5.service.DsLopTcService;
-import com.qlsv5.service.MonHocService;
+import com.qlsv5.service.*;
 import com.qlsv5.validation.ValidatorDiem;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -52,6 +49,9 @@ public class DiemApi {
 
     @Autowired
     private MonHocService monHocService;
+
+    @Autowired
+    private SinhVienService sinhVienService;
 
     /* CREATE */
     /*@Operation(summary = "Create Diem.")
@@ -308,14 +308,81 @@ public class DiemApi {
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
+            validatorDiem.validateGetListDiemByMaSvAndMaKeHoach(maSv, maKeHoach);
+
             List<DiemByMaSvAndMaKeHoachDto> diemByMaSvAndMaKeHoachDtoListDto = new ArrayList<>();
 
             List<DiemEntity> diemEntityList = diemService.getListDiemByMaSv(maSv);
             for (DiemEntity diemEntity: diemEntityList) {
                 ModelMapper modelMapper = new ModelMapper();
+
+                DsLopTcEntity dsLopTcEntity = dsLopTcService.getDsLopTcByMaLopTcAndMaKeHoach(diemEntity.getMaLopTc(), maKeHoach);
+                if(dsLopTcEntity == null){
+                    continue;
+                }
+                else {
+                    MonHocEntity monHocEntity = monHocService.getMonHocByMaMh(dsLopTcEntity.getMaMh());
+
+                    DiemByMaSvAndMaKeHoachDto diemByMaSvAndMaKeHoachDto = modelMapper.map(diemEntity, DiemByMaSvAndMaKeHoachDto.class);
+
+                    diemByMaSvAndMaKeHoachDto.setPercentCc(monHocEntity.getPercentCc());
+                    diemByMaSvAndMaKeHoachDto.setPercentGk(monHocEntity.getPercentGk());
+                    diemByMaSvAndMaKeHoachDto.setPercentCk(monHocEntity.getPercentCk());
+                    diemByMaSvAndMaKeHoachDto.setTenMh(monHocEntity.getTenMh());
+                    diemByMaSvAndMaKeHoachDto.setMaMh(monHocEntity.getMaMh());
+                    diemByMaSvAndMaKeHoachDto.setSoTc(monHocEntity.getSoTc());
+
+                    diemByMaSvAndMaKeHoachDtoListDto.add(diemByMaSvAndMaKeHoachDto);
+                }
+            }
+
+            returnObject.setRetObj(diemByMaSvAndMaKeHoachDtoListDto);
+
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(ex.getMessage());
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
+
+    @Operation(summary = "Get danh sach diem (Detail) by maLopTc")
+    @GetMapping("/diem/lopTc/detail/{maLopTc}")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
+    public ResponseEntity<?> getListDiemDetailByMaLopTc(@PathVariable(required = true) String maLopTc) {
+
+        ReturnObject returnObject = new ReturnObject();
+
+        try {
+            log.info("Get danh sach diem By maLopTc!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+            validatorDiem.validateGetListDiemByMaLopTc(maLopTc);
+
+
+            List<DiemByMaSvAndMaKeHoachDto> diemByMaSvAndMaKeHoachDtoListDto = new ArrayList<>();
+            List<DiemEntity> diemEntityList = diemService.getListDiemByMaLopTc(maLopTc);
+
+            for (DiemEntity diemEntity: diemEntityList) {
+                ModelMapper modelMapper = new ModelMapper();
                 DiemByMaSvAndMaKeHoachDto diemByMaSvAndMaKeHoachDto = modelMapper.map(diemEntity, DiemByMaSvAndMaKeHoachDto.class);
 
-                DsLopTcEntity dsLopTcEntity = dsLopTcService.getDsLopTcByMaLopTc(diemEntity.getMaLopTc());
+                SinhVienEntity sinhVienEntity = sinhVienService.findByMaSv(diemEntity.getMaSv());
+                diemByMaSvAndMaKeHoachDto.setTenSv(sinhVienEntity.getHo() + " " + sinhVienEntity.getTen());
+
+                DsLopTcEntity dsLopTcEntity = dsLopTcService.getDsLopTcByMaLopTc(maLopTc);
                 MonHocEntity monHocEntity = monHocService.getMonHocByMaMh(dsLopTcEntity.getMaMh());
 
                 diemByMaSvAndMaKeHoachDto.setPercentCc(monHocEntity.getPercentCc());
