@@ -35,4 +35,6 @@ public interface DiemRepository extends MongoRepository<DiemEntity, String> {
     int countDiemByMaLopTc(String maLopTc);
 
     Page<DiemEntity> findAllByMaLopTc(String maLopTc, Pageable pageable);
+
+    List<DiemEntity> findAllByMaSv(String maSv);
 }

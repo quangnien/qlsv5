@@ -1,12 +1,13 @@
 package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
+import com.qlsv5.dto.DiemByMaSvAndMaKeHoachDto;
 import com.qlsv5.dto.DiemDto;
-import com.qlsv5.entity.DiemEntity;
-import com.qlsv5.entity.LopEntity;
-import com.qlsv5.entity.SinhVienEntity;
+import com.qlsv5.entity.*;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.DiemService;
+import com.qlsv5.service.DsLopTcService;
+import com.qlsv5.service.MonHocService;
 import com.qlsv5.validation.ValidatorDiem;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,6 +46,12 @@ public class DiemApi {
 
     @Autowired
     private DiemService diemService;
+
+    @Autowired
+    private DsLopTcService dsLopTcService;
+
+    @Autowired
+    private MonHocService monHocService;
 
     /* CREATE */
     /*@Operation(summary = "Create Diem.")
@@ -267,6 +276,60 @@ public class DiemApi {
             returnObject.setPage(page);
             returnObject.setTotalRetObjs(diemEntityForPaging.size());
             returnObject.setTotalPages(totalPageForPaging);
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(ex.getMessage());
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
+
+    @Operation(summary = "Get danh sach diem sinh vien by maSinhVien & maKeHoach")
+    @PostMapping("/diem/{maSv}")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
+    public ResponseEntity<?> getDsDiemByMaSvAndMaKeHoach(@PathVariable(required = true) String maSv,
+                                                @RequestParam(required = true) String maKeHoach) {
+
+        ReturnObject returnObject = new ReturnObject();
+        try {
+            log.info("Get danh sach diem By maLopTc!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            List<DiemByMaSvAndMaKeHoachDto> diemByMaSvAndMaKeHoachDtoListDto = new ArrayList<>();
+
+            List<DiemEntity> diemEntityList = diemService.getListDiemByMaSv(maSv);
+            for (DiemEntity diemEntity: diemEntityList) {
+                ModelMapper modelMapper = new ModelMapper();
+                DiemByMaSvAndMaKeHoachDto diemByMaSvAndMaKeHoachDto = modelMapper.map(diemEntity, DiemByMaSvAndMaKeHoachDto.class);
+
+                DsLopTcEntity dsLopTcEntity = dsLopTcService.getDsLopTcByMaLopTc(diemEntity.getMaLopTc());
+                MonHocEntity monHocEntity = monHocService.getMonHocByMaMh(dsLopTcEntity.getMaMh());
+
+                diemByMaSvAndMaKeHoachDto.setPercentCc(monHocEntity.getPercentCc());
+                diemByMaSvAndMaKeHoachDto.setPercentGk(monHocEntity.getPercentGk());
+                diemByMaSvAndMaKeHoachDto.setPercentCk(monHocEntity.getPercentCk());
+                diemByMaSvAndMaKeHoachDto.setTenMh(monHocEntity.getTenMh());
+                diemByMaSvAndMaKeHoachDto.setMaMh(monHocEntity.getMaMh());
+                diemByMaSvAndMaKeHoachDto.setSoTc(monHocEntity.getSoTc());
+
+                diemByMaSvAndMaKeHoachDtoListDto.add(diemByMaSvAndMaKeHoachDto);
+            }
+
+            returnObject.setRetObj(diemByMaSvAndMaKeHoachDtoListDto);
+
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
