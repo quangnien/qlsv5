@@ -10,18 +10,31 @@ import java.util.List;
  */
 
 public enum XepLoaiEnum {
-    XUAT_SAC("XUAT_SAC", "Xuất sắc"),
-    GIOI("GIOI", "Giỏi"),
-    KHA("KHA", "Khá"),
-    TRUNG_BINH("TRUNG_BINH", "Trung bình"),
-    YEU("YEU", "Yếu");
-//
-//    A_PLUS("A", "A"),
-//    A("GIOI", "Giỏi"),
-//    B_PLUS("KHA", "Khá"),
-//    B("TRUNG_BINH", "Trung bình"),
-//    C_PLUS("YEU", "Yếu"),
-//    C("YEU", "Yếu");
+//    XUAT_SAC("XUAT_SAC", "Xuất sắc"),
+//    GIOI("GIOI", "Giỏi"),
+//    KHA("KHA", "Khá"),
+//    TRUNG_BINH("TRUNG_BINH", "Trung bình"),
+//    YEU("YEU", "Yếu");
+
+//  >=9: A+
+//  >=8.5: A
+//  >=8: B+
+//  >=7: B
+//  >=6.5: C+
+//  >=5.5: C
+//  >=5: D+
+//  >=4: D
+//  else : F
+
+    A_PLUS("A+", "A+"),
+    A("A", "A"),
+    B_PLUS("B+", "B"),
+    B("B", "B"),
+    C_PLUS("C+", "C+"),
+    C("C", "C"),
+    D_PLUS("D+", "D+"),
+    D("D", "D"),
+    F("F", "F");
 
     private String value;
 
@@ -63,32 +76,44 @@ public enum XepLoaiEnum {
     public static List<Select2Dto> getSelect2ComboList() {
         List<Select2Dto> list = new ArrayList<>();
         list.add(new Select2Dto("", "", ""));
-        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.XUAT_SAC.getValue()), XepLoaiEnum.XUAT_SAC.getName(), XepLoaiEnum.XUAT_SAC.getName()));
-        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.GIOI.getValue()), XepLoaiEnum.GIOI.getName(), XepLoaiEnum.GIOI.getName()));
-        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.KHA.getValue()), XepLoaiEnum.KHA.getName(), XepLoaiEnum.KHA.getName()));
-        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.TRUNG_BINH.getValue()), XepLoaiEnum.TRUNG_BINH.getName(), XepLoaiEnum.TRUNG_BINH.getName()));
-        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.YEU.getValue()), XepLoaiEnum.YEU.getName(), XepLoaiEnum.YEU.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.A_PLUS.getValue()), XepLoaiEnum.A_PLUS.getName(), XepLoaiEnum.A_PLUS.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.A.getValue()), XepLoaiEnum.A.getName(), XepLoaiEnum.A.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.B_PLUS.getValue()), XepLoaiEnum.B_PLUS.getName(), XepLoaiEnum.B_PLUS.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.B.getValue()), XepLoaiEnum.B.getName(), XepLoaiEnum.B.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.C_PLUS.getValue()), XepLoaiEnum.C_PLUS.getName(), XepLoaiEnum.C_PLUS.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.C.getValue()), XepLoaiEnum.C.getName(), XepLoaiEnum.C.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.D_PLUS.getValue()), XepLoaiEnum.D_PLUS.getName(), XepLoaiEnum.D_PLUS.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.D.getValue()), XepLoaiEnum.D.getName(), XepLoaiEnum.D.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.F.getValue()), XepLoaiEnum.F.getName(), XepLoaiEnum.F.getName()));
         return list;
     }
 
     public static List<Select2Dto> getSelect2ComboList1Layer() {
         List<Select2Dto> list = new ArrayList<>();
         list.add(new Select2Dto("", "", ""));
-        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.XUAT_SAC.getValue()), XepLoaiEnum.XUAT_SAC.getName(), XepLoaiEnum.XUAT_SAC.getName()));
-        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.GIOI.getValue()), XepLoaiEnum.GIOI.getName(), XepLoaiEnum.GIOI.getName()));
-        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.KHA.getValue()), XepLoaiEnum.KHA.getName(), XepLoaiEnum.KHA.getName()));
-        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.TRUNG_BINH.getValue()), XepLoaiEnum.TRUNG_BINH.getName(), XepLoaiEnum.TRUNG_BINH.getName()));
-        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.YEU.getValue()), XepLoaiEnum.YEU.getName(), XepLoaiEnum.YEU.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.A_PLUS.getValue()), XepLoaiEnum.A_PLUS.getName(), XepLoaiEnum.A_PLUS.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.A.getValue()), XepLoaiEnum.A.getName(), XepLoaiEnum.A.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.B_PLUS.getValue()), XepLoaiEnum.B_PLUS.getName(), XepLoaiEnum.B_PLUS.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.B.getValue()), XepLoaiEnum.B.getName(), XepLoaiEnum.B.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.C_PLUS.getValue()), XepLoaiEnum.C_PLUS.getName(), XepLoaiEnum.C_PLUS.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.C.getValue()), XepLoaiEnum.C.getName(), XepLoaiEnum.C.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.D_PLUS.getValue()), XepLoaiEnum.D_PLUS.getName(), XepLoaiEnum.D_PLUS.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.D.getValue()), XepLoaiEnum.D.getName(), XepLoaiEnum.D.getName()));
+        list.add(new Select2Dto(String.valueOf(XepLoaiEnum.F.getValue()), XepLoaiEnum.F.getName(), XepLoaiEnum.F.getName()));
         return list;
     }
 
     public static List<String> getComboList() {
         List<String> list = new ArrayList<>();
-        list.add(XepLoaiEnum.XUAT_SAC.getName());
-        list.add(XepLoaiEnum.GIOI.getName());
-        list.add(XepLoaiEnum.KHA.getName());
-        list.add(XepLoaiEnum.TRUNG_BINH.getName());
-        list.add(XepLoaiEnum.YEU.getName());
+        list.add(XepLoaiEnum.F.getName());
+        list.add(XepLoaiEnum.D.getName());
+        list.add(XepLoaiEnum.D_PLUS.getName());
+        list.add(XepLoaiEnum.C.getName());
+        list.add(XepLoaiEnum.C_PLUS.getName());
+        list.add(XepLoaiEnum.B.getName());
+        list.add(XepLoaiEnum.B_PLUS.getName());
+        list.add(XepLoaiEnum.A.getName());
+        list.add(XepLoaiEnum.A_PLUS.getName());
         return list;
     }
 }

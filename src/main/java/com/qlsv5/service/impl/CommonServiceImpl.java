@@ -12,6 +12,7 @@ import com.qlsv5.service.CommonService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -103,20 +104,32 @@ public class CommonServiceImpl implements CommonService {
             diemEntity.setTb(tbRound);
             /* ______________________________________ */
 
-            if(tb >=9 ){
-                diemEntity.setXepLoai(XepLoaiEnum.XUAT_SAC.getName());
+            if(tb >= 9 ){
+                diemEntity.setXepLoai(XepLoaiEnum.A_PLUS.getName());
+            }
+            else if(tb >= 8.5){
+                diemEntity.setXepLoai(XepLoaiEnum.A.getName());
             }
             else if(tb >= 8){
-                diemEntity.setXepLoai(XepLoaiEnum.GIOI.getName());
+                diemEntity.setXepLoai(XepLoaiEnum.B_PLUS.getName());
+            }
+            else if(tb >= 7){
+                diemEntity.setXepLoai(XepLoaiEnum.B.getName());
             }
             else if(tb >= 6.5){
-                diemEntity.setXepLoai(XepLoaiEnum.KHA.getName());
+                diemEntity.setXepLoai(XepLoaiEnum.C_PLUS.getName());
+            }
+            else if(tb >= 5.5){
+                diemEntity.setXepLoai(XepLoaiEnum.C.getName());
+            }
+            else if(tb >= 5){
+                diemEntity.setXepLoai(XepLoaiEnum.D_PLUS.getName());
             }
             else if(tb >= 4){
-                diemEntity.setXepLoai(XepLoaiEnum.TRUNG_BINH.getName());
+                diemEntity.setXepLoai(XepLoaiEnum.D.getName());
             }
             else {
-                diemEntity.setXepLoai(XepLoaiEnum.YEU.getName());
+                diemEntity.setXepLoai(XepLoaiEnum.F.getName());
             }
             diemRepository.save(diemEntity);
             return diemEntity;
@@ -538,10 +551,17 @@ public class CommonServiceImpl implements CommonService {
             return Collections.singletonList(chiTietLopTcRepository.findAll());
         }
         else if(object instanceof DiemDto){
-            return Collections.singletonList(diemRepository.findAll());
+            Sort sort = Sort.by(
+                    Sort.Order.desc("xepLoai")
+            );
+            return Collections.singletonList(diemRepository.findAll(sort));
         }
         if(object instanceof KeHoachNamDto){
-            return Collections.singletonList(keHoachNamRepository.findAll());
+            Sort sort = Sort.by(
+                    Sort.Order.desc("nam"),
+                    Sort.Order.desc("ky")
+            );
+            return Collections.singletonList(keHoachNamRepository.findAll(sort));
         }
         if(object instanceof TuanDto){
             return Collections.singletonList(tuanRepository.findAll());
