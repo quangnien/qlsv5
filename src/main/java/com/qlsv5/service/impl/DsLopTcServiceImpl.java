@@ -54,4 +54,9 @@ public class DsLopTcServiceImpl implements DsLopTcService {
         return dsLopTcRepository.getDsLopTcByMaLopTc(maLopTc);
     }
 
+    @Override
+    public List<DsLopTcEntity> findAllByMaKeHoach(String maKeHoach) {
+        return dsLopTcRepository.findAllByMaKeHoach(maKeHoach);
+    }
+
 }

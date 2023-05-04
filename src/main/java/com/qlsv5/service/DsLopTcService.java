@@ -18,4 +18,7 @@ public interface DsLopTcService {
 
     public DsLopTcEntity getDsLopTcByMaLopTc(String maLopTc);
 
+    public List<DsLopTcEntity> findAllByMaKeHoach(String maKeHoach);
+
+
 }

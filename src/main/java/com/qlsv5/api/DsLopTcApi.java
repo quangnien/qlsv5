@@ -204,7 +204,9 @@ public class DsLopTcApi {
                 return ResponseEntity.ok(returnObject);
             }
             else if(maLop.equals("") && !maKeHoach.equals("")){
-
+                List<DsLopTcEntity>  dsLopTcEntityList = dsLopTcService.findAllByMaKeHoach(maKeHoach);
+                returnObject.setRetObj(dsLopTcEntityList);
+                return ResponseEntity.ok(returnObject);
             }
             else if(!maLop.equals("") && maKeHoach.equals("")){
 
