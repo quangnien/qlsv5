@@ -44,4 +44,7 @@ public interface DsLopTcRepository extends MongoRepository<DsLopTcEntity, String
     DsLopTcEntity getDsLopTcByMaLopTcAndMaKeHoach(String maLopTc, String maKeHoach);
     List<DsLopTcEntity> findAllByMaGvAndMaKeHoach(String maGv, String maKeHoach);
 
+    List<DsLopTcEntity> findAllByMaKeHoach(String maKeHoach);
+
+
 }
