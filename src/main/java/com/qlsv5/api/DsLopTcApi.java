@@ -200,6 +200,8 @@ public class DsLopTcApi {
             List<Object> listDsLopTc = new ArrayList<>();
             if(maLop.equals("") && maKeHoach.equals("")){
                 listDsLopTc = commonService.findAllObject(new DsLopTcDto());
+                returnObject.setRetObj(listDsLopTc);
+                return ResponseEntity.ok(returnObject);
             }
             else if(maLop.equals("") && !maKeHoach.equals("")){
 
