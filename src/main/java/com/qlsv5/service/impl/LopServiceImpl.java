@@ -64,4 +64,9 @@ public class LopServiceImpl implements LopService {
     public List<LopEntity> getListLopByMaKhoa(String maKhoa){
         return lopRepository.getListLopByMaKhoa(maKhoa);
     }
+
+    @Override
+    public LopEntity getLopByMaLop(String taskId) {
+        return lopRepository.getLopByMaLop(taskId);
+    }
 }

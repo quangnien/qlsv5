@@ -5,10 +5,7 @@ import com.qlsv5.dto.DiemByMaSvAndMaKeHoachDto;
 import com.qlsv5.dto.DsLopTcDto;
 import com.qlsv5.dto.DsLopTcMonHocGiangVienLopDto;
 import com.qlsv5.entity.*;
-import com.qlsv5.service.CommonService;
-import com.qlsv5.service.DsLopTcService;
-import com.qlsv5.service.GiangVienService;
-import com.qlsv5.service.MonHocService;
+import com.qlsv5.service.*;
 import com.qlsv5.validation.ValidatorDsLopTc;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -50,6 +47,9 @@ public class DsLopTcApi {
 
     @Autowired
     private DsLopTcService dsLopTcService;
+
+    @Autowired
+    private LopService lopService;
 
     @Autowired
     private ValidatorDsLopTc validatorDsLopTc;
@@ -172,6 +172,7 @@ public class DsLopTcApi {
 
     /* GET ALL */
     /* GET ALL DSLOPTC BY MALOP & MAKEHOACH*/
+    /* GET ALL DSLOPTC BY MAKEHOACH*/
     @Operation(summary = "Get all DsLopTc.")
     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @GetMapping("/dsLopTc")
@@ -204,9 +205,44 @@ public class DsLopTcApi {
                 return ResponseEntity.ok(returnObject);
             }
             else if(maLop.equals("") && !maKeHoach.equals("")){
-                List<DsLopTcEntity>  dsLopTcEntityList = dsLopTcService.findAllByMaKeHoach(maKeHoach);
-                returnObject.setRetObj(dsLopTcEntityList);
-                return ResponseEntity.ok(returnObject);
+                List<DsLopTcEntity> dsLopTcEntityList = dsLopTcService.findAllByMaKeHoach(maKeHoach);
+
+                for (DsLopTcEntity dsLopTcEntity: dsLopTcEntityList) {
+                    String maGv = dsLopTcEntity.getMaGv();
+                    String maMh = dsLopTcEntity.getMaMh();
+                    String maLopNotParam = dsLopTcEntity.getMaLop();
+                    String tenGv = "";
+                    String tenMh = "";
+                    String tenLop = "";
+
+                    GiangVienEntity giangVienEntity = giangVienService.getGiangVienByMaGv(maGv);
+                    MonHocEntity monHocEntity = monHocService.getMonHocByMaMh(maMh);
+
+                    LopEntity lopEntity = lopService.getLopByMaLop(maLopNotParam);
+
+                    if(giangVienEntity != null){
+                        tenGv = giangVienEntity.getHo() + " " + giangVienEntity.getTen();
+                    }
+                    if(monHocEntity != null){
+                        tenMh = monHocEntity.getTenMh();
+                    }
+                    if(lopEntity != null){
+                        tenLop = lopEntity.getTenLop();
+                    }
+
+                    ModelMapper modelMapper = new ModelMapper();
+                    DsLopTcMonHocGiangVienLopDto dsLopTcMonHocGiangVienLopDto = new DsLopTcMonHocGiangVienLopDto();
+                    dsLopTcMonHocGiangVienLopDto = modelMapper.map(dsLopTcEntity, DsLopTcMonHocGiangVienLopDto.class);
+                    dsLopTcMonHocGiangVienLopDto.setTenGv(tenGv);
+                    dsLopTcMonHocGiangVienLopDto.setTenMh(tenMh);
+                    dsLopTcMonHocGiangVienLopDto.setTenLop(tenLop);
+
+                    dsLopTcMonHocGiangVienLopDtos.add(dsLopTcMonHocGiangVienLopDto);
+                }
+
+//                List<DsLopTcEntity>  dsLopTcEntityList = dsLopTcService.findAllByMaKeHoach(maKeHoach);
+//                returnObject.setRetObj(dsLopTcEntityList);
+//                return ResponseEntity.ok(returnObject);
             }
             else if(!maLop.equals("") && maKeHoach.equals("")){
 

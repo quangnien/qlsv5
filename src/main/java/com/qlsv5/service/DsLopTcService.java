@@ -20,5 +20,4 @@ public interface DsLopTcService {
 
     public List<DsLopTcEntity> findAllByMaKeHoach(String maKeHoach);
 
-
 }

@@ -21,6 +21,7 @@ public class DsLopTcMonHocGiangVienLopDto {
 	/* begin more field */
 	private String tenMh;
 	private String tenGv;
+	private String tenLop;
 	/* end more field */
 
 	/* soluong */
