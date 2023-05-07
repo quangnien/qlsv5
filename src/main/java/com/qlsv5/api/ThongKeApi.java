@@ -3,16 +3,12 @@ package com.qlsv5.api;
 import com.qlsv5.common.FunctionCommon;
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.DsLopTcDto;
+import com.qlsv5.dto.DsLopTcMonHocGiangVienLopDto;
 import com.qlsv5.dto.ThongKeDiemDto;
-import com.qlsv5.entity.DiemEntity;
-import com.qlsv5.entity.DsLopTcEntity;
-import com.qlsv5.entity.MonHocEntity;
+import com.qlsv5.entity.*;
 import com.qlsv5.enumdef.XepLoaiEnum;
 import com.qlsv5.exception.BusinessException;
-import com.qlsv5.service.CommonService;
-import com.qlsv5.service.DiemService;
-import com.qlsv5.service.DsLopTcService;
-import com.qlsv5.service.MonHocService;
+import com.qlsv5.service.*;
 import com.qlsv5.validation.ValidatorDiem;
 import com.qlsv5.validation.ValidatorDsLopTc;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -63,6 +60,12 @@ public class ThongKeApi {
     @Autowired
     private DsLopTcService dsLopTcService;
 
+    @Autowired
+    private GiangVienService giangVienService;
+
+    @Autowired
+    private LopService lopService;
+
     @Operation(summary = "Thong Ke.")
     @GetMapping("/search/thong-ke")
     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
@@ -95,15 +98,52 @@ public class ThongKeApi {
             else {
                 monHocEntityList = monHocService.findByTenMhContainingIgnoreCaseLike(keySearch);
             }
+
             List<DsLopTcEntity> dsLopTcEntityList = new ArrayList<>();
+            List<DsLopTcMonHocGiangVienLopDto> dsLopTcMonHocGiangVienLopDtoList = new ArrayList<>();
+
             for (MonHocEntity monHocEntity : monHocEntityList) {
+
                 List<DsLopTcEntity> dsLopTcEntities = dsLopTcService.getListLopTcByMaMh(monHocEntity.getMaMh());
+
                 for (DsLopTcEntity dsLopTcEntity : dsLopTcEntities) {
                     dsLopTcEntityList.add(dsLopTcEntity);
+
+                    String maGv = dsLopTcEntity.getMaGv();
+//                    String maMh = dsLopTcEntity.getMaMh();
+                    String maLopNotParam = dsLopTcEntity.getMaLop();
+                    String tenGv = "";
+                    String tenMh = "";
+                    String tenLop = "";
+
+                    GiangVienEntity giangVienEntity = giangVienService.getGiangVienByMaGv(maGv);
+//                    MonHocEntity monHocEntity = monHocService.getMonHocByMaMh(maMh);
+
+                    LopEntity lopEntity = lopService.getLopByMaLop(maLopNotParam);
+
+                    if(giangVienEntity != null){
+                        tenGv = giangVienEntity.getHo() + " " + giangVienEntity.getTen();
+                    }
+                    if(monHocEntity != null){
+                        tenMh = monHocEntity.getTenMh();
+                    }
+                    if(lopEntity != null){
+                        tenLop = lopEntity.getTenLop();
+                    }
+
+                    ModelMapper modelMapper = new ModelMapper();
+                    DsLopTcMonHocGiangVienLopDto dsLopTcMonHocGiangVienLopDto = new DsLopTcMonHocGiangVienLopDto();
+                    dsLopTcMonHocGiangVienLopDto = modelMapper.map(dsLopTcEntity, DsLopTcMonHocGiangVienLopDto.class);
+                    dsLopTcMonHocGiangVienLopDto.setTenGv(tenGv);
+                    dsLopTcMonHocGiangVienLopDto.setTenMh(tenMh);
+                    dsLopTcMonHocGiangVienLopDto.setTenLop(tenLop);
+
+                    dsLopTcMonHocGiangVienLopDtoList.add(dsLopTcMonHocGiangVienLopDto);
+
                 }
             }
 
-            returnObject.setRetObj(dsLopTcEntityList);
+            returnObject.setRetObj(dsLopTcMonHocGiangVienLopDtoList);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
