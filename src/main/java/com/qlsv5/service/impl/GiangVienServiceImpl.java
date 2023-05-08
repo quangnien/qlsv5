@@ -1,15 +1,12 @@
 package com.qlsv5.service.impl;
 
 import com.qlsv5.dto.TkbDto;
-import com.qlsv5.entity.ChiTietLopTcEntity;
-import com.qlsv5.entity.DsLopTcEntity;
-import com.qlsv5.entity.GiangVienEntity;
-import com.qlsv5.entity.SinhVienEntity;
+import com.qlsv5.entity.*;
 import com.qlsv5.repository.ChiTietLopTcRepository;
 import com.qlsv5.repository.DsLopTcRepository;
 import com.qlsv5.repository.GiangVienRepository;
-import com.qlsv5.repository.SinhVienRepository;
 import com.qlsv5.service.GiangVienService;
+import com.qlsv5.service.KeHoachNamService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,6 +34,9 @@ public class GiangVienServiceImpl implements GiangVienService {
 
     @Autowired
     private ChiTietLopTcRepository chiTietLopTcRepository;
+
+    @Autowired
+    private KeHoachNamService keHoachNamService;
 
     //CRUD  CREATE , READ , UPDATE , DELETE
 
@@ -108,6 +112,30 @@ public class GiangVienServiceImpl implements GiangVienService {
     public List<GiangVienEntity> getListGiangVienPaging(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return giangVienRepository.findAll(pageable).getContent();
+    }
+
+    @Override
+    public List<TkbDto> getListTKBForGV(String maGiangVien, String maKeHoach, int tuan) {
+        List<TkbDto> tkbDtoList = new ArrayList<>();
+
+
+//        KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamByMaKeHoach(maKeHoach);
+//
+//        Date timeTuanBd =
+//
+//        // Tính ngày bắt đầu của tuần
+//        LocalDate startDate = LocalDate.now()
+//                .with(TemporalAdjusters.previousOrSame(DayOfWeek.from(LocalDate.ofYearDay(LocalDate.now().getYear(), 1))))
+//                .plusWeeks(tuan - 1)
+//                .with(TemporalAdjusters.previousOrSame(DayOfWeek.from(LocalDate.of(1, 1, 1))));
+//
+//        // Tính ngày kết thúc của tuần
+//        LocalDate endDate = startDate.plusDays(6);
+
+
+
+
+        return null;
     }
 
 }

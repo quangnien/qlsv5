@@ -7,6 +7,9 @@ import org.hibernate.validator.constraints.Length;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -30,5 +33,11 @@ public class ChiTietLopTcDto {
 	@NotBlank(message = "Vui Lòng Nhập Mã Lớp Tín Chỉ")
 	@Length(min = 4 , message = "Mã lớp tín chỉ chứa ít nhất 4 ký tự!")
 	private String maLopTc;
+
+	@DateTimeFormat(pattern =  "yyyy-MM-dd")
+	private Date timeBd;
+
+	@DateTimeFormat(pattern =  "yyyy-MM-dd")
+	private Date timeKt;
 	
 }

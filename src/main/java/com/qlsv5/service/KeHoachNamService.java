@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface KeHoachNamService {
 
-    public List<String> deleteLstKeHoachNam(List<String> lstKeHoachNamId);
-
-    public List<KeHoachNamEntity> findAllKeHoachNam();
+//    public List<String> deleteLstKeHoachNam(List<String> lstKeHoachNamId);
+//
+//    public List<KeHoachNamEntity> findAllKeHoachNam();
+//
+//    public KeHoachNamEntity getKeHoachNamById(String id);
     
-    public KeHoachNamEntity getKeHoachNamById(String id);
-    
-    public KeHoachNamEntity getKeHoachNamByMaKeHoachNam(String maKeHoachNam);
+    public KeHoachNamEntity getKeHoachNamByMaKeHoach(String maKeHoachNam);
 
 }
