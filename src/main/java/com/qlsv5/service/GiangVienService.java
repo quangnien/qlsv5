@@ -23,4 +23,7 @@ public interface GiangVienService {
     // paging
     List<GiangVienEntity> getListGiangVienPaging(int page, int size);
 
+    public List<TkbDto> getListTKBForGV(String maGiangVien, String maKeHoach, int tuan);
+
+
 }
