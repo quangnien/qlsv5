@@ -84,8 +84,8 @@ public class DsLopTcApi {
             returnObject.setMessage("200");
 
             validatorDsLopTc.validateAddDsLopTc(dsLopTc);
-            commonService.addObject(dsLopTc);
-            returnObject.setRetObj(dsLopTc);
+            DsLopTcEntity dsLopTcEntity = (DsLopTcEntity) commonService.addObject(dsLopTc);
+            returnObject.setRetObj(dsLopTcEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

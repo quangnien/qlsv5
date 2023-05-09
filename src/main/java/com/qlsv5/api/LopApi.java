@@ -72,8 +72,8 @@ public class LopApi {
 
             validatorLop.validateAddLop(lop);
 //            lopService.addLop(lop);
-            commonService.addObject(lop);
-            returnObject.setRetObj(lop);
+            LopEntity lopEntity = (LopEntity) commonService.addObject(lop);
+            returnObject.setRetObj(lopEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

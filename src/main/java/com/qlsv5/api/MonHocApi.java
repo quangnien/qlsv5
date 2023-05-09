@@ -74,8 +74,8 @@ public class MonHocApi {
 
             validatorMonHoc.validateAddMonHoc(monHoc);
 //            monHocService.addMonHoc(monHoc);
-            commonService.addObject(monHoc);
-            returnObject.setRetObj(monHoc);
+            MonHocEntity monHocEntity = (MonHocEntity) commonService.addObject(monHoc);
+            returnObject.setRetObj(monHocEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

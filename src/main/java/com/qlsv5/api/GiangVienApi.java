@@ -90,8 +90,8 @@ public class GiangVienApi {
             returnObject.setMessage("200");
 
             validatorGiangVien.validateAddGiangVien(giangVien);
-            commonService.addObject(giangVien);
-            returnObject.setRetObj(giangVien);
+            GiangVienEntity giangVienEntity = (GiangVienEntity) commonService.addObject(giangVien);
+            returnObject.setRetObj(giangVienEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

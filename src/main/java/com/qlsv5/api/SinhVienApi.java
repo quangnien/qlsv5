@@ -84,8 +84,8 @@ public class SinhVienApi {
             returnObject.setMessage("200");
 
             validatorSinhVien.validateAddSinhVien(sinhVien);
-            commonService.addObject(sinhVien);
-            returnObject.setRetObj(sinhVien);
+            SinhVienEntity sinhVienEntity = (SinhVienEntity) commonService.addObject(sinhVien);
+            returnObject.setRetObj(sinhVienEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
