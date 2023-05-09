@@ -46,7 +46,7 @@ public class MonHocApi {
     /* CREATE */
     @Operation(summary = "Create MonHoc.")
     @PostMapping("/monHoc")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -88,7 +88,7 @@ public class MonHocApi {
     /* UPDATE */
     @Operation(summary = "Update MonHoc.")
     @PutMapping("/monHoc")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -130,7 +130,7 @@ public class MonHocApi {
     /* DELETE */
     @Operation(summary = "Delete MonHoc by list id")
     @DeleteMapping("/monHoc")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -165,7 +165,7 @@ public class MonHocApi {
     /* GET ALL */
     @Operation(summary = "Get all MonHoc.")
     @GetMapping("/monHoc")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -200,7 +200,7 @@ public class MonHocApi {
     /* GET BY ID */
     @Operation(summary = "Get MonHoc by id.")
     @GetMapping("/monHoc/{monHocId}")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -235,7 +235,7 @@ public class MonHocApi {
 
     @Operation(summary = "Get List Mon Hoc by maKhoa.")
     @GetMapping("/monHoc/khoa/{maKhoa}")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {

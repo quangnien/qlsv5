@@ -68,7 +68,7 @@ public class ThongKeApi {
 
     @Operation(summary = "Thong Ke.")
     @GetMapping("/search/thong-ke")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -156,7 +156,7 @@ public class ThongKeApi {
 //    /* CREATE */
     @Operation(summary = "Thong Ke.")
     @GetMapping("/diem/thong-ke")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {

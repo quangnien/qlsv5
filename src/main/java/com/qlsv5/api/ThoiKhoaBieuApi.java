@@ -44,8 +44,8 @@ public class ThoiKhoaBieuApi {
     private GiangVienService giangVienService;
 
     @Operation(summary = "Get TKB.")
-    @GetMapping("/tkb/{maGv}")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @GetMapping("/tkb")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {

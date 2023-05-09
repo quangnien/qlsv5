@@ -57,7 +57,7 @@ public class DsLopTcApi {
     /* CREATE */
     @Operation(summary = "Create DsLopTc.")
     @PostMapping("/dsLopTc")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -98,7 +98,7 @@ public class DsLopTcApi {
     /* UPDATE */
     @PutMapping("/dsLopTc")
     @Operation(summary = "Update DsLopTc.")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -139,7 +139,7 @@ public class DsLopTcApi {
     /* DELETE */
     @DeleteMapping("/dsLopTc")
     @Operation(summary = "Delete DsLopTc by list id")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -174,7 +174,7 @@ public class DsLopTcApi {
     /* GET ALL DSLOPTC BY MALOP & MAKEHOACH*/
     /* GET ALL DSLOPTC BY MAKEHOACH*/
     @Operation(summary = "Get all DsLopTc.")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @GetMapping("/dsLopTc")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
@@ -288,7 +288,7 @@ public class DsLopTcApi {
     /* GET BY ID */
     @Operation(summary = "Get DsLopTc by id.")
     @GetMapping("/dsLopTc/{dsLopTcId}")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -322,7 +322,7 @@ public class DsLopTcApi {
 
     @Operation(summary = "Get danh sach lop tin chi by maLop")
     @GetMapping("/dsLopTc/lop/{maLop}")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -368,7 +368,7 @@ public class DsLopTcApi {
 
     @Operation(summary = "Get danh sach lop tin chi by maGv and maKeHoach")
     @PostMapping("/dsLopTc/giangVien/{maGv}")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
