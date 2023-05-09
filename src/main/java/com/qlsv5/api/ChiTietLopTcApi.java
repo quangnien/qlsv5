@@ -72,8 +72,8 @@ public class ChiTietLopTcApi {
             returnObject.setMessage("200");
 
             validatorChiTietLopTc.validateAddChiTietLopTc(chiTietLopTc);
-            commonService.addObject(chiTietLopTc);
-            returnObject.setRetObj(chiTietLopTc);
+            ChiTietLopTcEntity chiTietLopTcEntity = (ChiTietLopTcEntity) commonService.addObject(chiTietLopTc);
+            returnObject.setRetObj(chiTietLopTcEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
