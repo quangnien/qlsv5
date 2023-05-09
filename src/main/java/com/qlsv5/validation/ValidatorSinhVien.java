@@ -1,5 +1,6 @@
 package com.qlsv5.validation;
 
+import com.qlsv5.common.FunctionCommon;
 import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.SinhVienDto;
 import com.qlsv5.dto.TkbDto;
@@ -12,6 +13,8 @@ import com.qlsv5.repository.SinhVienRepository;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
@@ -35,6 +38,14 @@ public class ValidatorSinhVien implements Validator {
     private UserService userService;
     @Autowired
     private CommonService commonService;
+
+    @Autowired
+    private FunctionCommon functionCommon;
+
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -62,6 +73,9 @@ public class ValidatorSinhVien implements Validator {
         }
         else if (countEmail > 0) {
             throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_IS_EXIST);
+        }
+        else if(functionCommon.isValidEmailFormat(sinhVienDto.getEmail()) == false){
+            throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_WRONG_FORMAT);
         }
     }
 
@@ -93,6 +107,9 @@ public class ValidatorSinhVien implements Validator {
             }
             else if (countValueByEmail > 0) {
                 throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_IS_EXIST);
+            }
+            else if(functionCommon.isValidEmailFormat(sinhVienDto.getEmail()) == false){
+                throw new BusinessException(MasterDataExceptionConstant.COMMON_EMAIL_WRONG_FORMAT);
             }
         }
     }
@@ -129,26 +146,40 @@ public class ValidatorSinhVien implements Validator {
         if(updatePasswordDto.getId() == null){
             throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
         }
-        else if(updatePasswordDto.getMatKhau() == null || updatePasswordDto.getMatKhau().equals("")){
-            throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_PASSWORD);
+        else if(updatePasswordDto.getMatKhauCu() == null || updatePasswordDto.getMatKhauCu().equals("")){
+            throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_PASSWORD_OLD);
         }
-        else if(updatePasswordDto.getConfirmPassword() == null || updatePasswordDto.getConfirmPassword().equals("")){
-            throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_CONFIRM_PASSWORD);
+        else if(updatePasswordDto.getMatKhauMoi() == null || updatePasswordDto.getMatKhauMoi().equals("")){
+            throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_PASSWORD_NEW);
         }
+//        else if(updatePasswordDto.getMatKhau() == null || updatePasswordDto.getMatKhau().equals("")){
+//            throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_PASSWORD);
+//        }
+//        else if(updatePasswordDto.getConfirmPassword() == null || updatePasswordDto.getConfirmPassword().equals("")){
+//            throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_CONFIRM_PASSWORD);
+//        }
         else {
-            int countMaSinhVien = sinhVienRepository.countSinhVienById(updatePasswordDto.getId());
 
-            SinhVienEntity getSinhVienByDB = (SinhVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new SinhVienDto());
-            UserEntity userEntity = userService.findByUsername(getSinhVienByDB.getMaSv());
+            UserEntity userEntity = userService.findById(updatePasswordDto.getId());
 
-            if (countMaSinhVien == 0) {
+            if(userEntity == null){
                 throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
             }
-            else if(updatePasswordDto.getConfirmPassword().equals(updatePasswordDto.getMatKhau()) == false){
-                throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_EQUAL_CONFIRM_PASSWORD);
-            }
-            else if (userEntity == null) {
-                throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
+            else {
+                // maSV
+                String userName = userEntity.getUsername();
+
+                SinhVienEntity getSinhVienByDB = (SinhVienEntity) sinhVienRepository.findByMaSv(userName);
+
+                if(getSinhVienByDB == null){
+                    throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
+                }
+                else {
+                    String decodedPassword = updatePasswordDto.getMatKhauCu();
+                    if (! encoder.matches(decodedPassword, userEntity.getPassword())) {
+                        throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_MATCH_PASSWORD);
+                    }
+                }
             }
         }
     }

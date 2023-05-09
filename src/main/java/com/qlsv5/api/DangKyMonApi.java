@@ -1,6 +1,7 @@
 package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
+import com.qlsv5.dto.DangKyMonDto;
 import com.qlsv5.dto.DiemDto;
 import com.qlsv5.entity.DiemEntity;
 import com.qlsv5.service.CommonService;
@@ -20,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,7 +58,7 @@ public class DangKyMonApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
-    public ResponseEntity<?> createDangKyMon(@Valid @RequestBody DiemDto diem, BindingResult bindingResult) {
+    public ResponseEntity<?> createDangKyMon(@Valid @RequestBody DangKyMonDto dangKyMonDto, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
 
@@ -71,9 +73,32 @@ public class DangKyMonApi {
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            validatorDiem.validateDangKyMon(diem);
-            commonService.addObject(diem);
-            returnObject.setRetObj(diem);
+            List<DiemDto> listDiem = new ArrayList<>();
+            for(int i = 0 ; i < dangKyMonDto.getMaLopTcList().size() ; i++){
+
+                DiemDto diemDto = new DiemDto();
+                diemDto.setMaSv(dangKyMonDto.getMaSv());
+                diemDto.setMaLopTc(dangKyMonDto.getMaLopTcList().get(i));
+
+                listDiem.add(diemDto);
+            }
+
+            List<String> listMaLopTcValid = new ArrayList<>();
+            for (DiemDto diemDto: listDiem) {
+                boolean checkValid = validatorDiem.validateDangKyMon(diemDto);
+                if(checkValid == true){
+                    listMaLopTcValid.add(diemDto.getMaLopTc());
+                }
+            }
+
+            DangKyMonDto dangKyMonDtoValid = new DangKyMonDto();
+            if(listMaLopTcValid.size() > 0 ){
+                dangKyMonDtoValid.setMaSv(dangKyMonDto.getMaSv());
+                dangKyMonDtoValid.setMaLopTcList(listMaLopTcValid);
+            }
+
+            commonService.addObject(dangKyMonDtoValid);
+            returnObject.setRetObj(dangKyMonDtoValid);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

@@ -32,6 +32,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -89,8 +90,8 @@ public class GiangVienApi {
             returnObject.setMessage("200");
 
             validatorGiangVien.validateAddGiangVien(giangVien);
-            commonService.addObject(giangVien);
-            returnObject.setRetObj(giangVien);
+            GiangVienEntity giangVienEntity = (GiangVienEntity) commonService.addObject(giangVien);
+            returnObject.setRetObj(giangVienEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
@@ -190,7 +191,8 @@ public class GiangVienApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) })})
-    public ResponseEntity<?> getAllGiangVien() {
+    public ResponseEntity<?> getAllGiangVien(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "7") int size) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
@@ -200,8 +202,22 @@ public class GiangVienApi {
             returnObject.setMessage("200");
 
 //            List<GiangVienEntity> listGiangVien = giangVienService.findAllGiangVien();
-            List<Object> listGiangVien = commonService.findAllObject(new GiangVienDto());
-            returnObject.setRetObj(listGiangVien);
+//            List<Object> listGiangVien = commonService.findAllObject(new GiangVienDto());
+            List<GiangVienEntity> listGiangVien = giangVienService.getListGiangVienPaging(page, size);
+
+            List<Object> returnObjectListInList = new ArrayList<>();
+            returnObjectListInList.add(listGiangVien);
+            returnObject.setRetObj(returnObjectListInList);
+
+            /*for paging*/
+            List<GiangVienEntity> dsLopTcEntityForPaging = giangVienService.getListGiangVienPaging(0, 100000);
+
+            double totalPageDouble = (double) dsLopTcEntityForPaging.size() / size;
+            int totalPageForPaging = (int) Math.ceil(totalPageDouble);
+
+            returnObject.setPage(page);
+            returnObject.setTotalRetObjs(dsLopTcEntityForPaging.size());
+            returnObject.setTotalPages(totalPageForPaging);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
@@ -281,59 +297,59 @@ public class GiangVienApi {
         return ResponseEntity.ok(returnObject);
     }
 
-    @Operation(summary = "Update password")
-    @PostMapping("/giangVien/updatePassword")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_GIANGVIEN')")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success",
-                    content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
-            @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
-            @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) })})
-    public ResponseEntity<?> updatePasswordGiangVien(@Valid @RequestBody UpdatePasswordDto updatePasswordDto, BindingResult bindingResult) {
-
-        ReturnObject returnObject = new ReturnObject();
-        if (bindingResult.hasErrors()) {
-            returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(bindingResult.getFieldErrors().get(0).getDefaultMessage());
-            return ResponseEntity.ok(returnObject);
-        }
-        try {
-            log.info("Update password GiangVien By Id!");
-
-            returnObject.setStatus(ReturnObject.SUCCESS);
-            returnObject.setMessage("200");
-
-            validatorGiangVien.validateUpdatePasswordGiangVien(updatePasswordDto);
-
-            GiangVienEntity getGiangVienByDB = (GiangVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new GiangVienDto());
-
-            /* update PW GiangVienEntity*/
-            getGiangVienByDB.setMatKhau(updatePasswordDto.getConfirmPassword());
-            commonService.updateObject(getGiangVienByDB);
-
-            /* update PW UserEntity*/
-            UserEntity userEntity = userService.findByUsername(getGiangVienByDB.getMaGv());
-            userEntity.setPassword(encoder.encode(updatePasswordDto.getConfirmPassword()));
-            userService.updateUser(userEntity);
-
-            returnObject.setRetObj(getGiangVienByDB);
-        }
-        catch (Exception ex){
-            returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
-        }
-
-        return ResponseEntity.ok(returnObject);
-    }
+//    @Operation(summary = "Update password")
+//    @PostMapping("/giangVien/updatePassword")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_GIANGVIEN')")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Success",
+//                    content = {
+//                            @Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
+//            @ApiResponse(responseCode = "401", description = "Unauthorized",
+//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
+//            @ApiResponse(responseCode = "403", description = "Forbidden",
+//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
+//            @ApiResponse(responseCode = "500", description = "Internal server error",
+//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) })})
+//    public ResponseEntity<?> updatePasswordGiangVien(@Valid @RequestBody UpdatePasswordDto updatePasswordDto, BindingResult bindingResult) {
+//
+//        ReturnObject returnObject = new ReturnObject();
+//        if (bindingResult.hasErrors()) {
+//            returnObject.setStatus(ReturnObject.ERROR);
+//            returnObject.setMessage(bindingResult.getFieldErrors().get(0).getDefaultMessage());
+//            return ResponseEntity.ok(returnObject);
+//        }
+//        try {
+//            log.info("Update password GiangVien By Id!");
+//
+//            returnObject.setStatus(ReturnObject.SUCCESS);
+//            returnObject.setMessage("200");
+//
+//            validatorGiangVien.validateUpdatePasswordGiangVien(updatePasswordDto);
+//
+//            GiangVienEntity getGiangVienByDB = (GiangVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new GiangVienDto());
+//
+//            /* update PW GiangVienEntity*/
+//            getGiangVienByDB.setMatKhau(updatePasswordDto.getConfirmPassword());
+//            commonService.updateObject(getGiangVienByDB);
+//
+//            /* update PW UserEntity*/
+//            UserEntity userEntity = userService.findByUsername(getGiangVienByDB.getMaGv());
+//            userEntity.setPassword(encoder.encode(updatePasswordDto.getConfirmPassword()));
+//            userService.updateUser(userEntity);
+//
+//            returnObject.setRetObj(getGiangVienByDB);
+//        }
+//        catch (Exception ex){
+//            returnObject.setStatus(ReturnObject.ERROR);
+//            returnObject.setMessage(ex.getMessage());
+//        }
+//
+//        return ResponseEntity.ok(returnObject);
+//    }
 
     /* GET THỜI KHÓA BIỂU */
     @Operation(summary = "Get TKB For Giang Vien.")
-    @GetMapping("/giangVien/tkb")
+    @PostMapping("/giangVien/tkb")
     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",

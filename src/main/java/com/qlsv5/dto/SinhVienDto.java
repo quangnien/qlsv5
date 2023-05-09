@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -49,6 +50,7 @@ public class SinhVienDto {
 
 //	@NotBlank(message = "Vui Lòng Nhập Mật Khẩu")
 //	@Length(min = 4 , message = "Mật khẩu chứa ít nhất 4 ký tự!")
+	@JsonIgnore
 	private String matKhau;
 
 	private String sdt;

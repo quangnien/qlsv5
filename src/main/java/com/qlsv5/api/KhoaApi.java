@@ -68,8 +68,8 @@ public class KhoaApi {
 
             validatorKhoa.validateAddKhoa(khoa);
 //            khoaService.addKhoa(khoa);
-            commonService.addObject(khoa);
-            returnObject.setRetObj(khoa);
+            KhoaEntity khoaEntity = (KhoaEntity) commonService.addObject(khoa);
+            returnObject.setRetObj(khoaEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
@@ -225,5 +225,14 @@ public class KhoaApi {
 
         return ResponseEntity.ok(returnObject);
     }
+
+
+
+
+
+
+
+
+
 
 }

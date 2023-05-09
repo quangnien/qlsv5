@@ -37,7 +37,7 @@ import com.qlsv5.security.services.UserDetailsImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class AuthApi {
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -57,7 +57,7 @@ public class AuthApi {
 	@Autowired
 	private TokenRefreshTokenPairRepository tokenRefreshTokenPairRepository;
 
-	@PostMapping("/signin")
+	@PostMapping("/auth/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
 		ReturnObject returnObject = new ReturnObject();
@@ -120,6 +120,26 @@ public class AuthApi {
 			// Xóa mã thông báo làm mới khỏi cơ sở dữ liệu
 //			tokenRefreshTokenPairRepository.deleteByRefreshToken(refreshToken);
 
+			// Get the current user's token
+//			HttpServletRequest requestJWT = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+//			String authorizationHeader = request.getHeader("Authorization");
+//			String token = authorizationHeader.substring("Bearer ".length());
+//			jwtUtils.deleteJwtTokens(token);
+//
+//
+//			String authToken = jwtUtils.getTokenFromRequest(request);
+//
+//			if (authToken != null) {
+//				String username = jwtUtils.getUsernameFromToken(authToken);
+//				UserEntity user = userRepository.findByUsername(username).get();
+//
+//				if (user != null) {
+////					token.remove(authToken);
+////					userRepository.save(user);
+//					jwtUtils.invalidateToken(authToken);
+//				}
+//			}
+
 			// Xóa đối tượng xác thực trong bảo mật context
 			SecurityContextHolder.getContext().setAuthentication(null);
 
@@ -135,7 +155,7 @@ public class AuthApi {
 		return ResponseEntity.ok(returnObject);
 	}
 
-	@PostMapping("/signup")
+	@PostMapping("/auth/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
@@ -152,7 +172,7 @@ public class AuthApi {
 		// Create new user's account
 		UserEntity user = new UserEntity(signUpRequest.getUsername(),
 							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()));
+							 encoder.encode(signUpRequest.getPassword()), null);
 
 		Set<String> strRoles = signUpRequest.getRoles();
 		Set<RoleEntity> roles = new HashSet<>();

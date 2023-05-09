@@ -23,4 +23,8 @@ public interface LopRepository extends MongoRepository<LopEntity, String> {
 
     List<LopEntity> getListLopByMaKhoa(String maKhoa);
 
+    int countLopByMaKhoa(String maKhoa);
+
+    LopEntity getLopByMaLop(String maLop);
+
 }

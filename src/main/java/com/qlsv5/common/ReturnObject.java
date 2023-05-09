@@ -8,6 +8,7 @@ import lombok.Getter;
  * @created 2023 - 03 - 01 4:45 AM
  */
 public class ReturnObject {
+
     public static enum RespStatus {
         ERROR("error"), INFO("info"), SUCCESS("success"), WARNING("warning");
 
@@ -35,6 +36,10 @@ public class ReturnObject {
     private String message;
 
     private Object retObj;
+
+    private int page;
+    private int totalPages;
+    private int totalRetObjs;
 
     public String getStatus() {
         return status;
@@ -78,5 +83,31 @@ public class ReturnObject {
     public void setMessage(RespStatus respStatus, String message) {
         this.status = String.valueOf(respStatus.toString());
         this.message = String.valueOf(message);
+    }
+
+    /* getter/setter paging */
+
+    public int getPage() {
+        return page;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public int getTotalRetObjs() {
+        return totalRetObjs;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public void setTotalRetObjs(int totalRetObjs) {
+        this.totalRetObjs = totalRetObjs;
     }
 }

@@ -26,4 +26,8 @@ public interface GiangVienRepository extends MongoRepository<GiangVienEntity, St
     @Query(value = "{'email': ?0, '_id': {$ne: ?1}}", count = true)
     Long countGiangVienByEmailAndNotId(String email, String id);
 
+    int countGiangVienByMaKhoa(String maKhoa);
+
+    GiangVienEntity findByMaGv(String maGv);
+
 }

@@ -19,4 +19,16 @@ public class FunctionCommon {
         return email.matches(regex);
     }
 
+    public static double roundToHalf(float num) {
+        float floor = (float) Math.floor(num);
+        float diff = num - floor;
+        if (diff <= 0.25) {
+            return floor;
+        } else if (diff <= 0.75) {
+            return floor + 0.5;
+        } else {
+            return floor + 1;
+        }
+    }
+
 }

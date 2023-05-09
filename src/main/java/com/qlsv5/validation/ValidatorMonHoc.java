@@ -5,6 +5,7 @@ import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.MonHocDto;
 import com.qlsv5.entity.MonHocEntity;
 import com.qlsv5.exception.BusinessException;
+import com.qlsv5.repository.KhoaRepository;
 import com.qlsv5.repository.MonHocRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,9 @@ public class ValidatorMonHoc implements Validator {
 
     @Autowired
     private MonHocRepository monHocRepository;
+
+    @Autowired
+    private KhoaRepository khoaRepository;
 
     @Autowired
     private FunctionCommon functionCommon;
@@ -79,6 +83,22 @@ public class ValidatorMonHoc implements Validator {
         if (countMaMonHoc == 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_MONHOC_NOT_FOUND_MONHOC);
         }
+    }
+
+    @Transactional
+    public void validateGetListMonHocByMaKhoa(String maKhoa) throws BusinessException {
+
+        if(maKhoa == null || "".equals(maKhoa)){
+            throw new BusinessException(MasterDataExceptionConstant.E_KHOA_NOT_FOUND_KHOA);
+        }
+        else {
+            int countKhoaByMaKhoa = khoaRepository.countKhoaByMaKhoa(maKhoa);
+
+            if (countKhoaByMaKhoa == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_KHOA_NOT_FOUND_KHOA);
+            }
+        }
+
     }
 
 }

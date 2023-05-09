@@ -20,6 +20,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserEntity findById(String id) {
+        return userRepository.findById(id).get();
+    }
+
+    @Override
     public UserEntity updateUser(UserEntity userEntity) {
         return userRepository.save(userEntity);
     }
