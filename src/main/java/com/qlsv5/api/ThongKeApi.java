@@ -147,7 +147,9 @@ public class ThongKeApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -283,7 +285,9 @@ public class ThongKeApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
