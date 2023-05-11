@@ -29,6 +29,8 @@ public class DsLopTcMonHocGiangVienLopDto {
 
 	private int soLuongCon;
 
+	private int soTc;
+
 	/* FOREIGN KEY */
 	@NotBlank(message = "Vui Lòng Nhập Mã Môn Học")
 	@Length(min = 4 , message = "Mã môn học chỉ chứa ít nhất 4 ký tự!")

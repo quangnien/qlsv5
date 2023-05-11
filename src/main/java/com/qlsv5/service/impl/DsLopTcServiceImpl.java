@@ -40,6 +40,11 @@ public class DsLopTcServiceImpl implements DsLopTcService {
     }
 
     @Override
+    public List<DsLopTcEntity> findAllByMaMhAndMaKeHoach(String maMh, String maKeHoach) {
+        return dsLopTcRepository.findAllByMaMhAndMaKeHoach(maMh, maKeHoach);
+    }
+
+    @Override
     public DsLopTcEntity getDsLopTcByMaLopTcAndMaKeHoach(String maLopTc, String maKeHoach) {
         return dsLopTcRepository.getDsLopTcByMaLopTcAndMaKeHoach(maLopTc, maKeHoach);
     }
