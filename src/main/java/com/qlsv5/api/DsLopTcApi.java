@@ -301,7 +301,7 @@ public class DsLopTcApi {
 
     /* GET ALL DSLOPTC BY MA MON HOC & MA KE HOACH*/
     @Operation(summary = "Get all DsLopTc By Ma Mon Hoc & Ma Ke Hoach")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @GetMapping("/dsLopTc/monHoc")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
