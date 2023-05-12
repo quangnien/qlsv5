@@ -49,6 +49,7 @@ public class MasterDataExceptionConstant {
     public static final String E_DSLOPTC_DUPLICATE_MA_DSLOPTC = "Mã Ds LopTc đã tồn tại, hãy nhập một mã Ds LopTc mới!";
     public static final String E_DSLOPTC_FULL_SLOT = "Lop TC is full, please choose another one!";
     public static final String E_DSLOPTC_IS_USED = "Lop TC is used!";
+    public static final String E_DSLOPTC_NGOAI_TIME_DK = "Đã kết thúc thời gian đăng ký môn, không thể hủy đăng ký!";
 
     /* Chi Tiet Lop Tc */
     public static final String E_CHITIETLOPTC_NOT_FOUND_DSLOPTC = "Chi Tiết Lớp Tc không tồn tại!";

@@ -97,8 +97,11 @@ public class DangKyMonApi {
                 dangKyMonDtoValid.setMaLopTcList(listMaLopTcValid);
             }
 
-            commonService.addObject(dangKyMonDtoValid);
+            if(dangKyMonDtoValid.getMaLopTcList() != null){
+                commonService.addObject(dangKyMonDtoValid);
+            }
             returnObject.setRetObj(dangKyMonDtoValid);
+
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
