@@ -1,11 +1,8 @@
 package com.qlsv5.dto;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,14 +19,19 @@ public class DsLopTcDto {
 	@Length(min = 4 , message = "Mã lớp tín chỉ chứa ít nhất 4 ký tự!")
 	private String maLopTc;
 
-	private int nienKhoa;
-	private int ky;
+//	private String nienKhoa;
+//	private int ky;
+//
+//	@DateTimeFormat(pattern =  "yyyy-MM-dd")
+//	private Date timeBd;
+//
+//	@DateTimeFormat(pattern =  "yyyy-MM-dd")
+//	private Date timeKt;
 
-	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeBd;
+	/* soluong */
+	private int soLuong;
 
-	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeKt;
+	private int soLuongCon;
 
 	/* FOREIGN KEY */
 	@NotBlank(message = "Vui Lòng Nhập Mã Môn Học")
@@ -43,4 +45,8 @@ public class DsLopTcDto {
 	@NotBlank(message = "Vui Lòng Nhập Mã Lớp")
 	@Length(min = 4 , message = "Mã lớp chứa ít nhất 4 ký tự!")
 	private String maLop;
+
+	@NotBlank(message = "Vui Lòng Nhập Mã Kế Hoạch")
+	@Length(min = 2 , message = "Mã lớp chứa ít nhất 2 ký tự!")
+	private String maKeHoach;
 }

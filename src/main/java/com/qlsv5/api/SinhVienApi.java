@@ -2,9 +2,11 @@ package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.SinhVienDto;
+import com.qlsv5.dto.TkbDto;
 import com.qlsv5.dto.UpdatePasswordDto;
 import com.qlsv5.entity.SinhVienEntity;
 import com.qlsv5.entity.UserEntity;
+import com.qlsv5.security.services.UserDetailsImpl;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.SinhVienService;
 import com.qlsv5.service.UserService;
@@ -19,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -54,7 +57,7 @@ public class SinhVienApi {
     /* CREATE */
     @Operation(summary = "Create Sinh Vien.")
     @PostMapping("/sinhVien")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -81,12 +84,14 @@ public class SinhVienApi {
             returnObject.setMessage("200");
 
             validatorSinhVien.validateAddSinhVien(sinhVien);
-            commonService.addObject(sinhVien);
-            returnObject.setRetObj(sinhVien);
+            SinhVienEntity sinhVienEntity = (SinhVienEntity) commonService.addObject(sinhVien);
+            returnObject.setRetObj(sinhVienEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -95,7 +100,7 @@ public class SinhVienApi {
     /* UPDATE */
     @Operation(summary = "Update Sinh Vien.")
     @PutMapping("/sinhVien")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -127,7 +132,9 @@ public class SinhVienApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -136,7 +143,7 @@ public class SinhVienApi {
     /* DELETE */
     @Operation(summary = "Delete Sinh Vien by list id")
     @DeleteMapping("/sinhVien")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -162,7 +169,9 @@ public class SinhVienApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -171,7 +180,7 @@ public class SinhVienApi {
     /* GET ALL */
     @Operation(summary = "Get all Sinh Vien.")
     @GetMapping("/sinhVien")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -197,7 +206,9 @@ public class SinhVienApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -206,7 +217,7 @@ public class SinhVienApi {
     /* GET BY ID */
     @Operation(summary = "Get Sinh Vien by id.")
     @GetMapping("/sinhVien/{sinhVienId}")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -232,7 +243,9 @@ public class SinhVienApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -240,7 +253,7 @@ public class SinhVienApi {
 
     @Operation(summary = "Get Sinh Vien by maLop.")
     @GetMapping("/sinhVien/lop/{maLop}")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -251,7 +264,9 @@ public class SinhVienApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SinhVienEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SinhVienEntity.class)) })})
-    public ResponseEntity<?> getSinhVienByLopId(@PathVariable String maLop) {
+    public ResponseEntity<?> getSinhVienByLopId(@PathVariable String maLop,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "7") int size) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
@@ -261,31 +276,95 @@ public class SinhVienApi {
             returnObject.setMessage("200");
 
             validatorSinhVien.validateGetListSinhVienByMaLop(maLop);
-            List<SinhVienEntity> sinhVienEntity = sinhVienService.getListSinhVienByMaLop(maLop);
+            List<SinhVienEntity> sinhVienEntity = sinhVienService.getListSinhVienByMaLop(maLop, page, size);
             returnObject.setRetObj(sinhVienEntity);
+
+            /*for paging*/
+            List<SinhVienEntity> dsLopTcEntityForPaging = sinhVienService.getListSinhVienByMaLop(maLop, 0, 100000);
+
+            double totalPageDouble = (double) dsLopTcEntityForPaging.size() / size;
+            int totalPageForPaging = (int) Math.ceil(totalPageDouble);
+
+            returnObject.setPage(page);
+            returnObject.setTotalRetObjs(dsLopTcEntityForPaging.size());
+            returnObject.setTotalPages(totalPageForPaging);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
     }
 
-    @Operation(summary = "Update password")
-    @PostMapping("/sinhVien/updatePassword")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @Operation(summary = "Update password")
+//    @PostMapping("/sinhVien/updatePassword")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Success",
+//                    content = {
+//                            @Content(mediaType = "application/json", schema = @Schema(implementation = SinhVienEntity.class)) }),
+//            @ApiResponse(responseCode = "401", description = "Unauthorized",
+//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SinhVienEntity.class)) }),
+//            @ApiResponse(responseCode = "403", description = "Forbidden",
+//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SinhVienEntity.class)) }),
+//            @ApiResponse(responseCode = "500", description = "Internal server error",
+//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SinhVienEntity.class)) })})
+//    public ResponseEntity<?> updatePasswordSinhVien(@Valid @RequestBody UpdatePasswordDto updatePasswordDto, BindingResult bindingResult) {
+//
+//        ReturnObject returnObject = new ReturnObject();
+//        if (bindingResult.hasErrors()) {
+//            returnObject.setStatus(ReturnObject.ERROR);
+//            returnObject.setMessage(bindingResult.getFieldErrors().get(0).getDefaultMessage());
+//            return ResponseEntity.ok(returnObject);
+//        }
+//        try {
+//            log.info("Update password SinhVien By Id!");
+//
+//            returnObject.setStatus(ReturnObject.SUCCESS);
+//            returnObject.setMessage("200");
+//
+//            validatorSinhVien.validateUpdatePasswordSinhVien(updatePasswordDto);
+//
+//            SinhVienEntity getSinhVienByDB = (SinhVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new SinhVienDto());
+//
+//            /* update PW SinhVienEntity*/
+//            getSinhVienByDB.setMatKhau(updatePasswordDto.getConfirmPassword());
+//            commonService.updateObject(getSinhVienByDB);
+//
+//            /* update PW UserEntity*/
+//            UserEntity userEntity = userService.findByUsername(getSinhVienByDB.getMaSv());
+//            userEntity.setPassword(encoder.encode(updatePasswordDto.getConfirmPassword()));
+//            userService.updateUser(userEntity);
+//
+//            returnObject.setRetObj(getSinhVienByDB);
+//        }
+//        catch (Exception ex){
+//            returnObject.setStatus(ReturnObject.ERROR);
+//            returnObject.setMessage(ex.getMessage());
+//        }
+//
+//        return ResponseEntity.ok(returnObject);
+//    }
+
+    /* GET THỜI KHÓA BIỂU */
+    @Operation(summary = "Get TKB For Sinh Vien.")
+    @PostMapping("/sinhVien/tkb")
+//    @PreAuthorize("hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
-                    content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = SinhVienEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SinhVienEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SinhVienEntity.class)) }),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SinhVienEntity.class)) })})
-    public ResponseEntity<?> updatePasswordSinhVien(@Valid @RequestBody UpdatePasswordDto updatePasswordDto, BindingResult bindingResult) {
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),
+            @ApiResponse(responseCode = "405", description = "Method not allowed",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) })})
+    public ResponseEntity<?> getTKForSinhVien(@Valid @RequestBody TkbDto tkbDto, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
         if (bindingResult.hasErrors()) {
@@ -294,29 +373,26 @@ public class SinhVienApi {
             return ResponseEntity.ok(returnObject);
         }
         try {
-            log.info("Update password SinhVien By Id!");
+            log.info("Get All TKB For SinhVien!");
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            validatorSinhVien.validateUpdatePasswordSinhVien(updatePasswordDto);
+            validatorSinhVien.validateGetTKBForSinhVien(tkbDto);
 
-            SinhVienEntity getSinhVienByDB = (SinhVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new SinhVienDto());
+            /* get info user is logining*/
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = ((UserDetailsImpl)principal).getUsername();
 
-            /* update PW SinhVienEntity*/
-            getSinhVienByDB.setMatKhau(updatePasswordDto.getConfirmPassword());
-            commonService.updateObject(getSinhVienByDB);
+            List<TkbDto> listTkbDto = sinhVienService.getListTKBForSinhVien(username, tkbDto);
 
-            /* update PW UserEntity*/
-            UserEntity userEntity = userService.findByUsername(getSinhVienByDB.getMaSv());
-            userEntity.setPassword(encoder.encode(updatePasswordDto.getConfirmPassword()));
-            userService.updateUser(userEntity);
-
-            returnObject.setRetObj(getSinhVienByDB);
+            returnObject.setRetObj(listTkbDto);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);

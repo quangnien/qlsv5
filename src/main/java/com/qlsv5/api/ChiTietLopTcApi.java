@@ -2,15 +2,11 @@ package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.ChiTietLopTcDto;
-import com.qlsv5.dto.LopDto;
 import com.qlsv5.entity.ChiTietLopTcEntity;
-import com.qlsv5.entity.KhoaEntity;
-import com.qlsv5.entity.LopEntity;
+import com.qlsv5.entity.DsLopTcEntity;
 import com.qlsv5.service.ChiTietLopTcService;
 import com.qlsv5.service.CommonService;
-import com.qlsv5.service.LopService;
 import com.qlsv5.validation.ValidatorChiTietLopTc;
-import com.qlsv5.validation.ValidatorLop;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,9 +39,12 @@ public class ChiTietLopTcApi {
     @Autowired
     private ValidatorChiTietLopTc validatorChiTietLopTc;
 
+    @Autowired
+    private ChiTietLopTcService chiTietLopTcService;
+
     /* CREATE */
     @Operation(summary = "Create ChiTietLopTc.")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @PostMapping("/chiTietLopTc")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
@@ -73,12 +72,14 @@ public class ChiTietLopTcApi {
             returnObject.setMessage("200");
 
             validatorChiTietLopTc.validateAddChiTietLopTc(chiTietLopTc);
-            commonService.addObject(chiTietLopTc);
-            returnObject.setRetObj(chiTietLopTc);
+            ChiTietLopTcEntity chiTietLopTcEntity = (ChiTietLopTcEntity) commonService.addObject(chiTietLopTc);
+            returnObject.setRetObj(chiTietLopTcEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -87,7 +88,7 @@ public class ChiTietLopTcApi {
     /* UPDATE */
     @PutMapping("/chiTietLopTc")
     @Operation(summary = "Update ChiTietLopTc.")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -119,7 +120,9 @@ public class ChiTietLopTcApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -128,7 +131,7 @@ public class ChiTietLopTcApi {
     /* DELETE */
     @DeleteMapping("/chiTietLopTc")
     @Operation(summary = "Delete ChiTietLopTc by list id")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -153,7 +156,9 @@ public class ChiTietLopTcApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -161,7 +166,7 @@ public class ChiTietLopTcApi {
 
     /* GET ALL */
     @Operation(summary = "Get all ChiTietLopTc.")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @GetMapping("/chiTietLopTc")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
@@ -187,7 +192,9 @@ public class ChiTietLopTcApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -196,7 +203,7 @@ public class ChiTietLopTcApi {
     /* GET BY ID */
     @Operation(summary = "Get ChiTietLopTc by id.")
     @GetMapping("/chiTietLopTc/{chiTietLopTcId}")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -222,7 +229,45 @@ public class ChiTietLopTcApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
+
+    @Operation(summary = "Get danh sach chi tiet lop tin chi by maLopTc")
+    @GetMapping("/chiTietLopTc/lopTc/{maLopTc}")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
+    public ResponseEntity<?> getDsLopTcByMaLop(@PathVariable String maLopTc) {
+
+        ReturnObject returnObject = new ReturnObject();
+        try {
+            log.info("Get Ds Chi Tiet Lop Tin Chi By maLopTc!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            validatorChiTietLopTc.validateGetListChiTietLopTcByMaLopTc(maLopTc);
+            List<ChiTietLopTcEntity> chiTietLopTcEntityList = chiTietLopTcService.getListChiTietLopTcByMaLopTc(maLopTc);
+            returnObject.setRetObj(chiTietLopTcEntityList);
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);

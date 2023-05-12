@@ -3,6 +3,7 @@ package com.qlsv5.service.impl;
 import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.*;
 import com.qlsv5.entity.*;
+import com.qlsv5.enumdef.XepLoaiEnum;
 import com.qlsv5.exception.BusinessException;
 import com.qlsv5.payload.request.SignupRequest;
 import com.qlsv5.payload.response.MessageResponse;
@@ -11,6 +12,7 @@ import com.qlsv5.service.CommonService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,12 @@ public class CommonServiceImpl implements CommonService {
     PasswordEncoder encoder;
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    TuanRepository tuanRepository;
+
+    @Autowired
+    private KeHoachNamRepository keHoachNamRepository;
 
     //CRUD  CREATE , READ , UPDATE , DELETE
 
@@ -82,7 +90,49 @@ public class CommonServiceImpl implements CommonService {
         }
         else if(object instanceof DiemDto){
             DiemEntity diemEntity = modelMapper.map(object, DiemEntity.class);
-            return diemRepository.save(diemEntity);
+
+            /* Vì TB là 1 field được sinh tự động khi edit */
+            DsLopTcEntity dsLopTcEntity = dsLopTcRepository.getDsLopTcByMaLopTc(diemEntity.getMaLopTc());
+            MonHocEntity monHocEntity = monHocRepository.getMonHocByMaMh(dsLopTcEntity.getMaMh());
+
+            float tb = (float) (diemEntity.getCc()*monHocEntity.getPercentCc()
+                    + diemEntity.getGk()*monHocEntity.getPercentGk()
+                    + diemEntity.getCk()*monHocEntity.getPercentCk()) / 100;
+
+            float tbRound = Math.round(tb * 10.0f) / 10.0f;
+
+            diemEntity.setTb(tbRound);
+            /* ______________________________________ */
+
+            if(tb >= 9 ){
+                diemEntity.setXepLoai(XepLoaiEnum.A_PLUS.getName());
+            }
+            else if(tb >= 8.5){
+                diemEntity.setXepLoai(XepLoaiEnum.A.getName());
+            }
+            else if(tb >= 8){
+                diemEntity.setXepLoai(XepLoaiEnum.B_PLUS.getName());
+            }
+            else if(tb >= 7){
+                diemEntity.setXepLoai(XepLoaiEnum.B.getName());
+            }
+            else if(tb >= 6.5){
+                diemEntity.setXepLoai(XepLoaiEnum.C_PLUS.getName());
+            }
+            else if(tb >= 5.5){
+                diemEntity.setXepLoai(XepLoaiEnum.C.getName());
+            }
+            else if(tb >= 5){
+                diemEntity.setXepLoai(XepLoaiEnum.D_PLUS.getName());
+            }
+            else if(tb >= 4){
+                diemEntity.setXepLoai(XepLoaiEnum.D.getName());
+            }
+            else {
+                diemEntity.setXepLoai(XepLoaiEnum.F.getName());
+            }
+            diemRepository.save(diemEntity);
+            return diemEntity;
         }
 
         return null;
@@ -115,12 +165,14 @@ public class CommonServiceImpl implements CommonService {
 
             /*_____________________________________________*/
             /* BEGIN CREATE ACCOUNT USER WITH ROLE_SINHVIEN*/
+            /*_____________________________________________*/
+
             SignupRequest signUpRequest = createUserAccountTemp(result);
 
             // Create new user's account
             UserEntity user = new UserEntity(signUpRequest.getUsername(),
                     signUpRequest.getEmail(),
-                    encoder.encode(signUpRequest.getPassword()));
+                    encoder.encode(signUpRequest.getPassword()), signUpRequest.getIdLogin(), signUpRequest.getUserFullName());
 
             Set<String> strRoles = signUpRequest.getRoles();
             Set<RoleEntity> roles = new HashSet<>();
@@ -158,12 +210,16 @@ public class CommonServiceImpl implements CommonService {
                 });
             }
 
+            result.setId(UUID.randomUUID().toString().split("-")[0]);
+
             user.setRoles(roles);
+            user.setIdLogin(result.getId());
+            user.setUserFullName(result.getHo() + " " + result.getTen());
             userRepository.save(user);
+            /*____________________________________________*/
             /* END CREATE ACCOUNT USER WITH ROLE_SINHVIEN */
             /*____________________________________________*/
 
-            result.setId(UUID.randomUUID().toString().split("-")[0]);
             return sinhVienRepository.save(result);
         }
         else if(object instanceof GiangVienDto){
@@ -177,13 +233,14 @@ public class CommonServiceImpl implements CommonService {
 
             /*_____________________________________________*/
             /* BEGIN CREATE ACCOUNT USER WITH ROLE_SINHVIEN*/
+            /*_____________________________________________*/
             SignupRequest signUpRequest = createUserAccountTemp(result);
 
             // Create new user's account
 
             UserEntity user = new UserEntity(signUpRequest.getUsername(),
                     signUpRequest.getEmail(),
-                    encoder.encode(signUpRequest.getPassword()));
+                    encoder.encode(signUpRequest.getPassword()), signUpRequest.getIdLogin(), signUpRequest.getUserFullName());
 
             Set<String> strRoles = signUpRequest.getRoles();
             Set<RoleEntity> roles = new HashSet<>();
@@ -215,13 +272,16 @@ public class CommonServiceImpl implements CommonService {
                     }
                 });
             }
+            result.setId(UUID.randomUUID().toString().split("-")[0]);
 
             user.setRoles(roles);
+            user.setIdLogin(result.getId());
+            user.setUserFullName(result.getHo() + " " + result.getTen());
             userRepository.save(user);
+            /*____________________________________________*/
             /* END CREATE ACCOUNT USER WITH ROLE_SINHVIEN */
             /*____________________________________________*/
 
-            result.setId(UUID.randomUUID().toString().split("-")[0]);
             return giangVienRepository.save(result);
         }
         else if(object instanceof MonHocDto){
@@ -242,11 +302,57 @@ public class CommonServiceImpl implements CommonService {
             result.setId(UUID.randomUUID().toString().split("-")[0]);
             return chiTietLopTcRepository.save(result);
         }
+        /* fact : not use */
         else if(object instanceof DiemDto){
+
+            /* TRUTH: DANG KY MON */
             DiemEntity result = new DiemEntity();
             result = modelMapper.map(object, DiemEntity.class);
             result.setId(UUID.randomUUID().toString().split("-")[0]);
+
+            /*SET SOLUONGCON CUA LOPTINCHI*/
+            DsLopTcEntity dsLopTcEntity = dsLopTcRepository.getDsLopTcByMaLopTc(result.getMaLopTc());
+            dsLopTcEntity.setSoLuongCon(dsLopTcEntity.getSoLuongCon() - 1);
+
+            dsLopTcRepository.save(dsLopTcEntity);
+
             return diemRepository.save(result);
+        }
+        else if(object instanceof DangKyMonDto){
+
+            /* TRUTH: DANG KY MON */
+            DangKyMonDto dangKyMonDto = modelMapper.map(object, DangKyMonDto.class);
+
+            List<DiemDto> listDiem = new ArrayList<>();
+            for(int i = 0 ; i < dangKyMonDto.getMaLopTcList().size() ; i++){
+
+                DiemDto diemDto = new DiemDto();
+                diemDto.setMaSv(dangKyMonDto.getMaSv());
+                diemDto.setMaLopTc(dangKyMonDto.getMaLopTcList().get(i));
+
+                listDiem.add(diemDto);
+            }
+
+            for(int i = 0 ; i < listDiem.size() ; i++){
+                DiemEntity result = new DiemEntity();
+                result = modelMapper.map(listDiem.get(i), DiemEntity.class);
+                result.setId(UUID.randomUUID().toString().split("-")[0]);
+
+                /*SET SOLUONGCON CUA LOPTINCHI*/
+                DsLopTcEntity dsLopTcEntity = dsLopTcRepository.getDsLopTcByMaLopTc(result.getMaLopTc());
+                dsLopTcEntity.setSoLuongCon(dsLopTcEntity.getSoLuongCon() - 1);
+
+                dsLopTcRepository.save(dsLopTcEntity);
+
+                diemRepository.save(result);
+            }
+            return null;
+        }
+        if(object instanceof KeHoachNamDto){
+            KeHoachNamEntity result = new KeHoachNamEntity();
+            result = modelMapper.map(object, KeHoachNamEntity.class);
+            result.setId(UUID.randomUUID().toString().split("-")[0]);
+            return keHoachNamRepository.save(result);
         }
 
         return null;
@@ -259,10 +365,22 @@ public class CommonServiceImpl implements CommonService {
 
         if(object instanceof KhoaDto){
             for (String item : lstId) {
+
                 int countMaKhoa = khoaRepository.countKhoaById(item);
+
                 if(countMaKhoa > 0){
-                    lstSuccess.add(item);
-                    khoaRepository.deleteById(item);
+                    /* important: validator */
+                    KhoaEntity khoaEntity = khoaRepository.findById(item).get();
+                    int countMaKhoaOnGiangVienTable = giangVienRepository.countGiangVienByMaKhoa(khoaEntity.getMaKhoa());
+                    int countMaKhoaOnLopTable = lopRepository.countLopByMaKhoa(khoaEntity.getMaKhoa());
+
+                    if(countMaKhoaOnLopTable > 0 || countMaKhoaOnGiangVienTable > 0){
+                        continue;
+                    }
+                    else {
+                        lstSuccess.add(item);
+                        khoaRepository.deleteById(item);
+                    }
                 }
             }
         }
@@ -270,8 +388,18 @@ public class CommonServiceImpl implements CommonService {
             for (String item : lstId) {
                 int countMaLop = lopRepository.countLopById(item);
                 if(countMaLop > 0){
-                    lstSuccess.add(item);
-                    lopRepository.deleteById(item);
+                    /* important: validator */
+                    LopEntity lopEntity = lopRepository.findById(item).get();
+                    int countMaLopOnSinhVienTable = sinhVienRepository.countSinhVienByMaLop(lopEntity.getMaLop());
+                    int countMaLopOnDsLopTcTable = dsLopTcRepository.countDsLopTcByMaLop(lopEntity.getMaLop());
+
+                    if(countMaLopOnSinhVienTable > 0 || countMaLopOnDsLopTcTable > 0){
+                        continue;
+                    }
+                    else {
+                        lstSuccess.add(item);
+                        lopRepository.deleteById(item);
+                    }
                 }
             }
         }
@@ -279,8 +407,19 @@ public class CommonServiceImpl implements CommonService {
             for (String item : lstId) {
                 int countMaSinhVien = sinhVienRepository.countSinhVienById(item);
                 if(countMaSinhVien > 0){
-                    lstSuccess.add(item);
-                    sinhVienRepository.deleteById(item);
+
+                    /* important: validator */
+                    SinhVienEntity sinhVienEntity = sinhVienRepository.findById(item).get();
+                    int countSinhVienOnDiemTable = diemRepository.countDiemByMaSv(sinhVienEntity.getMaSv());
+
+                    if(countSinhVienOnDiemTable > 0){
+                        continue;
+                    }
+                    else {
+                        lstSuccess.add(item);
+                        sinhVienRepository.deleteById(item);
+                    }
+
                 }
             }
         }
@@ -288,8 +427,19 @@ public class CommonServiceImpl implements CommonService {
             for (String item : lstId) {
                 int countMaGiangVien = giangVienRepository.countGiangVienById(item);
                 if(countMaGiangVien > 0){
-                    lstSuccess.add(item);
-                    giangVienRepository.deleteById(item);
+
+                    /* important: validator */
+                    GiangVienEntity giangVienEntity = giangVienRepository.findById(item).get();
+                    int countGiangVienOnDsLopTcTable = dsLopTcRepository.countDsLopTcByMaGv(giangVienEntity.getMaGv());
+
+                    if(countGiangVienOnDsLopTcTable > 0){
+                        continue;
+                    }
+                    else {
+                        lstSuccess.add(item);
+                        giangVienRepository.deleteById(item);
+                    }
+
                 }
             }
         }
@@ -297,8 +447,19 @@ public class CommonServiceImpl implements CommonService {
             for (String item : lstId) {
                 int countMaMonHoc = monHocRepository.countMonHocById(item);
                 if(countMaMonHoc > 0){
-                    lstSuccess.add(item);
-                    monHocRepository.deleteById(item);
+
+                    /* important: validator */
+                    MonHocEntity monHocEntity = monHocRepository.findById(item).get();
+                    int countGiangVienOnDsLopTcTable = dsLopTcRepository.countDsLopTcByMaMh(monHocEntity.getMaMh());
+
+                    if(countGiangVienOnDsLopTcTable > 0){
+                        continue;
+                    }
+                    else {
+                        lstSuccess.add(item);
+                        monHocRepository.deleteById(item);
+                    }
+
                 }
             }
         }
@@ -306,8 +467,29 @@ public class CommonServiceImpl implements CommonService {
             for (String item : lstId) {
                 int countMaDsLopTc = dsLopTcRepository.countDsLopTcById(item);
                 if(countMaDsLopTc > 0){
-                    lstSuccess.add(item);
-                    dsLopTcRepository.deleteById(item);
+
+                    /* important: validator */
+                    DsLopTcEntity dsLopTcEntity = dsLopTcRepository.findById(item).get();
+                    int countDslopTcOnDiemTable = diemRepository.countDiemByMaLopTc(dsLopTcEntity.getMaMh());
+                    int countDslopTcOnChiTietLopTcTable = chiTietLopTcRepository.countChiTietLopTcByMaLopTc(dsLopTcEntity.getMaMh());
+
+                    if(countDslopTcOnDiemTable > 0 || countDslopTcOnChiTietLopTcTable > 0){
+                        continue;
+                    }
+                    else {
+
+                        /*delete Loptc -> delte all ChiTietLopTc that relative with LopTc*/
+                        List<ChiTietLopTcEntity> chiTietLopTcEntityList = chiTietLopTcRepository.getListChiTietLopTcByMaLopTc(dsLopTcEntity.getMaLopTc());
+
+                        for (ChiTietLopTcEntity chiTietLopTcEntity: chiTietLopTcEntityList) {
+                            chiTietLopTcRepository.deleteById(chiTietLopTcEntity.getId());
+                        }
+                        /* end */
+
+                        lstSuccess.add(item);
+                        dsLopTcRepository.deleteById(item);
+                    }
+
                 }
             }
         }
@@ -322,8 +504,20 @@ public class CommonServiceImpl implements CommonService {
         }
         else if(object instanceof DiemDto){
             for (String item : lstId) {
+
+                /* TRUTH: DANG KY MON */
                 int countMaDiem = diemRepository.countDiemById(item);
                 if(countMaDiem > 0){
+
+                    /*SET SOLUONGCON CUA LOPTINCHI*/
+
+                    DiemEntity diemEntity = diemRepository.getDiemById(item);
+                    DsLopTcEntity dsLopTcEntity = dsLopTcRepository.getDsLopTcByMaLopTc(diemEntity.getMaLopTc());
+
+                    dsLopTcEntity.setSoLuongCon(dsLopTcEntity.getSoLuongCon() + 1);
+
+                    dsLopTcRepository.save(dsLopTcEntity);
+
                     lstSuccess.add(item);
                     diemRepository.deleteById(item);
                 }
@@ -357,7 +551,20 @@ public class CommonServiceImpl implements CommonService {
             return Collections.singletonList(chiTietLopTcRepository.findAll());
         }
         else if(object instanceof DiemDto){
-            return Collections.singletonList(diemRepository.findAll());
+            Sort sort = Sort.by(
+                    Sort.Order.desc("xepLoai")
+            );
+            return Collections.singletonList(diemRepository.findAll(sort));
+        }
+        if(object instanceof KeHoachNamDto){
+            Sort sort = Sort.by(
+                    Sort.Order.desc("nam"),
+                    Sort.Order.desc("ky")
+            );
+            return Collections.singletonList(keHoachNamRepository.findAll(sort));
+        }
+        if(object instanceof TuanDto){
+            return Collections.singletonList(tuanRepository.findAll());
         }
         return null;
     }
@@ -388,6 +595,9 @@ public class CommonServiceImpl implements CommonService {
         else if(object instanceof DiemDto){
             return diemRepository.findById(taskId).get();
         }
+        if(object instanceof KeHoachNamDto){
+            return keHoachNamRepository.findById(taskId).get();
+        }
         return null;
     }
 
@@ -401,6 +611,8 @@ public class CommonServiceImpl implements CommonService {
             objectTemp.setUsername(result.getMaSv());
             objectTemp.setPassword(result.getMatKhau());
             objectTemp.setEmail(result.getEmail());
+            objectTemp.setIdLogin(result.getId());
+            objectTemp.setUserFullName(result.getHo() + " " + result.getTen());
 
             Set<String> roles = new HashSet<>();
             roles.add("SINHVIEN");
@@ -412,6 +624,8 @@ public class CommonServiceImpl implements CommonService {
             objectTemp.setUsername(result.getMaGv());
             objectTemp.setPassword(result.getMatKhau());
             objectTemp.setEmail(result.getEmail());
+            objectTemp.setIdLogin(result.getId());
+            objectTemp.setUserFullName(result.getHo() + " " + result.getTen());
 
             Set<String> roles = new HashSet<>();
             roles.add("GIANGVIEN");

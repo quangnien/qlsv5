@@ -4,6 +4,7 @@ import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.MonHocDto;
 import com.qlsv5.entity.KhoaEntity;
 import com.qlsv5.entity.MonHocEntity;
+import com.qlsv5.entity.SinhVienEntity;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.MonHocService;
 import com.qlsv5.validation.ValidatorMonHoc;
@@ -35,6 +36,7 @@ import java.util.List;
 public class MonHocApi {
     @Autowired
     private CommonService commonService;
+
     @Autowired
     private MonHocService monHocService;
 
@@ -44,7 +46,7 @@ public class MonHocApi {
     /* CREATE */
     @Operation(summary = "Create MonHoc.")
     @PostMapping("/monHoc")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -72,12 +74,13 @@ public class MonHocApi {
 
             validatorMonHoc.validateAddMonHoc(monHoc);
 //            monHocService.addMonHoc(monHoc);
-            commonService.addObject(monHoc);
-            returnObject.setRetObj(monHoc);
+            MonHocEntity monHocEntity = (MonHocEntity) commonService.addObject(monHoc);
+            returnObject.setRetObj(monHocEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -86,7 +89,7 @@ public class MonHocApi {
     /* UPDATE */
     @Operation(summary = "Update MonHoc.")
     @PutMapping("/monHoc")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -119,7 +122,9 @@ public class MonHocApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -128,7 +133,7 @@ public class MonHocApi {
     /* DELETE */
     @Operation(summary = "Delete MonHoc by list id")
     @DeleteMapping("/monHoc")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -154,7 +159,9 @@ public class MonHocApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -163,7 +170,7 @@ public class MonHocApi {
     /* GET ALL */
     @Operation(summary = "Get all MonHoc.")
     @GetMapping("/monHoc")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -189,7 +196,9 @@ public class MonHocApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -198,7 +207,7 @@ public class MonHocApi {
     /* GET BY ID */
     @Operation(summary = "Get MonHoc by id.")
     @GetMapping("/monHoc/{monHocId}")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -225,7 +234,57 @@ public class MonHocApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
+
+    @Operation(summary = "Get List Mon Hoc by maKhoa.")
+    @GetMapping("/monHoc/khoa/{maKhoa}")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MonHocEntity.class)) })})
+    public ResponseEntity<?> getListMonHocByMaKhoa(@PathVariable String maKhoa,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "7") int size) {
+
+        ReturnObject returnObject = new ReturnObject();
+        try {
+            log.info("Get List Mon Hoc By maKhoa!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            validatorMonHoc.validateGetListMonHocByMaKhoa(maKhoa);
+            List<MonHocEntity> monHocEntity = monHocService.getListMonHocByMaKhoa(maKhoa, page, size);
+            returnObject.setRetObj(monHocEntity);
+
+            /*for paging*/
+            List<MonHocEntity> dsLopTcEntityForPaging = monHocService.getListMonHocByMaKhoa(maKhoa, 0, 100000);
+
+            double totalPageDouble = (double) dsLopTcEntityForPaging.size() / size;
+            int totalPageForPaging = (int) Math.ceil(totalPageDouble);
+
+            returnObject.setPage(page);
+            returnObject.setTotalRetObjs(dsLopTcEntityForPaging.size());
+            returnObject.setTotalPages(totalPageForPaging);
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);

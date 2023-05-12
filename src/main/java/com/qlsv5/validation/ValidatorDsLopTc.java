@@ -40,6 +40,9 @@ public class ValidatorDsLopTc implements Validator {
     @Autowired
     private FunctionCommon functionCommon;
 
+    @Autowired
+    private KeHoachNamRepository keHoachNamRepository;
+
     @Override
     public boolean supports(Class<?> clazz) {
         return false;
@@ -58,6 +61,7 @@ public class ValidatorDsLopTc implements Validator {
         int countGvByMaGv = giangVienRepository.countGiangVienByMaGv(dsLopTcDto.getMaGv());
         int countLopByMaLop = lopRepository.countLopByMaLop(dsLopTcDto.getMaLop());
         int countMonHocByMaMh = monHocRepository.countMonHocByMaMh(dsLopTcDto.getMaMh());
+        int countKeHoachNamByMaKeHoach = keHoachNamRepository.countKeHoachNamByMaKeHoach(dsLopTcDto.getMaKeHoach());
 
         if (countGvByMaGv == 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
@@ -67,6 +71,9 @@ public class ValidatorDsLopTc implements Validator {
         }
         if (countMonHocByMaMh == 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_MONHOC_NOT_FOUND_MONHOC);
+        }
+        else if (countKeHoachNamByMaKeHoach == 0) {
+            throw new BusinessException(MasterDataExceptionConstant.E_KEHOACHNAM_NOT_FOUND_KEHOACHNAM);
         }
         else if (countMaDsLopTc > 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_DUPLICATE_MA_DSLOPTC);
@@ -86,6 +93,7 @@ public class ValidatorDsLopTc implements Validator {
         int countGvByMaGv = giangVienRepository.countGiangVienByMaGv(dsLopTcDto.getMaGv());
         int countLopByMaLop = lopRepository.countLopByMaLop(dsLopTcDto.getMaLop());
         int countMonHocByMaMh = monHocRepository.countMonHocByMaMh(dsLopTcDto.getMaMh());
+        int countKeHoachNamByMaKeHoach = keHoachNamRepository.countKeHoachNamByMaKeHoach(dsLopTcDto.getMaKeHoach());
 
         if (dsLopTcEntity.isPresent() == false) {
             throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_NOT_FOUND_DSLOPTC);
@@ -98,6 +106,9 @@ public class ValidatorDsLopTc implements Validator {
         }
         else if (countMonHocByMaMh == 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_MONHOC_NOT_FOUND_MONHOC);
+        }
+        else if (countKeHoachNamByMaKeHoach == 0) {
+            throw new BusinessException(MasterDataExceptionConstant.E_KEHOACHNAM_NOT_FOUND_KEHOACHNAM);
         }
         else {
             Long countMaDsLopTc = dsLopTcRepository.countDsLopTcByMaLopTcAndNotId(dsLopTcDto.getMaLopTc(), dsLopTcDto.getId());
@@ -118,4 +129,56 @@ public class ValidatorDsLopTc implements Validator {
         }
     }
 
+    @Transactional
+    public void validateGetListLopTcByMaLop(String maLop) throws BusinessException {
+
+        if(maLop == null || "".equals(maLop)){
+            throw new BusinessException(MasterDataExceptionConstant.E_LOP_NOT_FOUND_LOP);
+        }
+        else {
+            int countLopByMaLop = lopRepository.countLopByMaLop(maLop);
+
+            if (countLopByMaLop == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_LOP_NOT_FOUND_LOP);
+            }
+        }
+
+    }
+
+    @Transactional
+    public void validateSearchThongKe(String idKeHoachNam, String keySearch) throws BusinessException {
+
+        if(idKeHoachNam == null || "".equals(idKeHoachNam)){
+            throw new BusinessException(MasterDataExceptionConstant.E_KEHOACHNAM_NOT_FOUND_KEHOACHNAM);
+        }
+        else {
+            int countKeHoachNam = keHoachNamRepository.countKeHoachNamById(idKeHoachNam);
+
+            if (countKeHoachNam == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_KEHOACHNAM_NOT_FOUND_KEHOACHNAM);
+            }
+        }
+    }
+
+    @Transactional
+    public void validateGetListLopTcByMaGvAndMaKeHoach(String maGv, String maKeHoach) throws BusinessException {
+
+        if(maGv == null || "".equals(maGv)){
+            throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
+        }
+        else if(maKeHoach == null || "".equals(maKeHoach)){
+            throw new BusinessException(MasterDataExceptionConstant.E_KEHOACHNAM_NOT_FOUND_KEHOACHNAM);
+        }
+        else {
+            int countGvMaGv = giangVienRepository.countGiangVienByMaGv(maGv);
+            int countByMaKeHoach = keHoachNamRepository.countKeHoachNamByMaKeHoach(maKeHoach);
+
+            if (countGvMaGv == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
+            }
+            else if (countByMaKeHoach == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_KEHOACHNAM_NOT_FOUND_KEHOACHNAM);
+            }
+        }
+    }
 }

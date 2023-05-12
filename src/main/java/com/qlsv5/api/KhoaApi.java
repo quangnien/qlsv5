@@ -40,7 +40,7 @@ public class KhoaApi {
     /* CREATE */
     @Operation(summary = "Create Khoa.")
     @PostMapping("/khoa")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -68,12 +68,14 @@ public class KhoaApi {
 
             validatorKhoa.validateAddKhoa(khoa);
 //            khoaService.addKhoa(khoa);
-            commonService.addObject(khoa);
-            returnObject.setRetObj(khoa);
+            KhoaEntity khoaEntity = (KhoaEntity) commonService.addObject(khoa);
+            returnObject.setRetObj(khoaEntity);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -82,7 +84,7 @@ public class KhoaApi {
     /* UPDATE */
     @Operation(summary = "Update Khoa.")
     @PutMapping("/khoa")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -115,7 +117,9 @@ public class KhoaApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -124,7 +128,7 @@ public class KhoaApi {
     /* DELETE */
     @Operation(summary = "Delete Khoa by list id")
     @DeleteMapping("/khoa")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -150,7 +154,9 @@ public class KhoaApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -159,7 +165,7 @@ public class KhoaApi {
     /* GET ALL */
     @Operation(summary = "Get all Khoa.")
     @GetMapping("/khoa")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -185,7 +191,9 @@ public class KhoaApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
@@ -194,7 +202,7 @@ public class KhoaApi {
     /* GET BY ID */
     @Operation(summary = "Get Khoa by id.")
     @GetMapping("/khoa/{khoaId}")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = KhoaEntity.class)) }),
@@ -220,10 +228,21 @@ public class KhoaApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);
     }
+
+
+
+
+
+
+
+
+
 
 }

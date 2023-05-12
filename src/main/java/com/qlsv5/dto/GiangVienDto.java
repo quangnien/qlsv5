@@ -8,6 +8,8 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,6 +45,7 @@ public class GiangVienDto {
 
 //	@NotBlank(message = "Vui Lòng Nhập Mật Khẩu")
 //	@Length(min = 4 , message = "Mật khẩu chứa ít nhất 4 ký tự!")
+	@JsonIgnore
 	private String matKhau;
 
 	private int vaiTro;
