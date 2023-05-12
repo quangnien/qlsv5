@@ -53,6 +53,9 @@ public class DiemApi {
     @Autowired
     private SinhVienService sinhVienService;
 
+    @Autowired
+    private KeHoachNamService keHoachNamService;
+
     /* CREATE */
     /*@Operation(summary = "Create Diem.")
     @PostMapping("/diem")
@@ -309,7 +312,8 @@ public class DiemApi {
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
     public ResponseEntity<?> getDsDiemByMaSvAndMaKeHoach(@PathVariable(required = true) String maSv,
-                                                @RequestParam(required = false, defaultValue = "") String maKeHoach) {
+                                                @RequestParam(required = false, defaultValue = "") String maKeHoach,
+                                                         @RequestParam(required = false, defaultValue = "False") String mkh) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
@@ -318,38 +322,74 @@ public class DiemApi {
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            if(maKeHoach.equals("")){
-                validatorDiem.validateGetListDiemByMaSv(maSv);
+            if(mkh.equals("False")){
+                if(maKeHoach.equals("")){
+                    validatorDiem.validateGetListDiemByMaSv(maSv);
 
-                List<DiemByMaSvAndMaKeHoachDto> diemByMaSvDtoListDto = new ArrayList<>();
+                    List<DiemByMaSvAndMaKeHoachDto> diemByMaSvDtoListDto = new ArrayList<>();
 
-                List<DiemEntity> diemEntityList = diemService.getListDiemByMaSv(maSv);
-                for (DiemEntity diemEntity: diemEntityList) {
-                    ModelMapper modelMapper = new ModelMapper();
+                    List<DiemEntity> diemEntityList = diemService.getListDiemByMaSv(maSv);
+                    for (DiemEntity diemEntity: diemEntityList) {
+                        ModelMapper modelMapper = new ModelMapper();
 
-                    DsLopTcEntity dsLopTcEntity = dsLopTcService.getDsLopTcByMaLopTc(diemEntity.getMaLopTc());
-                    if(dsLopTcEntity == null){
-                        continue;
+                        DsLopTcEntity dsLopTcEntity = dsLopTcService.getDsLopTcByMaLopTc(diemEntity.getMaLopTc());
+                        if(dsLopTcEntity == null){
+                            continue;
+                        }
+                        else {
+                            MonHocEntity monHocEntity = monHocService.getMonHocByMaMh(dsLopTcEntity.getMaMh());
+
+                            DiemByMaSvAndMaKeHoachDto diemByMaSvAndMaKeHoachDto = modelMapper.map(diemEntity, DiemByMaSvAndMaKeHoachDto.class);
+
+                            diemByMaSvAndMaKeHoachDto.setPercentCc(monHocEntity.getPercentCc());
+                            diemByMaSvAndMaKeHoachDto.setPercentGk(monHocEntity.getPercentGk());
+                            diemByMaSvAndMaKeHoachDto.setPercentCk(monHocEntity.getPercentCk());
+                            diemByMaSvAndMaKeHoachDto.setTenMh(monHocEntity.getTenMh());
+                            diemByMaSvAndMaKeHoachDto.setMaMh(monHocEntity.getMaMh());
+                            diemByMaSvAndMaKeHoachDto.setSoTc(monHocEntity.getSoTc());
+
+                            diemByMaSvDtoListDto.add(diemByMaSvAndMaKeHoachDto);
+                        }
                     }
-                    else {
-                        MonHocEntity monHocEntity = monHocService.getMonHocByMaMh(dsLopTcEntity.getMaMh());
 
-                        DiemByMaSvAndMaKeHoachDto diemByMaSvAndMaKeHoachDto = modelMapper.map(diemEntity, DiemByMaSvAndMaKeHoachDto.class);
-
-                        diemByMaSvAndMaKeHoachDto.setPercentCc(monHocEntity.getPercentCc());
-                        diemByMaSvAndMaKeHoachDto.setPercentGk(monHocEntity.getPercentGk());
-                        diemByMaSvAndMaKeHoachDto.setPercentCk(monHocEntity.getPercentCk());
-                        diemByMaSvAndMaKeHoachDto.setTenMh(monHocEntity.getTenMh());
-                        diemByMaSvAndMaKeHoachDto.setMaMh(monHocEntity.getMaMh());
-                        diemByMaSvAndMaKeHoachDto.setSoTc(monHocEntity.getSoTc());
-
-                        diemByMaSvDtoListDto.add(diemByMaSvAndMaKeHoachDto);
-                    }
+                    returnObject.setRetObj(diemByMaSvDtoListDto);
                 }
+                else {
+                    validatorDiem.validateGetListDiemByMaSvAndMaKeHoach(maSv, maKeHoach);
 
-                returnObject.setRetObj(diemByMaSvDtoListDto);
+                    List<DiemByMaSvAndMaKeHoachDto> diemByMaSvAndMaKeHoachDtoListDto = new ArrayList<>();
+
+                    List<DiemEntity> diemEntityList = diemService.getListDiemByMaSv(maSv);
+                    for (DiemEntity diemEntity: diemEntityList) {
+                        ModelMapper modelMapper = new ModelMapper();
+
+                        DsLopTcEntity dsLopTcEntity = dsLopTcService.getDsLopTcByMaLopTcAndMaKeHoach(diemEntity.getMaLopTc(), maKeHoach);
+                        if(dsLopTcEntity == null){
+                            continue;
+                        }
+                        else {
+                            MonHocEntity monHocEntity = monHocService.getMonHocByMaMh(dsLopTcEntity.getMaMh());
+
+                            DiemByMaSvAndMaKeHoachDto diemByMaSvAndMaKeHoachDto = modelMapper.map(diemEntity, DiemByMaSvAndMaKeHoachDto.class);
+
+                            diemByMaSvAndMaKeHoachDto.setPercentCc(monHocEntity.getPercentCc());
+                            diemByMaSvAndMaKeHoachDto.setPercentGk(monHocEntity.getPercentGk());
+                            diemByMaSvAndMaKeHoachDto.setPercentCk(monHocEntity.getPercentCk());
+                            diemByMaSvAndMaKeHoachDto.setTenMh(monHocEntity.getTenMh());
+                            diemByMaSvAndMaKeHoachDto.setMaMh(monHocEntity.getMaMh());
+                            diemByMaSvAndMaKeHoachDto.setSoTc(monHocEntity.getSoTc());
+
+                            diemByMaSvAndMaKeHoachDtoListDto.add(diemByMaSvAndMaKeHoachDto);
+                        }
+                    }
+
+                    returnObject.setRetObj(diemByMaSvAndMaKeHoachDtoListDto);
+                }
             }
-            else {
+            else if(mkh.equals("True")){
+                KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamClosest();
+                maKeHoach = keHoachNamEntity.getMaKeHoach();
+
                 validatorDiem.validateGetListDiemByMaSvAndMaKeHoach(maSv, maKeHoach);
 
                 List<DiemByMaSvAndMaKeHoachDto> diemByMaSvAndMaKeHoachDtoListDto = new ArrayList<>();
@@ -380,9 +420,6 @@ public class DiemApi {
 
                 returnObject.setRetObj(diemByMaSvAndMaKeHoachDtoListDto);
             }
-
-
-
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
