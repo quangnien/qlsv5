@@ -17,5 +17,6 @@ public interface LopService {
 
     public List<LopEntity> getListLopByMaKhoa(String maKhoa);
 
+    public LopEntity getLopByMaLop(String taskId);
 
 }

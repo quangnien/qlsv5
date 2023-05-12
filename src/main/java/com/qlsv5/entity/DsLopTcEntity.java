@@ -28,14 +28,14 @@ public class DsLopTcEntity {
 	@Indexed(unique = true)
 	private String maLopTc;
 	
-	private String nienKhoa;
-	private int ky;
-
-	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeBd;
-	
-	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeKt;
+//	private String nienKhoa;
+//	private int ky;
+//
+//	@DateTimeFormat(pattern =  "yyyy-MM-dd")
+//	private Date timeBd;
+//
+//	@DateTimeFormat(pattern =  "yyyy-MM-dd")
+//	private Date timeKt;
 
 	/* soluong */
 	@NotBlank(message = "Vui Lòng Nhập Số Lượng Sinh Viên")
@@ -55,5 +55,9 @@ public class DsLopTcEntity {
 	@NotBlank(message = "Vui Lòng Nhập Mã Lớp")
 	@Length(min = 4 , message = "Mã lớp chứa ít nhất 4 ký tự!")
 	private String maLop;
+
+	@NotBlank(message = "Vui Lòng Nhập Mã Kế Hoạch")
+	@Length(min = 2 , message = "Mã lớp chứa ít nhất 2 ký tự!")
+	private String maKeHoach;
 	
 }

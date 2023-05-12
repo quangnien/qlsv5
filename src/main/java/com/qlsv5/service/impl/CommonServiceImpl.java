@@ -3,6 +3,7 @@ package com.qlsv5.service.impl;
 import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.*;
 import com.qlsv5.entity.*;
+import com.qlsv5.enumdef.XepLoaiEnum;
 import com.qlsv5.exception.BusinessException;
 import com.qlsv5.payload.request.SignupRequest;
 import com.qlsv5.payload.response.MessageResponse;
@@ -11,6 +12,7 @@ import com.qlsv5.service.CommonService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,12 @@ public class CommonServiceImpl implements CommonService {
     PasswordEncoder encoder;
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    TuanRepository tuanRepository;
+
+    @Autowired
+    private KeHoachNamRepository keHoachNamRepository;
 
     //CRUD  CREATE , READ , UPDATE , DELETE
 
@@ -82,7 +90,49 @@ public class CommonServiceImpl implements CommonService {
         }
         else if(object instanceof DiemDto){
             DiemEntity diemEntity = modelMapper.map(object, DiemEntity.class);
-            return diemRepository.save(diemEntity);
+
+            /* Vì TB là 1 field được sinh tự động khi edit */
+            DsLopTcEntity dsLopTcEntity = dsLopTcRepository.getDsLopTcByMaLopTc(diemEntity.getMaLopTc());
+            MonHocEntity monHocEntity = monHocRepository.getMonHocByMaMh(dsLopTcEntity.getMaMh());
+
+            float tb = (float) (diemEntity.getCc()*monHocEntity.getPercentCc()
+                    + diemEntity.getGk()*monHocEntity.getPercentGk()
+                    + diemEntity.getCk()*monHocEntity.getPercentCk()) / 100;
+
+            float tbRound = Math.round(tb * 10.0f) / 10.0f;
+
+            diemEntity.setTb(tbRound);
+            /* ______________________________________ */
+
+            if(tb >= 9 ){
+                diemEntity.setXepLoai(XepLoaiEnum.A_PLUS.getName());
+            }
+            else if(tb >= 8.5){
+                diemEntity.setXepLoai(XepLoaiEnum.A.getName());
+            }
+            else if(tb >= 8){
+                diemEntity.setXepLoai(XepLoaiEnum.B_PLUS.getName());
+            }
+            else if(tb >= 7){
+                diemEntity.setXepLoai(XepLoaiEnum.B.getName());
+            }
+            else if(tb >= 6.5){
+                diemEntity.setXepLoai(XepLoaiEnum.C_PLUS.getName());
+            }
+            else if(tb >= 5.5){
+                diemEntity.setXepLoai(XepLoaiEnum.C.getName());
+            }
+            else if(tb >= 5){
+                diemEntity.setXepLoai(XepLoaiEnum.D_PLUS.getName());
+            }
+            else if(tb >= 4){
+                diemEntity.setXepLoai(XepLoaiEnum.D.getName());
+            }
+            else {
+                diemEntity.setXepLoai(XepLoaiEnum.F.getName());
+            }
+            diemRepository.save(diemEntity);
+            return diemEntity;
         }
 
         return null;
@@ -298,6 +348,12 @@ public class CommonServiceImpl implements CommonService {
             }
             return null;
         }
+        if(object instanceof KeHoachNamDto){
+            KeHoachNamEntity result = new KeHoachNamEntity();
+            result = modelMapper.map(object, KeHoachNamEntity.class);
+            result.setId(UUID.randomUUID().toString().split("-")[0]);
+            return keHoachNamRepository.save(result);
+        }
 
         return null;
     }
@@ -495,7 +551,20 @@ public class CommonServiceImpl implements CommonService {
             return Collections.singletonList(chiTietLopTcRepository.findAll());
         }
         else if(object instanceof DiemDto){
-            return Collections.singletonList(diemRepository.findAll());
+            Sort sort = Sort.by(
+                    Sort.Order.desc("xepLoai")
+            );
+            return Collections.singletonList(diemRepository.findAll(sort));
+        }
+        if(object instanceof KeHoachNamDto){
+            Sort sort = Sort.by(
+                    Sort.Order.desc("nam"),
+                    Sort.Order.desc("ky")
+            );
+            return Collections.singletonList(keHoachNamRepository.findAll(sort));
+        }
+        if(object instanceof TuanDto){
+            return Collections.singletonList(tuanRepository.findAll());
         }
         return null;
     }
@@ -525,6 +594,9 @@ public class CommonServiceImpl implements CommonService {
         }
         else if(object instanceof DiemDto){
             return diemRepository.findById(taskId).get();
+        }
+        if(object instanceof KeHoachNamDto){
+            return keHoachNamRepository.findById(taskId).get();
         }
         return null;
     }

@@ -9,6 +9,8 @@ import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.entity.SinhVienEntity;
 import com.qlsv5.entity.UserEntity;
 import com.qlsv5.payload.request.SignupRequest;
+import com.qlsv5.repository.GiangVienRepository;
+import com.qlsv5.repository.SinhVienRepository;
 import com.qlsv5.security.services.UserDetailsImpl;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.SinhVienService;
@@ -64,6 +66,12 @@ public class DoiMatKhauApi {
     PasswordEncoder encoder;
 
     @Autowired
+    private SinhVienRepository sinhVienRepository;
+
+    @Autowired
+    private GiangVienRepository giangVienRepository;
+
+    @Autowired
     private ValidatorSinhVien validatorSinhVien;
 
     @Autowired
@@ -74,8 +82,8 @@ public class DoiMatKhauApi {
 
 
     @Operation(summary = "Update password")
-    @PostMapping("/updatePassword")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PutMapping("/updatePassword")
+//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -109,13 +117,12 @@ public class DoiMatKhauApi {
                         .collect(Collectors.toList()));
             }
 
-
             if(roleList.get(0).equals("ROLE_ADMIN")){
                 validatorAdmin.validateUpdatePasswordAdmin(updatePasswordDto);
 
                 /* update PW UserEntity*/
                 UserEntity userEntity = userService.findById(updatePasswordDto.getId());
-                userEntity.setPassword(encoder.encode(updatePasswordDto.getConfirmPassword()));
+                userEntity.setPassword(encoder.encode(updatePasswordDto.getMatKhauMoi()));
                 userService.updateUser(userEntity);
 
                 returnObject.setRetObj(userEntity);
@@ -123,41 +130,67 @@ public class DoiMatKhauApi {
             else if(roleList.get(0).equals("ROLE_GIANGVIEN")){
                 validatorGiangVien.validateUpdatePasswordGiangVien(updatePasswordDto);
 
-                GiangVienEntity getGiangVienByDB = (GiangVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new GiangVienDto());
+//                GiangVienEntity getGiangVienByDB = (GiangVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new GiangVienDto());
+
+                UserEntity userEntity = userService.findById(updatePasswordDto.getId());
+                // maSV
+                String userName = userEntity.getUsername();
+                GiangVienEntity getGiangVienByDB = (GiangVienEntity) giangVienRepository.findByMaGv(userName);
 
                 /* update PW GiangVienEntity*/
-                getGiangVienByDB.setMatKhau(updatePasswordDto.getConfirmPassword());
+                getGiangVienByDB.setMatKhau(updatePasswordDto.getMatKhauMoi());
                 commonService.updateObject(getGiangVienByDB);
 
                 /* update PW UserEntity*/
-                UserEntity userEntity = userService.findByUsername(getGiangVienByDB.getMaGv());
-                userEntity.setPassword(encoder.encode(updatePasswordDto.getConfirmPassword()));
+//                UserEntity userEntity = userService.findByUsername(getGiangVienByDB.getMaSv());
+                userEntity.setPassword(encoder.encode(updatePasswordDto.getMatKhauMoi()));
                 userService.updateUser(userEntity);
 
                 returnObject.setRetObj(getGiangVienByDB);
+
+//                validatorGiangVien.validateUpdatePasswordGiangVien(updatePasswordDto);
+////
+////                GiangVienEntity getGiangVienByDB = (GiangVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new GiangVienDto());
+////
+////                /* update PW GiangVienEntity*/
+////                getGiangVienByDB.setMatKhau(updatePasswordDto.getMatKhauMoi());
+////                commonService.updateObject(getGiangVienByDB);
+////
+////                /* update PW UserEntity*/
+////                UserEntity userEntity = userService.findByUsername(getGiangVienByDB.getMaGv());
+////                userEntity.setPassword(encoder.encode(updatePasswordDto.getMatKhauMoi()));
+////                userService.updateUser(userEntity);
+////
+////                returnObject.setRetObj(getGiangVienByDB);
             }
             else if(roleList.get(0).equals("ROLE_SINHVIEN")){
                 validatorSinhVien.validateUpdatePasswordSinhVien(updatePasswordDto);
 
-                SinhVienEntity getSinhVienByDB = (SinhVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new SinhVienDto());
+//                SinhVienEntity getSinhVienByDB = (SinhVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new SinhVienDto());
+
+                UserEntity userEntity = userService.findById(updatePasswordDto.getId());
+                // maSV
+                String userName = userEntity.getUsername();
+                SinhVienEntity getSinhVienByDB = (SinhVienEntity) sinhVienRepository.findByMaSv(userName);
 
                 /* update PW SinhVienEntity*/
-                getSinhVienByDB.setMatKhau(updatePasswordDto.getConfirmPassword());
+                getSinhVienByDB.setMatKhau(updatePasswordDto.getMatKhauMoi());
                 commonService.updateObject(getSinhVienByDB);
 
                 /* update PW UserEntity*/
-                UserEntity userEntity = userService.findByUsername(getSinhVienByDB.getMaSv());
-                userEntity.setPassword(encoder.encode(updatePasswordDto.getConfirmPassword()));
+//                UserEntity userEntity = userService.findByUsername(getSinhVienByDB.getMaSv());
+                userEntity.setPassword(encoder.encode(updatePasswordDto.getMatKhauMoi()));
                 userService.updateUser(userEntity);
 
                 returnObject.setRetObj(getSinhVienByDB);
             }
 
-
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(ex.getMessage());
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
         }
 
         return ResponseEntity.ok(returnObject);

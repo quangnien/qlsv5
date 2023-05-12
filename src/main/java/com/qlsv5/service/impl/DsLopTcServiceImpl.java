@@ -1,5 +1,6 @@
 package com.qlsv5.service.impl;
 
+import com.qlsv5.dto.DsLopTcMonHocGiangVienLopDto;
 import com.qlsv5.entity.DsLopTcEntity;
 import com.qlsv5.repository.DsLopTcRepository;
 import com.qlsv5.service.DsLopTcService;
@@ -26,6 +27,41 @@ public class DsLopTcServiceImpl implements DsLopTcService {
         Pageable pageable = PageRequest.of(page, size);
         Page<DsLopTcEntity> resultPage = dsLopTcRepository.findAllByMaLop(maLop, pageable);
         return resultPage.getContent();
+    }
+
+    @Override
+    public List<DsLopTcEntity> getListLopTcByMaMh(String maMh) {
+        return dsLopTcRepository.findAllByMaMh(maMh);
+    }
+
+    @Override
+    public List<DsLopTcEntity> findAllByMaLopAndMaKeHoach(String maLop, String maKeHoach) {
+        return dsLopTcRepository.findAllByMaLopAndMaKeHoach(maLop, maKeHoach);
+    }
+
+    @Override
+    public List<DsLopTcEntity> findAllByMaMhAndMaKeHoach(String maMh, String maKeHoach) {
+        return dsLopTcRepository.findAllByMaMhAndMaKeHoach(maMh, maKeHoach);
+    }
+
+    @Override
+    public DsLopTcEntity getDsLopTcByMaLopTcAndMaKeHoach(String maLopTc, String maKeHoach) {
+        return dsLopTcRepository.getDsLopTcByMaLopTcAndMaKeHoach(maLopTc, maKeHoach);
+    }
+
+    @Override
+    public List<DsLopTcEntity> findAllByMaGvAndMaKeHoach(String maGv, String maKeHoach) {
+        return dsLopTcRepository.findAllByMaGvAndMaKeHoach(maGv, maKeHoach);
+    }
+
+    @Override
+    public DsLopTcEntity getDsLopTcByMaLopTc(String maLopTc) {
+        return dsLopTcRepository.getDsLopTcByMaLopTc(maLopTc);
+    }
+
+    @Override
+    public List<DsLopTcEntity> findAllByMaKeHoach(String maKeHoach) {
+        return dsLopTcRepository.findAllByMaKeHoach(maKeHoach);
     }
 
 }
