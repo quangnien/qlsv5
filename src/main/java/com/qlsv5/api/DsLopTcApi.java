@@ -4,6 +4,7 @@ import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.DiemByMaSvAndMaKeHoachDto;
 import com.qlsv5.dto.DsLopTcDto;
 import com.qlsv5.dto.DsLopTcMonHocGiangVienLopDto;
+import com.qlsv5.dto.KeHoachNamDto;
 import com.qlsv5.entity.*;
 import com.qlsv5.service.*;
 import com.qlsv5.validation.ValidatorDsLopTc;
@@ -53,6 +54,9 @@ public class DsLopTcApi {
 
     @Autowired
     private ValidatorDsLopTc validatorDsLopTc;
+
+    @Autowired
+    private KeHoachNamService keHoachNamService;
 
     /* CREATE */
     @Operation(summary = "Create DsLopTc.")
@@ -255,6 +259,37 @@ public class DsLopTcApi {
             }
             else if(!maLop.equals("") && maKeHoach.equals("")){
 
+                KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamClosest();
+                maKeHoach = keHoachNamEntity.getMaKeHoach();
+
+                List<DsLopTcEntity> dsLopTcEntityList = dsLopTcService.findAllByMaLopAndMaKeHoach(maLop, maKeHoach);
+                for (DsLopTcEntity dsLopTcEntity: dsLopTcEntityList) {
+                    String maGv = dsLopTcEntity.getMaGv();
+                    String maMh = dsLopTcEntity.getMaMh();
+                    String tenGv = "";
+                    String tenMh = "";
+                    int soTc = 0;
+
+                    GiangVienEntity giangVienEntity = giangVienService.getGiangVienByMaGv(maGv);
+                    MonHocEntity monHocEntity = monHocService.getMonHocByMaMh(maMh);
+
+                    if(giangVienEntity != null){
+                        tenGv = giangVienEntity.getHo() + " " + giangVienEntity.getTen();
+                    }
+                    if(monHocEntity != null){
+                        soTc = monHocEntity.getSoTc();
+                        tenMh = monHocEntity.getTenMh();
+                    }
+
+                    ModelMapper modelMapper = new ModelMapper();
+                    DsLopTcMonHocGiangVienLopDto dsLopTcMonHocGiangVienLopDto = new DsLopTcMonHocGiangVienLopDto();
+                    dsLopTcMonHocGiangVienLopDto = modelMapper.map(dsLopTcEntity, DsLopTcMonHocGiangVienLopDto.class);
+                    dsLopTcMonHocGiangVienLopDto.setTenGv(tenGv);
+                    dsLopTcMonHocGiangVienLopDto.setTenMh(tenMh);
+                    dsLopTcMonHocGiangVienLopDto.setSoTc(soTc);
+
+                    dsLopTcMonHocGiangVienLopDtos.add(dsLopTcMonHocGiangVienLopDto);
+                }
             }
             else {
                 List<DsLopTcEntity> dsLopTcEntityList = dsLopTcService.findAllByMaLopAndMaKeHoach(maLop, maKeHoach);
@@ -314,7 +349,7 @@ public class DsLopTcApi {
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
     public ResponseEntity<?> getAllDsLopTcByMaMhAndMaKeHoach(@RequestParam(required = true, defaultValue = "") String maMh,
-                                           @RequestParam(required = true, defaultValue = "") String maKeHoach) {
+                                           @RequestParam(required = false, defaultValue = "") String maKeHoach) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
@@ -322,6 +357,11 @@ public class DsLopTcApi {
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
+
+            if(maKeHoach.equals("")){
+                KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamClosest();
+                maKeHoach = keHoachNamEntity.getMaKeHoach();
+            }
 
             List<DsLopTcMonHocGiangVienLopDto> dsLopTcMonHocGiangVienLopDtos = new ArrayList<>();
 
@@ -466,7 +506,7 @@ public class DsLopTcApi {
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
     public ResponseEntity<?> getDsLopTcByMaGvAndMaKeHoach(@PathVariable(required = true) String maGv,
-                                               @RequestParam(required = true) String maKeHoach) {
+                                                          @PathVariable(required = false, value = "") String maKeHoach) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
