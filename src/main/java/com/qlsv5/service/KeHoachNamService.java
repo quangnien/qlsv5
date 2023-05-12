@@ -15,4 +15,5 @@ public interface KeHoachNamService {
     
     public KeHoachNamEntity getKeHoachNamByMaKeHoach(String maKeHoachNam);
 
+    public KeHoachNamEntity getKeHoachNamClosest();
 }

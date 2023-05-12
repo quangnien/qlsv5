@@ -7,10 +7,12 @@ import com.qlsv5.repository.KhoaRepository;
 import com.qlsv5.service.KeHoachNamService;
 import com.qlsv5.service.KhoaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -24,5 +26,15 @@ public class KeHoachNamServiceImpl implements KeHoachNamService {
     @Override
     public KeHoachNamEntity getKeHoachNamByMaKeHoach(String maKeHoachNam) {
         return keHoachNamRepository.getKeHoachNamByMaKeHoach(maKeHoachNam);
+    }
+
+    @Override
+    public KeHoachNamEntity getKeHoachNamClosest() {
+        Sort sort = Sort.by(
+                Sort.Order.desc("nam"),
+                Sort.Order.desc("ky")
+        );
+        List<KeHoachNamEntity> keHoachNamEntityList = keHoachNamRepository.findAll(sort);
+        return keHoachNamEntityList.get(0);
     }
 }
