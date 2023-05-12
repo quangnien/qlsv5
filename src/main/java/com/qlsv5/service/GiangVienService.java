@@ -25,5 +25,6 @@ public interface GiangVienService {
 
     public List<TkbDto> getListTKBForGV(String maGiangVien, String maKeHoach, int tuan);
 
+    List<GiangVienEntity> getListGiangVienByMaKhoaPaging(int page, int size, String maKhoa);
 
 }
