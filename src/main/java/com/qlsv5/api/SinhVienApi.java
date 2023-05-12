@@ -57,7 +57,7 @@ public class SinhVienApi {
     /* CREATE */
     @Operation(summary = "Create Sinh Vien.")
     @PostMapping("/sinhVien")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -100,7 +100,7 @@ public class SinhVienApi {
     /* UPDATE */
     @Operation(summary = "Update Sinh Vien.")
     @PutMapping("/sinhVien")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -143,7 +143,7 @@ public class SinhVienApi {
     /* DELETE */
     @Operation(summary = "Delete Sinh Vien by list id")
     @DeleteMapping("/sinhVien")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -180,7 +180,7 @@ public class SinhVienApi {
     /* GET ALL */
     @Operation(summary = "Get all Sinh Vien.")
     @GetMapping("/sinhVien")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -217,7 +217,7 @@ public class SinhVienApi {
     /* GET BY ID */
     @Operation(summary = "Get Sinh Vien by id.")
     @GetMapping("/sinhVien/{sinhVienId}")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -253,7 +253,7 @@ public class SinhVienApi {
 
     @Operation(summary = "Get Sinh Vien by maLop.")
     @GetMapping("/sinhVien/lop/{maLop}")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -352,7 +352,7 @@ public class SinhVienApi {
     /* GET THỜI KHÓA BIỂU */
     @Operation(summary = "Get TKB For Sinh Vien.")
     @PostMapping("/sinhVien/tkb")
-    @PreAuthorize("hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),

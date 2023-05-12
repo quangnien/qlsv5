@@ -47,7 +47,7 @@ public class DangKyMonApi {
     /* CREATE */
     @Operation(summary = "Dang ky mon.")
     @PostMapping("/dang-ky-mon")
-    @PreAuthorize("hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -113,7 +113,7 @@ public class DangKyMonApi {
     /* DELETE */
     @DeleteMapping("/dang-ky-mon")
     @Operation(summary = "Delete Dang Ky Mon by list id")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
