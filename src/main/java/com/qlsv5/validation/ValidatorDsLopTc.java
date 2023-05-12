@@ -4,6 +4,7 @@ import com.qlsv5.common.FunctionCommon;
 import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.DsLopTcDto;
 import com.qlsv5.entity.DsLopTcEntity;
+import com.qlsv5.entity.KeHoachNamEntity;
 import com.qlsv5.exception.BusinessException;
 import com.qlsv5.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -179,6 +181,18 @@ public class ValidatorDsLopTc implements Validator {
             else if (countByMaKeHoach == 0) {
                 throw new BusinessException(MasterDataExceptionConstant.E_KEHOACHNAM_NOT_FOUND_KEHOACHNAM);
             }
+        }
+    }
+
+    @Transactional
+    public void validateDeleteDsLopTc(Object target) throws BusinessException {
+
+        DsLopTcDto dsLopTcDto = (DsLopTcDto) target;
+
+        Date dateNow = new Date();
+        KeHoachNamEntity keHoachNamEntity = keHoachNamRepository.getKeHoachNamByMaKeHoach(dsLopTcDto.getMaKeHoach());
+        if(dateNow.after(keHoachNamEntity.getTimeDkMonEnd())){
+            throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_NGOAI_TIME_DK);
         }
     }
 }
