@@ -286,7 +286,9 @@ public class GiangVienApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) })})
-    public ResponseEntity<?> getGiangVienByKhoaId(@PathVariable String maKhoa) {
+    public ResponseEntity<?> getGiangVienByKhoaId(@PathVariable String maKhoa,
+                                                  @RequestParam(required = false, defaultValue = "0") int page,
+                                                  @RequestParam(required = false, defaultValue = "999") int size) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
@@ -296,7 +298,20 @@ public class GiangVienApi {
             returnObject.setMessage("200");
 
             validatorGiangVien.validateGetListGiangVienByMaKhoa(maKhoa);
-            List<GiangVienEntity> giangVienEntity = giangVienService.getListGiangVienByMaKhoa(maKhoa);
+
+//            List<GiangVienEntity> giangVienEntity = giangVienService.getListGiangVienByMaKhoa(maKhoa);
+            List<GiangVienEntity> giangVienEntity = giangVienService.getListGiangVienByMaKhoaPaging(page, size, maKhoa);
+
+            /*for paging*/
+            List<GiangVienEntity> dsLopTcEntityForPaging = giangVienService.getListGiangVienPaging(0, 100000);
+
+            double totalPageDouble = (double) dsLopTcEntityForPaging.size() / size;
+            int totalPageForPaging = (int) Math.ceil(totalPageDouble);
+
+            returnObject.setPage(page);
+            returnObject.setTotalRetObjs(dsLopTcEntityForPaging.size());
+            returnObject.setTotalPages(totalPageForPaging);
+
             returnObject.setRetObj(giangVienEntity);
         }
         catch (Exception ex){

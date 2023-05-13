@@ -43,4 +43,14 @@ public class DiemServiceImpl implements DiemService {
         return diemRepository.findAllByMaLopTc(maLopTc);
     }
 
+    @Override
+    public DiemEntity getDiemByMaSvAndMaLopTc(String maSv, String maLopTc) {
+        return diemRepository.getDiemByMaSvAndMaLopTc(maSv, maLopTc);
+    }
+
+    @Override
+    public void deleteDangKyMon(DiemEntity diemEntity) {
+        diemRepository.delete(diemEntity);
+    }
+
 }

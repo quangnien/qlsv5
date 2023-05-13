@@ -11,4 +11,9 @@ public interface DiemService {
     public List<DiemEntity> getListDiemByMaSv(String maSv);
 
     public List<DiemEntity> getListDiemByMaLopTc(String maLopTc);
+
+    DiemEntity getDiemByMaSvAndMaLopTc(String maSv, String maLopTc);
+
+    void deleteDangKyMon(DiemEntity diemEntity);
+
 }

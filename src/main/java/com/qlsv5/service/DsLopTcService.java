@@ -15,7 +15,6 @@ public interface DsLopTcService {
 
     public List<DsLopTcEntity> findAllByMaMhAndMaKeHoach(String maMh, String maKeHoach);
 
-
     public DsLopTcEntity getDsLopTcByMaLopTcAndMaKeHoach(String maLopTc, String maKeHoach);
 
     public List<DsLopTcEntity> findAllByMaGvAndMaKeHoach(String maGv, String maKeHoach);
@@ -23,5 +22,7 @@ public interface DsLopTcService {
     public DsLopTcEntity getDsLopTcByMaLopTc(String maLopTc);
 
     public List<DsLopTcEntity> findAllByMaKeHoach(String maKeHoach);
+
+    public DsLopTcEntity getDsLopTcById(String id);
 
 }

@@ -10,11 +10,13 @@ package com.qlsv5.repository;
 import com.qlsv5.dto.TkbDto;
 import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.entity.SinhVienEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import java.util.Date;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface GiangVienRepository extends MongoRepository<GiangVienEntity, String> {
     int countGiangVienByMaGv(String maGiangVien);
@@ -29,5 +31,7 @@ public interface GiangVienRepository extends MongoRepository<GiangVienEntity, St
     int countGiangVienByMaKhoa(String maKhoa);
 
     GiangVienEntity findByMaGv(String maGv);
+
+    Page<GiangVienEntity> findAllByMaKhoa(String maKhoa, Pageable pageable);
 
 }
