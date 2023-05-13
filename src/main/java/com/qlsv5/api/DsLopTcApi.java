@@ -173,7 +173,7 @@ public class DsLopTcApi {
 
             if(lstDsLopTcId.size() > 0){
                 DsLopTcEntity dsLopTcEntity = dsLopTcService.getDsLopTcById(lstDsLopTcId.get(0));
-                validatorDsLopTc.validateDeleteDsLopTc(dsLopTcEntity);
+//                validatorDsLopTc.validateDeleteDsLopTc(dsLopTcEntity);
             }
 
             List<String> deleteSuccess = commonService.deleteLstObject(lstDsLopTcId, new DsLopTcDto());

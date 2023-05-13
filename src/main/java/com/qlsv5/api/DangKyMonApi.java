@@ -127,17 +127,49 @@ public class DangKyMonApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
-    public ResponseEntity<?> deleteDangKyMon(@Valid @RequestBody List<String> lstDiemId) {
+    public ResponseEntity<?> huyDangKyMon(@Valid @RequestBody DangKyMonDto dangKyMonDto, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
+
+        if (bindingResult.hasErrors()) {
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(bindingResult.getFieldErrors().get(0).getDefaultMessage());
+            return ResponseEntity.ok(returnObject);
+        }
         try {
-            log.info("Delete List Diem!");
+            log.info("Huy Dang ky mon!");
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            List<String> deleteSuccess = commonService.deleteLstObject(lstDiemId, new DiemDto());
-            returnObject.setRetObj(deleteSuccess);
+//            List<DiemDto> listDiem = new ArrayList<>();
+//            for(int i = 0 ; i < dangKyMonDto.getMaLopTcList().size() ; i++){
+//
+//                DiemDto diemDto = new DiemDto();
+//                diemDto.setMaSv(dangKyMonDto.getMaSv());
+//                diemDto.setMaLopTc(dangKyMonDto.getMaLopTcList().get(i));
+//
+//                listDiem.add(diemDto);
+//            }
+
+            List<DiemEntity> diemEntityList = new ArrayList<>();
+            for (String maLopTc: dangKyMonDto.getMaLopTcList()) {
+                DiemEntity diemEntity = diemService.getDiemByMaSvAndMaLopTc(dangKyMonDto.getMaSv(), maLopTc);
+                if(diemEntity != null){
+                    diemEntityList.add(diemEntity);
+                }
+            }
+
+            DangKyMonDto dangKyMonDtoValid = new DangKyMonDto();
+            dangKyMonDtoValid.setMaSv(dangKyMonDto.getMaSv());
+            List<String> maLopTcListValid = new ArrayList<>();
+            for (DiemEntity diemEntity : diemEntityList){
+                maLopTcListValid.add(diemEntity.getMaLopTc());
+                diemService.deleteDangKyMon(diemEntity);
+            }
+            dangKyMonDtoValid.setMaLopTcList(maLopTcListValid);
+
+            returnObject.setRetObj(dangKyMonDtoValid);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
