@@ -256,4 +256,19 @@ public class ValidatorDiem implements Validator {
         }
     }
 
+//    @Transactional
+//    public void validateDeleteDangKyMonValid(String maSv, String maLopTc) throws BusinessException {
+//
+//        if(maSv == null || "".equals(maSv)){
+//            throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
+//        }
+//        else {
+//            int countSvByMaSv = sinhVienRepository.countSinhVienByMaSv(maSv);
+//
+//            if (countSvByMaSv == 0) {
+//                throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
+//            }
+//        }
+//    }
+
 }
