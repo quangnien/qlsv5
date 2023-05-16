@@ -44,7 +44,7 @@ public class ChiTietLopTcApi {
 
     /* CREATE */
     @Operation(summary = "Create ChiTietLopTc.")
-//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @PostMapping("/chiTietLopTc")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
@@ -88,7 +88,7 @@ public class ChiTietLopTcApi {
     /* UPDATE */
     @PutMapping("/chiTietLopTc")
     @Operation(summary = "Update ChiTietLopTc.")
-//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -131,7 +131,7 @@ public class ChiTietLopTcApi {
     /* DELETE */
     @DeleteMapping("/chiTietLopTc")
     @Operation(summary = "Delete ChiTietLopTc by list id")
-//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -166,7 +166,7 @@ public class ChiTietLopTcApi {
 
     /* GET ALL */
     @Operation(summary = "Get all ChiTietLopTc.")
-//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @GetMapping("/chiTietLopTc")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
@@ -203,7 +203,7 @@ public class ChiTietLopTcApi {
     /* GET BY ID */
     @Operation(summary = "Get ChiTietLopTc by id.")
     @GetMapping("/chiTietLopTc/{chiTietLopTcId}")
-//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -239,7 +239,7 @@ public class ChiTietLopTcApi {
 
     @Operation(summary = "Get danh sach chi tiet lop tin chi by maLopTc")
     @GetMapping("/chiTietLopTc/lopTc/{maLopTc}")
-//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {

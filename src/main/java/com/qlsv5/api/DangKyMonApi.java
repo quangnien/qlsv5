@@ -47,7 +47,7 @@ public class DangKyMonApi {
     /* CREATE */
     @Operation(summary = "Dang ky mon.")
     @PostMapping("/dang-ky-mon")
-//    @PreAuthorize("hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -97,8 +97,11 @@ public class DangKyMonApi {
                 dangKyMonDtoValid.setMaLopTcList(listMaLopTcValid);
             }
 
-            commonService.addObject(dangKyMonDtoValid);
+            if(dangKyMonDtoValid.getMaLopTcList() != null){
+                commonService.addObject(dangKyMonDtoValid);
+            }
             returnObject.setRetObj(dangKyMonDtoValid);
+
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
@@ -113,7 +116,7 @@ public class DangKyMonApi {
     /* DELETE */
     @DeleteMapping("/dang-ky-mon")
     @Operation(summary = "Delete Dang Ky Mon by list id")
-//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -124,17 +127,41 @@ public class DangKyMonApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
-    public ResponseEntity<?> deleteDangKyMon(@Valid @RequestBody List<String> lstDiemId) {
+    public ResponseEntity<?> huyDangKyMon(@Valid @RequestBody DangKyMonDto dangKyMonDto, BindingResult bindingResult) {
 
         ReturnObject returnObject = new ReturnObject();
+
+        if (bindingResult.hasErrors()) {
+            returnObject.setStatus(ReturnObject.ERROR);
+            returnObject.setMessage(bindingResult.getFieldErrors().get(0).getDefaultMessage());
+            return ResponseEntity.ok(returnObject);
+        }
         try {
-            log.info("Delete List Diem!");
+            log.info("Huy Dang ky mon!");
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-            List<String> deleteSuccess = commonService.deleteLstObject(lstDiemId, new DiemDto());
-            returnObject.setRetObj(deleteSuccess);
+            validatorDiem.validateHuyDangKyMon(dangKyMonDto);
+
+            List<DiemEntity> diemEntityList = new ArrayList<>();
+            for (String maLopTc: dangKyMonDto.getMaLopTcList()) {
+                DiemEntity diemEntity = diemService.getDiemByMaSvAndMaLopTc(dangKyMonDto.getMaSv(), maLopTc);
+                if(diemEntity != null){
+                    diemEntityList.add(diemEntity);
+                }
+            }
+
+            DangKyMonDto dangKyMonDtoValid = new DangKyMonDto();
+            dangKyMonDtoValid.setMaSv(dangKyMonDto.getMaSv());
+            List<String> maLopTcListValid = new ArrayList<>();
+            for (DiemEntity diemEntity : diemEntityList){
+                maLopTcListValid.add(diemEntity.getMaLopTc());
+                diemService.deleteDangKyMon(diemEntity);
+            }
+            dangKyMonDtoValid.setMaLopTcList(maLopTcListValid);
+
+            returnObject.setRetObj(dangKyMonDtoValid);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
@@ -145,7 +172,4 @@ public class DangKyMonApi {
 
         return ResponseEntity.ok(returnObject);
     }
-
-
-
 }

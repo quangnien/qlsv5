@@ -63,7 +63,7 @@ public class GiangVienApi {
     /* CREATE */
     @Operation(summary = "Create Giang Vien.")
     @PostMapping("/giangVien")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -106,7 +106,7 @@ public class GiangVienApi {
     /* UPDATE */
     @Operation(summary = "Update Giang Vien.")
     @PutMapping("/giangVien")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -149,7 +149,7 @@ public class GiangVienApi {
     /* DELETE */
     @Operation(summary = "Delete Giang Vien by list id")
     @DeleteMapping("/giangVien")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -186,7 +186,7 @@ public class GiangVienApi {
     /* GET ALL */
     @Operation(summary = "Get all Giang Vien.")
     @GetMapping("/giangVien")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -238,7 +238,7 @@ public class GiangVienApi {
     /* GET BY ID */
     @Operation(summary = "Get Giang Vien by id.")
     @GetMapping("/giangVien/{giangVienId}")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -275,7 +275,7 @@ public class GiangVienApi {
 
     @Operation(summary = "Get Giang Vien by maKhoa.")
     @GetMapping("/giangVien/khoa/{maKhoa}")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -286,7 +286,9 @@ public class GiangVienApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) }),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) })})
-    public ResponseEntity<?> getGiangVienByKhoaId(@PathVariable String maKhoa) {
+    public ResponseEntity<?> getGiangVienByKhoaId(@PathVariable String maKhoa,
+                                                  @RequestParam(required = false, defaultValue = "0") int page,
+                                                  @RequestParam(required = false, defaultValue = "999") int size) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
@@ -296,7 +298,20 @@ public class GiangVienApi {
             returnObject.setMessage("200");
 
             validatorGiangVien.validateGetListGiangVienByMaKhoa(maKhoa);
-            List<GiangVienEntity> giangVienEntity = giangVienService.getListGiangVienByMaKhoa(maKhoa);
+
+//            List<GiangVienEntity> giangVienEntity = giangVienService.getListGiangVienByMaKhoa(maKhoa);
+            List<GiangVienEntity> giangVienEntity = giangVienService.getListGiangVienByMaKhoaPaging(page, size, maKhoa);
+
+            /*for paging*/
+            List<GiangVienEntity> dsLopTcEntityForPaging = giangVienService.getListGiangVienPaging(0, 100000);
+
+            double totalPageDouble = (double) dsLopTcEntityForPaging.size() / size;
+            int totalPageForPaging = (int) Math.ceil(totalPageDouble);
+
+            returnObject.setPage(page);
+            returnObject.setTotalRetObjs(dsLopTcEntityForPaging.size());
+            returnObject.setTotalPages(totalPageForPaging);
+
             returnObject.setRetObj(giangVienEntity);
         }
         catch (Exception ex){
@@ -362,7 +377,7 @@ public class GiangVienApi {
     /* GET THỜI KHÓA BIỂU */
     @Operation(summary = "Get TKB For Giang Vien.")
     @PostMapping("/giangVien/tkb")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TkbDto.class)) }),

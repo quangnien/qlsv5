@@ -118,7 +118,6 @@ public class GiangVienServiceImpl implements GiangVienService {
     public List<TkbDto> getListTKBForGV(String maGiangVien, String maKeHoach, int tuan) {
         List<TkbDto> tkbDtoList = new ArrayList<>();
 
-
 //        KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamByMaKeHoach(maKeHoach);
 //
 //        Date timeTuanBd =
@@ -132,10 +131,15 @@ public class GiangVienServiceImpl implements GiangVienService {
 //        // Tính ngày kết thúc của tuần
 //        LocalDate endDate = startDate.plusDays(6);
 
-
-
-
         return null;
+    }
+
+    @Override
+    public List<GiangVienEntity> getListGiangVienByMaKhoaPaging(int page, int size, String maKhoa) {
+        Pageable pageable = PageRequest.of(page, size);
+//        return giangVienRepository.findAll(pageable).getContent();
+        return giangVienRepository.findAllByMaKhoa(maKhoa, pageable).getContent();
+
     }
 
 }

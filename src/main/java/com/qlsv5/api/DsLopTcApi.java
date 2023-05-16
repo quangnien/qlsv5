@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,10 +59,13 @@ public class DsLopTcApi {
     @Autowired
     private KeHoachNamService keHoachNamService;
 
+    @Autowired
+    private DiemService diemService;
+
     /* CREATE */
     @Operation(summary = "Create DsLopTc.")
     @PostMapping("/dsLopTc")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -104,7 +108,7 @@ public class DsLopTcApi {
     /* UPDATE */
     @PutMapping("/dsLopTc")
     @Operation(summary = "Update DsLopTc.")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -147,7 +151,7 @@ public class DsLopTcApi {
     /* DELETE */
     @DeleteMapping("/dsLopTc")
     @Operation(summary = "Delete DsLopTc by list id")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -167,6 +171,11 @@ public class DsLopTcApi {
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
+            if(lstDsLopTcId.size() > 0){
+                DsLopTcEntity dsLopTcEntity = dsLopTcService.getDsLopTcById(lstDsLopTcId.get(0));
+//                validatorDsLopTc.validateDeleteDsLopTc(dsLopTcEntity);
+            }
+
             List<String> deleteSuccess = commonService.deleteLstObject(lstDsLopTcId, new DsLopTcDto());
             returnObject.setRetObj(deleteSuccess);
         }
@@ -184,7 +193,7 @@ public class DsLopTcApi {
     /* GET ALL DSLOPTC BY MALOP & MAKEHOACH*/
     /* GET ALL DSLOPTC BY MAKEHOACH*/
     @Operation(summary = "Get all DsLopTc.")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @GetMapping("/dsLopTc")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
@@ -336,7 +345,7 @@ public class DsLopTcApi {
 
     /* GET ALL DSLOPTC BY MA MON HOC & MA KE HOACH*/
     @Operation(summary = "Get all DsLopTc By Ma Mon Hoc & Ma Ke Hoach")
-//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @GetMapping("/dsLopTc/monHoc")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
@@ -410,7 +419,7 @@ public class DsLopTcApi {
     /* GET BY ID */
     @Operation(summary = "Get DsLopTc by id.")
     @GetMapping("/dsLopTc/{dsLopTcId}")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -446,7 +455,7 @@ public class DsLopTcApi {
 
     @Operation(summary = "Get danh sach lop tin chi by maLop")
     @GetMapping("/dsLopTc/lop/{maLop}")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -494,7 +503,7 @@ public class DsLopTcApi {
 
     @Operation(summary = "Get danh sach lop tin chi by maGv and maKeHoach")
     @PostMapping("/dsLopTc/giangVien/{maGv}")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -534,6 +543,89 @@ public class DsLopTcApi {
 
             returnObject.setRetObj(dsLopTcMonHocGiangVienLopDtoList);
 
+        }
+        catch (Exception ex){
+            returnObject.setStatus(ReturnObject.ERROR);
+//            returnObject.setMessage(ex.getMessage());
+            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
+            returnObject.setMessage(errorMessage);
+        }
+
+        return ResponseEntity.ok(returnObject);
+    }
+
+    /* GET ALL DSLOPTC BY MASINH VIEN & MA KE HOACH*/
+    @Operation(summary = "Get all DsLopTc By Ma Mon Hoc & Ma Ke Hoach")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @GetMapping("/dsLopTc/sinhVien")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
+    public ResponseEntity<?> getAllDsLopTcByMaSvAndMaKeHoach(@RequestParam(required = true, defaultValue = "") String maSv,
+                                                             @RequestParam(required = false, defaultValue = "") String maKeHoach) {
+
+        ReturnObject returnObject = new ReturnObject();
+        try {
+            log.info("Get All DsLopTc By Ma Sinh Vien & Ma Mon Hoc!");
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            returnObject.setMessage("200");
+
+            if(maKeHoach.equals("")){
+                KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamClosest();
+                maKeHoach = keHoachNamEntity.getMaKeHoach();
+            }
+
+            List<DsLopTcMonHocGiangVienLopDto> dsLopTcMonHocGiangVienLopDtos = new ArrayList<>();
+
+            List<Object> listDsLopTc = new ArrayList<>();
+
+//            List<DsLopTcEntity> dsLopTcEntityList = dsLopTcService.findAllByMaMhAndMaKeHoach(maMh, maKeHoach);
+            List<DsLopTcEntity> dsLopTcEntityList = new ArrayList<>();
+            List<DiemEntity> diemEntityList = diemService.getListDiemByMaSv(maSv);
+            for(DiemEntity diemEntity: diemEntityList){
+                DsLopTcEntity dsLopTcEntity = dsLopTcService.getDsLopTcByMaLopTcAndMaKeHoach(diemEntity.getMaLopTc(), maKeHoach);
+                if(dsLopTcEntity != null){
+                    dsLopTcEntityList.add(dsLopTcEntity);
+                }
+            }
+
+            for (DsLopTcEntity dsLopTcEntity: dsLopTcEntityList) {
+                String maGv = dsLopTcEntity.getMaGv();
+                String maMh = dsLopTcEntity.getMaMh();
+                String tenGv = "";
+                String tenMh = "";
+                int soTc = 0;
+
+                GiangVienEntity giangVienEntity = giangVienService.getGiangVienByMaGv(maGv);
+                MonHocEntity monHocEntity = monHocService.getMonHocByMaMh(maMh);
+
+                if(giangVienEntity != null){
+                    tenGv = giangVienEntity.getHo() + " " + giangVienEntity.getTen();
+                }
+                if(monHocEntity != null){
+                    soTc = monHocEntity.getSoTc();
+                    tenMh = monHocEntity.getTenMh();
+                }
+
+                ModelMapper modelMapper = new ModelMapper();
+                DsLopTcMonHocGiangVienLopDto dsLopTcMonHocGiangVienLopDto = new DsLopTcMonHocGiangVienLopDto();
+                dsLopTcMonHocGiangVienLopDto = modelMapper.map(dsLopTcEntity, DsLopTcMonHocGiangVienLopDto.class);
+                dsLopTcMonHocGiangVienLopDto.setTenGv(tenGv);
+                dsLopTcMonHocGiangVienLopDto.setTenMh(tenMh);
+                dsLopTcMonHocGiangVienLopDto.setSoTc(soTc);
+
+                dsLopTcMonHocGiangVienLopDtos.add(dsLopTcMonHocGiangVienLopDto);
+            }
+
+            returnObject.setRetObj(dsLopTcMonHocGiangVienLopDtos);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

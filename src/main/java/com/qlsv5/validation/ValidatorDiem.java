@@ -1,20 +1,25 @@
 package com.qlsv5.validation;
 
 import com.qlsv5.constant.MasterDataExceptionConstant;
+import com.qlsv5.dto.DangKyMonDto;
 import com.qlsv5.dto.DiemDto;
+import com.qlsv5.dto.DsLopTcDto;
 import com.qlsv5.entity.DiemEntity;
 import com.qlsv5.entity.DsLopTcEntity;
+import com.qlsv5.entity.KeHoachNamEntity;
+import com.qlsv5.entity.MonHocEntity;
 import com.qlsv5.exception.BusinessException;
-import com.qlsv5.repository.DiemRepository;
-import com.qlsv5.repository.DsLopTcRepository;
-import com.qlsv5.repository.KeHoachNamRepository;
-import com.qlsv5.repository.SinhVienRepository;
+import com.qlsv5.repository.*;
+import com.qlsv5.service.DsLopTcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -34,6 +39,12 @@ public class ValidatorDiem implements Validator {
 
     @Autowired
     private KeHoachNamRepository keHoachNamRepository;
+
+    @Autowired
+    private MonHocRepository monHocRepository;
+
+    @Autowired
+    private DsLopTcService dsLopTcService;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -159,6 +170,10 @@ public class ValidatorDiem implements Validator {
 
         /* DK: 1 MONHOC 1 - n LOPTINCHI -> only đk 1 LOPTINCHI thuộc về 1 môn học đó*/
 //        Hiện tại không bắt đk này, vì 1 list truyền cả 2 cái đó vô thì sao kiểm soát được
+        List<DiemEntity> diemEntityList = new ArrayList<>();
+        if(diemDto.getMaSv() != null){
+            diemEntityList = diemRepository.getListDiemByMaSv(diemDto.getMaSv());
+        }
 
         if (countSinhVienByMaSv == 0) {
             return false;
@@ -168,6 +183,18 @@ public class ValidatorDiem implements Validator {
         }
         else if (countDiemByMaSvMaLopTc > 0) {
             return false;
+        }
+        /* DK: 1 MONHOC 1 - n LOPTINCHI -> only đk 1 LOPTINCHI thuộc về 1 môn học đó*/
+        else if(diemEntityList.size() > 0){
+            DsLopTcEntity dsLopTcEntityInput = dsLopTcRepository.getDsLopTcByMaLopTc(diemDto.getMaLopTc());
+            for (DiemEntity diemEntity : diemEntityList) {
+                DsLopTcEntity dsLopTcEntity = dsLopTcRepository.getDsLopTcByMaLopTc(diemEntity.getMaLopTc());
+                if(dsLopTcEntity != null){
+                    if(dsLopTcEntityInput.getMaMh().equals(dsLopTcEntity.getMaMh())){
+                        return false;
+                    };
+                }
+            }
         }
         else {
             DsLopTcEntity dsLopTcEntity = dsLopTcRepository.getDsLopTcByMaLopTc(diemDto.getMaLopTc());
@@ -236,5 +263,45 @@ public class ValidatorDiem implements Validator {
             }
         }
     }
+
+    @Transactional
+    public void validateHuyDangKyMon(DangKyMonDto dangKyMonDto) throws BusinessException {
+
+        if (dangKyMonDto.getMaSv() == null){
+            throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
+        }
+        else if (sinhVienRepository.countSinhVienByMaSv(dangKyMonDto.getMaSv())== 0) {
+            throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
+        }
+        else if (dangKyMonDto.getMaLopTcList().size() == 0){
+            throw new BusinessException(MasterDataExceptionConstant.E_DIEM_LIST_MAlOPTC_NULL);
+        }
+        else {
+            Date dateNow = new Date();
+            DsLopTcEntity dsLopTcEntity = dsLopTcService.getDsLopTcByMaLopTc(dangKyMonDto.getMaLopTcList().get(0));
+
+            if(dsLopTcEntity != null){
+                KeHoachNamEntity keHoachNamEntity = keHoachNamRepository.getKeHoachNamByMaKeHoach(dsLopTcEntity.getMaKeHoach());
+                if(dateNow.after(keHoachNamEntity.getTimeDkMonEnd())){
+                    throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_NGOAI_TIME_DK);
+                }
+            }
+        }
+    }
+
+//    @Transactional
+//    public void validateDeleteDangKyMonValid(String maSv, String maLopTc) throws BusinessException {
+//
+//        if(maSv == null || "".equals(maSv)){
+//            throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
+//        }
+//        else {
+//            int countSvByMaSv = sinhVienRepository.countSinhVienByMaSv(maSv);
+//
+//            if (countSvByMaSv == 0) {
+//                throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
+//            }
+//        }
+//    }
 
 }

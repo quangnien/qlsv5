@@ -56,53 +56,10 @@ public class DiemApi {
     @Autowired
     private KeHoachNamService keHoachNamService;
 
-    /* CREATE */
-    /*@Operation(summary = "Create Diem.")
-    @PostMapping("/diem")
-    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success",
-                    content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
-            @ApiResponse(responseCode = "403", description = "Forbidden",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
-            @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
-    public ResponseEntity<?> createDiem(@Valid @RequestBody DiemDto diem, BindingResult bindingResult) {
-
-        ReturnObject returnObject = new ReturnObject();
-
-        if (bindingResult.hasErrors()) {
-            returnObject.setStatus(ReturnObject.ERROR);
-            returnObject.setMessage(bindingResult.getFieldErrors().get(0).getDefaultMessage());
-            return ResponseEntity.ok(returnObject);
-        }
-        try {
-            log.info("Add Diem!");
-
-            returnObject.setStatus(ReturnObject.SUCCESS);
-            returnObject.setMessage("200");
-
-            validatorDiem.validateAddDiem(diem);
-            commonService.addObject(diem);
-            returnObject.setRetObj(diem);
-        }
-        catch (Exception ex){
-            returnObject.setStatus(ReturnObject.ERROR);
-//            returnObject.setMessage(ex.getMessage());
-            String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
-            returnObject.setMessage(errorMessage);
-        }
-
-        return ResponseEntity.ok(returnObject);
-    }*/
-
     /* UPDATE */
     @PutMapping("/diem")
     @Operation(summary = "Update Diem.")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -143,44 +100,10 @@ public class DiemApi {
         return ResponseEntity.ok(returnObject);
     }
 
-    /* DELETE */
-//    @DeleteMapping("/diem")
-//    @Operation(summary = "Delete Diem by list id")
-//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Success",
-//                    content = {
-//                            @Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
-//            @ApiResponse(responseCode = "401", description = "Unauthorized",
-//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
-//            @ApiResponse(responseCode = "403", description = "Forbidden",
-//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) }),
-//            @ApiResponse(responseCode = "500", description = "Internal server error",
-//                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
-//    public ResponseEntity<?> deleteDiem(@Valid @RequestBody List<String> lstDiemId) {
-//
-//        ReturnObject returnObject = new ReturnObject();
-//        try {
-//            log.info("Delete List Diem!");
-//
-//            returnObject.setStatus(ReturnObject.SUCCESS);
-//            returnObject.setMessage("200");
-//
-//            List<String> deleteSuccess = commonService.deleteLstObject(lstDiemId, new DiemDto());
-//            returnObject.setRetObj(deleteSuccess);
-//        }
-//        catch (Exception ex){
-//            returnObject.setStatus(ReturnObject.ERROR);
-//            returnObject.setMessage(ex.getMessage());
-//        }
-//
-//        return ResponseEntity.ok(returnObject);
-//    }
-
     /* GET ALL */
     @Operation(summary = "Get all Diem.")
     @GetMapping("/diem")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -216,7 +139,7 @@ public class DiemApi {
     /* GET BY ID */
     @Operation(summary = "Get Diem by id.")
     @GetMapping("/diem/{diemId}")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -252,7 +175,7 @@ public class DiemApi {
 
     @Operation(summary = "Get danh sach diem by maLopTc")
     @GetMapping("/diem/lopTc/{maLopTc}")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -300,7 +223,7 @@ public class DiemApi {
 
     @Operation(summary = "Get danh sach diem sinh vien by maSinhVien & maKeHoach")
     @PostMapping("/diem/{maSv}")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -313,7 +236,7 @@ public class DiemApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DiemEntity.class)) })})
     public ResponseEntity<?> getDsDiemByMaSvAndMaKeHoach(@PathVariable(required = true) String maSv,
                                                 @RequestParam(required = false, defaultValue = "") String maKeHoach,
-                                                         @RequestParam(required = false, defaultValue = "False") String mkh) {
+                                                @RequestParam(required = false, defaultValue = "False") String mkh) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
@@ -433,7 +356,7 @@ public class DiemApi {
 
     @Operation(summary = "Get danh sach diem (Detail) by maLopTc")
     @GetMapping("/diem/lopTc/detail/{maLopTc}")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
