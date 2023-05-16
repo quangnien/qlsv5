@@ -47,7 +47,7 @@ public class DangKyMonApi {
     /* CREATE */
     @Operation(summary = "Dang ky mon.")
     @PostMapping("/dang-ky-mon")
-//    @PreAuthorize("hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -116,7 +116,7 @@ public class DangKyMonApi {
     /* DELETE */
     @DeleteMapping("/dang-ky-mon")
     @Operation(summary = "Delete Dang Ky Mon by list id")
-//    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -142,15 +142,7 @@ public class DangKyMonApi {
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
-//            List<DiemDto> listDiem = new ArrayList<>();
-//            for(int i = 0 ; i < dangKyMonDto.getMaLopTcList().size() ; i++){
-//
-//                DiemDto diemDto = new DiemDto();
-//                diemDto.setMaSv(dangKyMonDto.getMaSv());
-//                diemDto.setMaLopTc(dangKyMonDto.getMaLopTcList().get(i));
-//
-//                listDiem.add(diemDto);
-//            }
+            validatorDiem.validateHuyDangKyMon(dangKyMonDto);
 
             List<DiemEntity> diemEntityList = new ArrayList<>();
             for (String maLopTc: dangKyMonDto.getMaLopTcList()) {
@@ -180,7 +172,4 @@ public class DangKyMonApi {
 
         return ResponseEntity.ok(returnObject);
     }
-
-
-
 }
