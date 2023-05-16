@@ -41,7 +41,7 @@ public class KeHoachNamApi {
     /* CREATE */
     @Operation(summary = "Create KeHoachNam.")
     @PostMapping("/keHoachNam")
-//     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -85,7 +85,7 @@ public class KeHoachNamApi {
     /* GET ALL */
     @Operation(summary = "Get all KeHoachNam.")
     @GetMapping("/keHoachNam")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = {
@@ -121,7 +121,7 @@ public class KeHoachNamApi {
     /* GET BY ID */
     @Operation(summary = "Get KeHoachNam by id.")
     @GetMapping("/keHoachNam/{keHoachNamId}")
-//     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
+    @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = KeHoachNamEntity.class)) }),
