@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Document(collection = "chi_tiet_lop_tc")
@@ -42,9 +43,9 @@ public class ChiTietLopTcEntity {
 	private String maLopTc;
 
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeBd;
+	private LocalDate timeBd;
 
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeKt;
+	private LocalDate timeKt;
 
 }

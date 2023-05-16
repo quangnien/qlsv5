@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
@@ -189,9 +190,11 @@ public class ValidatorDsLopTc implements Validator {
 
         DsLopTcDto dsLopTcDto = (DsLopTcDto) target;
 
-        Date dateNow = new Date();
+//        Date dateNow = new Date();
+        LocalDate dateNow = LocalDate.now();
+
         KeHoachNamEntity keHoachNamEntity = keHoachNamRepository.getKeHoachNamByMaKeHoach(dsLopTcDto.getMaKeHoach());
-        if(dateNow.after(keHoachNamEntity.getTimeDkMonEnd())){
+        if(dateNow.isAfter(keHoachNamEntity.getTimeDkMonEnd())){
             throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_NGOAI_TIME_DK);
         }
     }

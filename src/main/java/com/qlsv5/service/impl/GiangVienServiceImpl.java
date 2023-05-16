@@ -1,5 +1,6 @@
 package com.qlsv5.service.impl;
 
+import com.qlsv5.dto.KhoaDto;
 import com.qlsv5.dto.TkbDto;
 import com.qlsv5.entity.*;
 import com.qlsv5.repository.ChiTietLopTcRepository;
@@ -8,14 +9,17 @@ import com.qlsv5.repository.GiangVienRepository;
 import com.qlsv5.service.GiangVienService;
 import com.qlsv5.service.KeHoachNamService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Type;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
@@ -118,20 +122,54 @@ public class GiangVienServiceImpl implements GiangVienService {
     public List<TkbDto> getListTKBForGV(String maGiangVien, String maKeHoach, int tuan) {
         List<TkbDto> tkbDtoList = new ArrayList<>();
 
+        KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamByMaKeHoach(maKeHoach);
+
+        LocalDate timeTuanBdParam = keHoachNamEntity.getTimeStudyBegin().plusDays((tuan - 1) * 7);
+        LocalDate timeTuanKtParam = keHoachNamEntity.getTimeStudyBegin().plusDays(7);
+
+        List<DsLopTcEntity> dsLopTcEntityList = dsLopTcRepository.findAllByMaGvAndMaKeHoach(maGiangVien, maKeHoach);
+        for(DsLopTcEntity dsLopTcEntity: dsLopTcEntityList){
+            List<ChiTietLopTcEntity> chiTietLopTcEntityList = chiTietLopTcRepository.getListChiTietLopTcByMaLopTc(dsLopTcEntity.getMaLopTc());
+            List<ChiTietLopTcEntity> chiTietLopTcEntityListValid = new ArrayList<>();
+
+            for (ChiTietLopTcEntity chiTietLopTcEntity : chiTietLopTcEntityList) {
+                if (timeTuanBdParam.isEqual(chiTietLopTcEntity.getTimeBd()) || timeTuanBdParam.isAfter(chiTietLopTcEntity.getTimeBd())
+                    && (timeTuanKtParam.isEqual(chiTietLopTcEntity.getTimeKt()) || timeTuanKtParam.isBefore(chiTietLopTcEntity.getTimeKt()))) {
+                    chiTietLopTcEntityListValid.add(chiTietLopTcEntity);
+                }
+            }
+
+            if(chiTietLopTcEntityListValid != null){
+                for (ChiTietLopTcEntity chiTietLopTcEntity: chiTietLopTcEntityListValid){
+                    ModelMapper modelMapper = new ModelMapper();
+
+                    TkbDto tkbDto = modelMapper.map(dsLopTcEntity, TkbDto.class);
+                    tkbDto.setTiet(chiTietLopTcEntity.getTiet());
+                    tkbDto.setSoTiet(chiTietLopTcEntity.getSoTiet());
+                    tkbDto.setThu(chiTietLopTcEntity.getThu());
+                    tkbDto.setPhong(chiTietLopTcEntity.getPhong());
+
+                    tkbDtoList.add(tkbDto);
+                }
+            }
+
+        }
+
+
 //        KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamByMaKeHoach(maKeHoach);
 //
 //        Date timeTuanBd =
 //
 //        // Tính ngày bắt đầu của tuần
 //        LocalDate startDate = LocalDate.now()
-//                .with(TemporalAdjusters.previousOrSame(DayOfWeek.from(LocalDate.ofYearDay(LocalDate.now().getYear(), 1))))
+//                .with(TemporalAdjusters.previousssssssssssssssssssssssssssssssssssssssssssssssssssssssOrSame(DayOfWeek.from(LocalDate.ofYearDay(LocalDate.now().getYear(), 1))))
 //                .plusWeeks(tuan - 1)
 //                .with(TemporalAdjusters.previousOrSame(DayOfWeek.from(LocalDate.of(1, 1, 1))));
 //
 //        // Tính ngày kết thúc của tuần
 //        LocalDate endDate = startDate.plusDays(6);
 
-        return null;
+        return tkbDtoList;
     }
 
     @Override
