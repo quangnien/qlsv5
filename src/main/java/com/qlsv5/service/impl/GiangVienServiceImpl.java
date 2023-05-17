@@ -165,12 +165,12 @@ public class GiangVienServiceImpl implements GiangVienService {
         List<WrapTkbDto> wrapTkbDtoList = new ArrayList<>();
 
         List<String> thuOfWeek = new ArrayList<>();
-        String thu2 = "2";
-        String thu3 = "3";
-        String thu4 = "4";
-        String thu5 = "5";
-        String thu6 = "6";
-        String thu7 = "7";
+        String thu2 = "02";
+        String thu3 = "03";
+        String thu4 = "04";
+        String thu5 = "05";
+        String thu6 = "06";
+        String thu7 = "07";
         thuOfWeek.add(thu2);
         thuOfWeek.add(thu3);
         thuOfWeek.add(thu4);
