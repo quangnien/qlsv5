@@ -7,8 +7,10 @@ import com.qlsv5.entity.*;
 import com.qlsv5.repository.ChiTietLopTcRepository;
 import com.qlsv5.repository.DsLopTcRepository;
 import com.qlsv5.repository.GiangVienRepository;
+import com.qlsv5.repository.MonHocRepository;
 import com.qlsv5.service.GiangVienService;
 import com.qlsv5.service.KeHoachNamService;
+import com.qlsv5.service.MonHocService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,9 @@ public class GiangVienServiceImpl implements GiangVienService {
 
     @Autowired
     private KeHoachNamService keHoachNamService;
+
+    @Autowired
+    private MonHocRepository monHocRepository;
 
     //CRUD  CREATE , READ , UPDATE , DELETE
 
@@ -131,7 +136,7 @@ public class GiangVienServiceImpl implements GiangVienService {
 
         List<DsLopTcEntity> dsLopTcEntityList = dsLopTcRepository.findAllByMaGvAndMaKeHoach(maGiangVien, maKeHoach);
         for(DsLopTcEntity dsLopTcEntity: dsLopTcEntityList){
-//            List<ChiTietLopTcEntity> chiTietLopTcEntityList = chiTietLopTcRepository.getListChiTietLopTcByMaLopTc(dsLopTcEntity.getMaLopTc());
+
             Sort sort = Sort.by(
                     Sort.Order.asc("thu"),
                     Sort.Order.asc("tiet")
@@ -148,9 +153,22 @@ public class GiangVienServiceImpl implements GiangVienService {
 
             if(chiTietLopTcEntityListValid != null){
                 for (ChiTietLopTcEntity chiTietLopTcEntity: chiTietLopTcEntityListValid){
-                    ModelMapper modelMapper = new ModelMapper();
 
+                    ModelMapper modelMapper = new ModelMapper();
                     TkbDto tkbDto = modelMapper.map(dsLopTcEntity, TkbDto.class);
+
+                    // bonus TEN MON HOC
+                    String tenMh = "";
+                    MonHocEntity monHocEntity = monHocRepository.getMonHocByMaMh(dsLopTcEntity.getMaMh());
+                    tenMh = monHocEntity.getTenMh();
+                    tkbDto.setTenMh(tenMh);
+
+                    // bonus TEN GIANG VIEN
+                    String tenGv = "";
+                    GiangVienEntity giangVienEntity = giangVienRepository.findByMaGv(maGiangVien);
+                    tenGv = giangVienEntity.getHo() + " " + giangVienEntity.getTen();
+                    tkbDto.setTenGv(tenGv);
+
                     tkbDto.setTiet(chiTietLopTcEntity.getTiet());
                     tkbDto.setSoTiet(chiTietLopTcEntity.getSoTiet());
                     tkbDto.setThu(chiTietLopTcEntity.getThu());
