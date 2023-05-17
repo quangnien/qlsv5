@@ -133,8 +133,8 @@ public class GiangVienServiceImpl implements GiangVienService {
         for(DsLopTcEntity dsLopTcEntity: dsLopTcEntityList){
 //            List<ChiTietLopTcEntity> chiTietLopTcEntityList = chiTietLopTcRepository.getListChiTietLopTcByMaLopTc(dsLopTcEntity.getMaLopTc());
             Sort sort = Sort.by(
-                    Sort.Order.desc("thu"),
-                    Sort.Order.desc("tiet")
+                    Sort.Order.asc("thu"),
+                    Sort.Order.asc("tiet")
             );
             List<ChiTietLopTcEntity> chiTietLopTcEntityList = chiTietLopTcRepository.findAllByMaLopTc(dsLopTcEntity.getMaLopTc(), sort);
             List<ChiTietLopTcEntity> chiTietLopTcEntityListValid = new ArrayList<>();
