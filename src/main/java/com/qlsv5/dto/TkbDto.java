@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -20,10 +20,10 @@ public class TkbDto {
 	private int ky;
 
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeBd;
+	private LocalDate timeBd;
 
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeKt;
+	private LocalDate timeKt;
 
 	/* soluong */
 	private int soLuong;
@@ -35,12 +35,15 @@ public class TkbDto {
 	private String maGv;
 	private String maLop;
 
+	private String tenMh;
+	private String tenGv;
+
 	/* DATE INPUT */
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeInputBegin;
+	private LocalDate timeInputBegin;
 
 	@DateTimeFormat(pattern =  "yyyy-MM-dd")
-	private Date timeInputEnd;
+	private LocalDate timeInputEnd;
 
 	/* FROM CHI TIET LOP TC */
 	private int tiet;
@@ -48,7 +51,7 @@ public class TkbDto {
 	private int soTiet;
 	private String phong;
 
-	public TkbDto(Date timeInputBegin, Date timeInputEnd) {
+	public TkbDto(LocalDate timeInputBegin, LocalDate timeInputEnd) {
 		this.timeInputBegin = timeInputBegin;
 		this.timeInputEnd = timeInputEnd;
 	}

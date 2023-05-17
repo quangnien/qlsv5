@@ -1,6 +1,7 @@
 package com.qlsv5.service;
 
 import com.qlsv5.dto.TkbDto;
+import com.qlsv5.dto.WrapTkbDto;
 import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.entity.GiangVienEntity;
 
@@ -23,7 +24,8 @@ public interface GiangVienService {
     // paging
     List<GiangVienEntity> getListGiangVienPaging(int page, int size);
 
-    public List<TkbDto> getListTKBForGV(String maGiangVien, String maKeHoach, int tuan);
+//    public List<TkbDto> getListTKBForGV(String maGiangVien, String maKeHoach, int tuan);
+    public List<WrapTkbDto> getListTKBForGV(String maGiangVien, String maKeHoach, int tuan);
 
     List<GiangVienEntity> getListGiangVienByMaKhoaPaging(int page, int size, String maKhoa);
 

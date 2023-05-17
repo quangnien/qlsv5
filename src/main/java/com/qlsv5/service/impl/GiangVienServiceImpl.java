@@ -1,6 +1,8 @@
 package com.qlsv5.service.impl;
 
+import com.qlsv5.dto.KhoaDto;
 import com.qlsv5.dto.TkbDto;
+import com.qlsv5.dto.WrapTkbDto;
 import com.qlsv5.entity.*;
 import com.qlsv5.repository.ChiTietLopTcRepository;
 import com.qlsv5.repository.DsLopTcRepository;
@@ -8,14 +10,18 @@ import com.qlsv5.repository.GiangVienRepository;
 import com.qlsv5.service.GiangVienService;
 import com.qlsv5.service.KeHoachNamService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Type;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
@@ -115,8 +121,78 @@ public class GiangVienServiceImpl implements GiangVienService {
     }
 
     @Override
-    public List<TkbDto> getListTKBForGV(String maGiangVien, String maKeHoach, int tuan) {
+    public List<WrapTkbDto> getListTKBForGV(String maGiangVien, String maKeHoach, int tuan) {
         List<TkbDto> tkbDtoList = new ArrayList<>();
+
+        KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamByMaKeHoach(maKeHoach);
+
+        LocalDate timeTuanBdParam = keHoachNamEntity.getTimeStudyBegin().plusDays((tuan - 1) * 7);
+        LocalDate timeTuanKtParam = keHoachNamEntity.getTimeStudyBegin().plusDays(7);
+
+        List<DsLopTcEntity> dsLopTcEntityList = dsLopTcRepository.findAllByMaGvAndMaKeHoach(maGiangVien, maKeHoach);
+        for(DsLopTcEntity dsLopTcEntity: dsLopTcEntityList){
+//            List<ChiTietLopTcEntity> chiTietLopTcEntityList = chiTietLopTcRepository.getListChiTietLopTcByMaLopTc(dsLopTcEntity.getMaLopTc());
+            Sort sort = Sort.by(
+                    Sort.Order.desc("thu"),
+                    Sort.Order.desc("tiet")
+            );
+            List<ChiTietLopTcEntity> chiTietLopTcEntityList = chiTietLopTcRepository.findAllByMaLopTc(dsLopTcEntity.getMaLopTc(), sort);
+            List<ChiTietLopTcEntity> chiTietLopTcEntityListValid = new ArrayList<>();
+
+            for (ChiTietLopTcEntity chiTietLopTcEntity : chiTietLopTcEntityList) {
+                if (timeTuanBdParam.isEqual(chiTietLopTcEntity.getTimeBd()) || timeTuanBdParam.isAfter(chiTietLopTcEntity.getTimeBd())
+                    && (timeTuanKtParam.isEqual(chiTietLopTcEntity.getTimeKt()) || timeTuanKtParam.isBefore(chiTietLopTcEntity.getTimeKt()))) {
+                    chiTietLopTcEntityListValid.add(chiTietLopTcEntity);
+                }
+            }
+
+            if(chiTietLopTcEntityListValid != null){
+                for (ChiTietLopTcEntity chiTietLopTcEntity: chiTietLopTcEntityListValid){
+                    ModelMapper modelMapper = new ModelMapper();
+
+                    TkbDto tkbDto = modelMapper.map(dsLopTcEntity, TkbDto.class);
+                    tkbDto.setTiet(chiTietLopTcEntity.getTiet());
+                    tkbDto.setSoTiet(chiTietLopTcEntity.getSoTiet());
+                    tkbDto.setThu(chiTietLopTcEntity.getThu());
+                    tkbDto.setPhong(chiTietLopTcEntity.getPhong());
+
+                    tkbDtoList.add(tkbDto);
+                }
+            }
+
+        }
+
+        List<WrapTkbDto> wrapTkbDtoList = new ArrayList<>();
+
+        List<String> thuOfWeek = new ArrayList<>();
+        String thu2 = "2";
+        String thu3 = "3";
+        String thu4 = "4";
+        String thu5 = "5";
+        String thu6 = "6";
+        String thu7 = "7";
+        thuOfWeek.add(thu2);
+        thuOfWeek.add(thu3);
+        thuOfWeek.add(thu4);
+        thuOfWeek.add(thu5);
+        thuOfWeek.add(thu6);
+        thuOfWeek.add(thu7);
+
+        for (String thu: thuOfWeek){
+            List<TkbDto> tkbDtos = new ArrayList<>();
+            WrapTkbDto wrapTkbDto = new WrapTkbDto();
+
+            for (TkbDto tkbDto: tkbDtoList){
+                wrapTkbDto.setThu(thu);
+                if(tkbDto.getThu().equals(thu)){
+                    tkbDtos.add(tkbDto);
+                }
+            }
+            wrapTkbDto.setTkbDtoList(tkbDtos);
+
+            wrapTkbDtoList.add(wrapTkbDto);
+        }
+
 
 //        KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamByMaKeHoach(maKeHoach);
 //
@@ -124,14 +200,14 @@ public class GiangVienServiceImpl implements GiangVienService {
 //
 //        // Tính ngày bắt đầu của tuần
 //        LocalDate startDate = LocalDate.now()
-//                .with(TemporalAdjusters.previousOrSame(DayOfWeek.from(LocalDate.ofYearDay(LocalDate.now().getYear(), 1))))
+//                .with(TemporalAdjusters.previousssssssssssssssssssssssssssssssssssssssssssssssssssssssOrSame(DayOfWeek.from(LocalDate.ofYearDay(LocalDate.now().getYear(), 1))))
 //                .plusWeeks(tuan - 1)
 //                .with(TemporalAdjusters.previousOrSame(DayOfWeek.from(LocalDate.of(1, 1, 1))));
 //
 //        // Tính ngày kết thúc của tuần
 //        LocalDate endDate = startDate.plusDays(6);
 
-        return null;
+        return wrapTkbDtoList;
     }
 
     @Override

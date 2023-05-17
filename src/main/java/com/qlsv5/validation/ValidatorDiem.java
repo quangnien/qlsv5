@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -277,12 +278,12 @@ public class ValidatorDiem implements Validator {
             throw new BusinessException(MasterDataExceptionConstant.E_DIEM_LIST_MAlOPTC_NULL);
         }
         else {
-            Date dateNow = new Date();
+            LocalDate dateNow = LocalDate.now();
             DsLopTcEntity dsLopTcEntity = dsLopTcService.getDsLopTcByMaLopTc(dangKyMonDto.getMaLopTcList().get(0));
 
             if(dsLopTcEntity != null){
                 KeHoachNamEntity keHoachNamEntity = keHoachNamRepository.getKeHoachNamByMaKeHoach(dsLopTcEntity.getMaKeHoach());
-                if(dateNow.after(keHoachNamEntity.getTimeDkMonEnd())){
+                if(dateNow.isAfter(keHoachNamEntity.getTimeDkMonEnd())){
                     throw new BusinessException(MasterDataExceptionConstant.E_DSLOPTC_NGOAI_TIME_DK);
                 }
             }

@@ -3,9 +3,12 @@ package com.qlsv5.api;
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.TkbDto;
 import com.qlsv5.dto.TuanDto;
+import com.qlsv5.dto.WrapTkbDto;
+import com.qlsv5.entity.KeHoachNamEntity;
 import com.qlsv5.entity.TuanEntity;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.GiangVienService;
+import com.qlsv5.service.KeHoachNamService;
 import com.qlsv5.service.TuanService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -41,10 +44,13 @@ public class ThoiKhoaBieuApi {
     private TuanService tuanService;
 
     @Autowired
+    private KeHoachNamService keHoachNamService;
+
+    @Autowired
     private GiangVienService giangVienService;
 
     @Operation(summary = "Get TKB.")
-    @GetMapping("/tkb")
+    @GetMapping("/tkb/{maGv}")
     @PreAuthorize("hasAuthority('ROLE_GIANGVIEN') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SINHVIEN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
@@ -57,7 +63,7 @@ public class ThoiKhoaBieuApi {
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TuanEntity.class)) })})
     public ResponseEntity<?> getTKBFlByTuan(@PathVariable String maGv,
-                                        @RequestParam(required = true, defaultValue = "") String maKeHoach,
+                                        @RequestParam(required = false, defaultValue = "") String maKeHoach,
                                         @RequestParam(required = true, defaultValue = "") int tuan) {
 
         ReturnObject returnObject = new ReturnObject();
@@ -67,12 +73,18 @@ public class ThoiKhoaBieuApi {
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
 
+            KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamClosest();
+            if(maKeHoach.equals("")){
+                maKeHoach = keHoachNamEntity.getMaKeHoach();
+            }
+
             TkbDto tkbDto = new TkbDto();
 
-            List<TkbDto> listTkbDto = giangVienService.getListTKBForGV(maGv, maKeHoach, tuan);
+//            List<TkbDto> listTkbDto = giangVienService.getListTKBForGV(maGv, maKeHoach, tuan);
+            List<WrapTkbDto> wrapTkbDtoList = giangVienService.getListTKBForGV(maGv, maKeHoach, tuan);
 
-            List<Object> listTuan = commonService.findAllObject( new TuanDto());
-            returnObject.setRetObj(listTuan);
+//            List<Object> listTuan = commonService.findAllObject( new TuanDto());
+            returnObject.setRetObj(wrapTkbDtoList);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
