@@ -3,6 +3,7 @@ package com.qlsv5.api;
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.TkbDto;
 import com.qlsv5.dto.TuanDto;
+import com.qlsv5.dto.WrapTkbDto;
 import com.qlsv5.entity.KeHoachNamEntity;
 import com.qlsv5.entity.TuanEntity;
 import com.qlsv5.service.CommonService;
@@ -79,10 +80,11 @@ public class ThoiKhoaBieuApi {
 
             TkbDto tkbDto = new TkbDto();
 
-            List<TkbDto> listTkbDto = giangVienService.getListTKBForGV(maGv, maKeHoach, tuan);
+//            List<TkbDto> listTkbDto = giangVienService.getListTKBForGV(maGv, maKeHoach, tuan);
+            List<WrapTkbDto> wrapTkbDtoList = giangVienService.getListTKBForGV(maGv, maKeHoach, tuan);
 
 //            List<Object> listTuan = commonService.findAllObject( new TuanDto());
-            returnObject.setRetObj(listTkbDto);
+            returnObject.setRetObj(wrapTkbDtoList);
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);

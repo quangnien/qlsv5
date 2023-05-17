@@ -2,6 +2,7 @@ package com.qlsv5.service.impl;
 
 import com.qlsv5.dto.KhoaDto;
 import com.qlsv5.dto.TkbDto;
+import com.qlsv5.dto.WrapTkbDto;
 import com.qlsv5.entity.*;
 import com.qlsv5.repository.ChiTietLopTcRepository;
 import com.qlsv5.repository.DsLopTcRepository;
@@ -13,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -119,7 +121,7 @@ public class GiangVienServiceImpl implements GiangVienService {
     }
 
     @Override
-    public List<TkbDto> getListTKBForGV(String maGiangVien, String maKeHoach, int tuan) {
+    public List<WrapTkbDto> getListTKBForGV(String maGiangVien, String maKeHoach, int tuan) {
         List<TkbDto> tkbDtoList = new ArrayList<>();
 
         KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamByMaKeHoach(maKeHoach);
@@ -129,7 +131,12 @@ public class GiangVienServiceImpl implements GiangVienService {
 
         List<DsLopTcEntity> dsLopTcEntityList = dsLopTcRepository.findAllByMaGvAndMaKeHoach(maGiangVien, maKeHoach);
         for(DsLopTcEntity dsLopTcEntity: dsLopTcEntityList){
-            List<ChiTietLopTcEntity> chiTietLopTcEntityList = chiTietLopTcRepository.getListChiTietLopTcByMaLopTc(dsLopTcEntity.getMaLopTc());
+//            List<ChiTietLopTcEntity> chiTietLopTcEntityList = chiTietLopTcRepository.getListChiTietLopTcByMaLopTc(dsLopTcEntity.getMaLopTc());
+            Sort sort = Sort.by(
+                    Sort.Order.desc("thu"),
+                    Sort.Order.desc("tiet")
+            );
+            List<ChiTietLopTcEntity> chiTietLopTcEntityList = chiTietLopTcRepository.findAllByMaLopTc(dsLopTcEntity.getMaLopTc(), sort);
             List<ChiTietLopTcEntity> chiTietLopTcEntityListValid = new ArrayList<>();
 
             for (ChiTietLopTcEntity chiTietLopTcEntity : chiTietLopTcEntityList) {
@@ -155,6 +162,37 @@ public class GiangVienServiceImpl implements GiangVienService {
 
         }
 
+        List<WrapTkbDto> wrapTkbDtoList = new ArrayList<>();
+
+        List<String> thuOfWeek = new ArrayList<>();
+        String thu2 = "2";
+        String thu3 = "3";
+        String thu4 = "4";
+        String thu5 = "5";
+        String thu6 = "6";
+        String thu7 = "7";
+        thuOfWeek.add(thu2);
+        thuOfWeek.add(thu3);
+        thuOfWeek.add(thu4);
+        thuOfWeek.add(thu5);
+        thuOfWeek.add(thu6);
+        thuOfWeek.add(thu7);
+
+        for (String thu: thuOfWeek){
+            List<TkbDto> tkbDtos = new ArrayList<>();
+            WrapTkbDto wrapTkbDto = new WrapTkbDto();
+
+            for (TkbDto tkbDto: tkbDtoList){
+                wrapTkbDto.setThu(thu);
+                if(tkbDto.getThu().equals(thu)){
+                    tkbDtos.add(tkbDto);
+                }
+            }
+            wrapTkbDto.setTkbDtoList(tkbDtos);
+
+            wrapTkbDtoList.add(wrapTkbDto);
+        }
+
 
 //        KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamByMaKeHoach(maKeHoach);
 //
@@ -169,7 +207,7 @@ public class GiangVienServiceImpl implements GiangVienService {
 //        // Tính ngày kết thúc của tuần
 //        LocalDate endDate = startDate.plusDays(6);
 
-        return tkbDtoList;
+        return wrapTkbDtoList;
     }
 
     @Override
