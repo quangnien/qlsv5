@@ -28,7 +28,7 @@ public enum XepLoaiEnum {
 
     A_PLUS("A+", "A+"),
     A("A", "A"),
-    B_PLUS("B+", "B"),
+    B_PLUS("B+", "B+"),
     B("B", "B"),
     C_PLUS("C+", "C+"),
     C("C", "C"),
