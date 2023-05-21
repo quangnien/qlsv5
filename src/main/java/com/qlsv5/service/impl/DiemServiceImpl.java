@@ -1,9 +1,11 @@
 package com.qlsv5.service.impl;
 
 import com.qlsv5.entity.DiemEntity;
+import com.qlsv5.entity.DsLopTcEntity;
 import com.qlsv5.entity.LopEntity;
 import com.qlsv5.entity.SinhVienEntity;
 import com.qlsv5.repository.DiemRepository;
+import com.qlsv5.repository.DsLopTcRepository;
 import com.qlsv5.service.DiemService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class DiemServiceImpl implements DiemService {
 
     @Autowired
     private DiemRepository diemRepository;
+
+    @Autowired
+    private DsLopTcRepository dsLopTcRepository;
 
     @Override
     public List<DiemEntity> getListDiemByMaLopTc(String maLopTc, int page, int size){
@@ -50,6 +55,12 @@ public class DiemServiceImpl implements DiemService {
 
     @Override
     public void deleteDangKyMon(DiemEntity diemEntity) {
+
+        /*SET SOLUONGCON CUA LOPTINCHI*/
+        DsLopTcEntity dsLopTcEntity = dsLopTcRepository.getDsLopTcByMaLopTc(diemEntity.getMaLopTc());
+        dsLopTcEntity.setSoLuongCon(dsLopTcEntity.getSoLuongCon() + 1);
+        dsLopTcRepository.save(dsLopTcEntity);
+
         diemRepository.delete(diemEntity);
     }
 

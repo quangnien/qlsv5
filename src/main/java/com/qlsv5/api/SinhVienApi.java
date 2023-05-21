@@ -266,7 +266,7 @@ public class SinhVienApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SinhVienEntity.class)) })})
     public ResponseEntity<?> getSinhVienByLopId(@PathVariable String maLop,
                                                 @RequestParam(defaultValue = "0") int page,
-                                                @RequestParam(defaultValue = "7") int size) {
+                                                @RequestParam(defaultValue = "12") int size) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
