@@ -515,7 +515,7 @@ public class DsLopTcApi {
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DsLopTcEntity.class)) })})
     public ResponseEntity<?> getDsLopTcByMaGvAndMaKeHoach(@PathVariable(required = true) String maGv,
-                                                          @PathVariable(required = false, value = "") String maKeHoach) {
+                                                          @RequestParam(required = false, defaultValue = "") String maKeHoach) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
@@ -523,6 +523,11 @@ public class DsLopTcApi {
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
+
+            if(maKeHoach.equals("")){
+                KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamClosest();
+                maKeHoach = keHoachNamEntity.getMaKeHoach();
+            }
 
             validatorDsLopTc.validateGetListLopTcByMaGvAndMaKeHoach(maGv, maKeHoach);
 

@@ -288,7 +288,7 @@ public class GiangVienApi {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GiangVienEntity.class)) })})
     public ResponseEntity<?> getGiangVienByKhoaId(@PathVariable String maKhoa,
                                                   @RequestParam(required = false, defaultValue = "0") int page,
-                                                  @RequestParam(required = false, defaultValue = "999") int size) {
+                                                  @RequestParam(required = false, defaultValue = "12") int size) {
 
         ReturnObject returnObject = new ReturnObject();
         try {
