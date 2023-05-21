@@ -132,7 +132,7 @@ public class GiangVienServiceImpl implements GiangVienService {
         KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamByMaKeHoach(maKeHoach);
 
         LocalDate timeTuanBdParam = keHoachNamEntity.getTimeStudyBegin().plusDays((tuan - 1) * 7);
-        LocalDate timeTuanKtParam = keHoachNamEntity.getTimeStudyBegin().plusDays(7);
+        LocalDate timeTuanKtParam = timeTuanBdParam.plusDays(7);
 
         List<DsLopTcEntity> dsLopTcEntityList = dsLopTcRepository.findAllByMaGvAndMaKeHoach(maGiangVien, maKeHoach);
         for(DsLopTcEntity dsLopTcEntity: dsLopTcEntityList){
