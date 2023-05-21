@@ -100,6 +100,7 @@ public class DangKyMonApi {
             if(dangKyMonDtoValid.getMaLopTcList() != null){
                 commonService.addObject(dangKyMonDtoValid);
             }
+
             returnObject.setRetObj(dangKyMonDtoValid);
 
         }
