@@ -4,8 +4,10 @@ import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.DangKyMonDto;
 import com.qlsv5.dto.DiemDto;
 import com.qlsv5.entity.DiemEntity;
+import com.qlsv5.entity.KeHoachNamEntity;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.DiemService;
+import com.qlsv5.service.KeHoachNamService;
 import com.qlsv5.validation.ValidatorDiem;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +46,10 @@ public class DangKyMonApi {
 
     @Autowired
     private DiemService diemService;
+
+    @Autowired
+    private KeHoachNamService keHoachNamService;
+
 
     /* CREATE */
     @Operation(summary = "Dang ky mon.")
@@ -72,6 +79,15 @@ public class DangKyMonApi {
 
             returnObject.setStatus(ReturnObject.SUCCESS);
             returnObject.setMessage("200");
+
+            KeHoachNamEntity keHoachNamEntity = keHoachNamService.getKeHoachNamClosest();
+            LocalDate dateNow = LocalDate.now();
+            if(dateNow.isAfter(keHoachNamEntity.getTimeDkMonEnd())){
+                returnObject.setStatus(ReturnObject.ERROR);
+                String errorMessage = "Ngoài thời gian đăng ký!";
+                returnObject.setMessage(errorMessage);
+                return ResponseEntity.ok(returnObject);
+            }
 
             List<DiemDto> listDiem = new ArrayList<>();
             for(int i = 0 ; i < dangKyMonDto.getMaLopTcList().size() ; i++){
