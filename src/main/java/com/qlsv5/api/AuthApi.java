@@ -8,9 +8,9 @@ import com.qlsv5.entity.UserEntity;
 import com.qlsv5.payload.request.LoginRequest;
 import com.qlsv5.payload.request.SignupRequest;
 import com.qlsv5.payload.response.MessageResponse;
-import com.qlsv5.repository.RoleRepository;
-import com.qlsv5.repository.TokenRefreshTokenPairRepository;
-import com.qlsv5.repository.UserRepository;
+import com.qlsv5.service.impl.repository.RoleRepository;
+import com.qlsv5.service.impl.repository.TokenRefreshTokenPairRepository;
+import com.qlsv5.service.impl.repository.UserRepository;
 import com.qlsv5.security.jwt.JwtUtils;
 import com.qlsv5.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -30,8 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.qlsv5.security.jwt.JwtUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

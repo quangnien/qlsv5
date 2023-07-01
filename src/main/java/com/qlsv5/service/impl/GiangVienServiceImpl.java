@@ -1,16 +1,14 @@
 package com.qlsv5.service.impl;
 
-import com.qlsv5.dto.KhoaDto;
 import com.qlsv5.dto.TkbDto;
 import com.qlsv5.dto.WrapTkbDto;
 import com.qlsv5.entity.*;
-import com.qlsv5.repository.ChiTietLopTcRepository;
-import com.qlsv5.repository.DsLopTcRepository;
-import com.qlsv5.repository.GiangVienRepository;
-import com.qlsv5.repository.MonHocRepository;
+import com.qlsv5.service.impl.repository.ChiTietLopTcRepository;
+import com.qlsv5.service.impl.repository.DsLopTcRepository;
+import com.qlsv5.service.impl.repository.GiangVienRepository;
+import com.qlsv5.service.impl.repository.MonHocRepository;
 import com.qlsv5.service.GiangVienService;
 import com.qlsv5.service.KeHoachNamService;
-import com.qlsv5.service.MonHocService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Type;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service

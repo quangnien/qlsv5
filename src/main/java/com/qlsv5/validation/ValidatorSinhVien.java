@@ -8,8 +8,8 @@ import com.qlsv5.dto.UpdatePasswordDto;
 import com.qlsv5.entity.SinhVienEntity;
 import com.qlsv5.entity.UserEntity;
 import com.qlsv5.exception.BusinessException;
-import com.qlsv5.repository.LopRepository;
-import com.qlsv5.repository.SinhVienRepository;
+import com.qlsv5.service.impl.repository.LopRepository;
+import com.qlsv5.service.impl.repository.SinhVienRepository;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,7 +143,10 @@ public class ValidatorSinhVien implements Validator {
     @Transactional
     public void validateUpdatePasswordSinhVien(UpdatePasswordDto updatePasswordDto) throws BusinessException {
 
-        if(updatePasswordDto.getId() == null){
+//        if(updatePasswordDto.getId() == null){
+//            throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
+//        }
+        if(updatePasswordDto.getUserName() == null){
             throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
         }
         else if(updatePasswordDto.getMatKhauCu() == null || updatePasswordDto.getMatKhauCu().equals("")){
@@ -160,7 +163,8 @@ public class ValidatorSinhVien implements Validator {
 //        }
         else {
 
-            UserEntity userEntity = userService.findById(updatePasswordDto.getId());
+//            UserEntity userEntity = userService.findById(updatePasswordDto.getId());
+            UserEntity userEntity = userService.findByUsername(updatePasswordDto.getUserName());
 
             if(userEntity == null){
                 throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);

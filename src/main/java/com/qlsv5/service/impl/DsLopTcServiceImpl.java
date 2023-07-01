@@ -1,8 +1,7 @@
 package com.qlsv5.service.impl;
 
-import com.qlsv5.dto.DsLopTcMonHocGiangVienLopDto;
 import com.qlsv5.entity.DsLopTcEntity;
-import com.qlsv5.repository.DsLopTcRepository;
+import com.qlsv5.service.impl.repository.DsLopTcRepository;
 import com.qlsv5.service.DsLopTcService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

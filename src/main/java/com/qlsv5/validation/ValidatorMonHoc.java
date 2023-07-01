@@ -5,8 +5,9 @@ import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.MonHocDto;
 import com.qlsv5.entity.MonHocEntity;
 import com.qlsv5.exception.BusinessException;
-import com.qlsv5.repository.KhoaRepository;
-import com.qlsv5.repository.MonHocRepository;
+import com.qlsv5.service.impl.repository.KhoaRepository;
+import com.qlsv5.service.impl.repository.MHTQRepository;
+import com.qlsv5.service.impl.repository.MonHocRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,12 +26,12 @@ public class ValidatorMonHoc implements Validator {
 
     @Autowired
     private MonHocRepository monHocRepository;
-
     @Autowired
     private KhoaRepository khoaRepository;
-
     @Autowired
     private FunctionCommon functionCommon;
+    @Autowired
+    private MHTQRepository mhtqRepository;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -44,12 +45,16 @@ public class ValidatorMonHoc implements Validator {
 
     @Transactional
     public void validateAddMonHoc(Object target) throws BusinessException {
-        MonHocDto monHocDto = (MonHocDto) target;
+        MonHocEntity monHocEntity = (MonHocEntity) target;
 
-        int countMaMonHoc = monHocRepository.countMonHocByMaMh(monHocDto.getMaMh());
+        int countMaMonHoc = monHocRepository.countMonHocByMaMh(monHocEntity.getMaMh());
+        int countMaKhoa = khoaRepository.countKhoaByMaKhoa(monHocEntity.getMaKhoa());
 
         if (countMaMonHoc > 0) {
             throw new BusinessException(MasterDataExceptionConstant.E_MONHOC_DUPLICATE_MA_MONHOC);
+        }
+        else if(countMaKhoa == 0) {
+            throw new BusinessException(MasterDataExceptionConstant.E_KHOA_NOT_FOUND_KHOA);
         }
     }
 
@@ -60,6 +65,9 @@ public class ValidatorMonHoc implements Validator {
         if(monHocDto.getId() == null){
             throw new BusinessException(MasterDataExceptionConstant.E_MONHOC_NOT_FOUND_MONHOC);
         }
+        else if(monHocDto.getMaKhoa() == null){
+            throw new BusinessException(MasterDataExceptionConstant.E_KHOA_DUPLICATE_MA_KHOA);
+        }
 
         Optional<MonHocEntity> monHocEntity = monHocRepository.findById(monHocDto.getId());
 
@@ -68,9 +76,13 @@ public class ValidatorMonHoc implements Validator {
         }
         else {
             Long countMaMonHoc = monHocRepository.countMonHocByMaMhAndNotId(monHocDto.getMaMh(), monHocDto.getId());
+            int countMaKhoa = khoaRepository.countKhoaByMaKhoa(monHocDto.getMaKhoa());
             long countValue = countMaMonHoc != null ? countMaMonHoc : 0;
             if (countValue > 0) {
                 throw new BusinessException(MasterDataExceptionConstant.E_MONHOC_DUPLICATE_MA_MONHOC);
+            }
+            else if(countMaKhoa == 0) {
+                throw new BusinessException(MasterDataExceptionConstant.E_KHOA_NOT_FOUND_KHOA);
             }
         }
     }
@@ -101,4 +113,37 @@ public class ValidatorMonHoc implements Validator {
 
     }
 
+    @Transactional
+    public void validateGetMonHocByMaMh(String maMh) throws BusinessException {
+
+        int countMaMonHoc = monHocRepository.countMonHocByMaMh(maMh);
+
+        if (countMaMonHoc == 0) {
+            throw new BusinessException(MasterDataExceptionConstant.E_MONHOC_NOT_FOUND_MONHOC);
+        }
+    }
+
+    @Transactional
+    public boolean validateUpdateDKMHTQPossible(String maMh, String maMHTQ) throws BusinessException {
+
+        int countMaMonHoc = monHocRepository.countMonHocByMaMh(maMh);
+        int countMaMonHocTienQuyet = monHocRepository.countMonHocByMaMh(maMHTQ);
+
+        Long countMHMHTQ = mhtqRepository.countMHTQByMaMhAndMaMHTQ(maMh, maMHTQ);
+
+        if (countMHMHTQ > 0) {
+            return false;
+        }
+        else if(maMh.equals(maMHTQ)){
+            return false;
+        }
+        else if (countMaMonHoc == 0) {
+            return false;
+        }
+        else if (countMaMonHocTienQuyet == 0) {
+            return false;
+        }
+
+        return true;
+    }
 }

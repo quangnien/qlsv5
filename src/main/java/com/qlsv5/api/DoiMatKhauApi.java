@@ -1,20 +1,18 @@
 package com.qlsv5.api;
 
 import com.qlsv5.common.ReturnObject;
-import com.qlsv5.dto.GiangVienDto;
-import com.qlsv5.dto.SinhVienDto;
-import com.qlsv5.dto.TkbDto;
 import com.qlsv5.dto.UpdatePasswordDto;
-import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.entity.SinhVienEntity;
-import com.qlsv5.entity.UserEntity;
-import com.qlsv5.payload.request.SignupRequest;
-import com.qlsv5.repository.GiangVienRepository;
-import com.qlsv5.repository.SinhVienRepository;
-import com.qlsv5.security.services.UserDetailsImpl;
+import com.qlsv5.factory.UserChangePW;
+import com.qlsv5.factory.UserChangePWFactory;
+import com.qlsv5.factoryMethod.UpdatePasswordFactory;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.SinhVienService;
 import com.qlsv5.service.UserService;
+import com.qlsv5.service.impl.UpdatePasswordServiceImpl;
+import com.qlsv5.service.impl.repository.GiangVienRepository;
+import com.qlsv5.service.impl.repository.SinhVienRepository;
+import com.qlsv5.strategy.StrategyUpdatePassword;
 import com.qlsv5.validation.ValidatorAdmin;
 import com.qlsv5.validation.ValidatorGiangVien;
 import com.qlsv5.validation.ValidatorSinhVien;
@@ -34,13 +32,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -66,19 +65,28 @@ public class DoiMatKhauApi {
     PasswordEncoder encoder;
 
     @Autowired
-    private SinhVienRepository sinhVienRepository;
-
+    public SinhVienRepository sinhVienRepository;
     @Autowired
-    private GiangVienRepository giangVienRepository;
-
+    public GiangVienRepository giangVienRepository;
     @Autowired
-    private ValidatorSinhVien validatorSinhVien;
-
+    public ValidatorSinhVien validatorSinhVien;
     @Autowired
-    private ValidatorGiangVien validatorGiangVien;
-
+    public ValidatorGiangVien validatorGiangVien;
     @Autowired
-    private ValidatorAdmin validatorAdmin;
+    public  ValidatorAdmin validatorAdmin;
+
+
+    /* _________ STRATEGY PATTERN _________ */
+//    @Autowired
+//    private final UpdatePasswordService updatePasswordService;
+//    private final UpdatePasswordServiceImpl updatePasswordService;
+//
+//    public DoiMatKhauApi(UpdatePasswordServiceImpl updatePasswordService) {
+//        this.updatePasswordService = updatePasswordService;
+//    }
+    @Autowired
+    private UpdatePasswordServiceImpl updatePasswordService;
+    /* _________ STRATEGY PATTERN _________ */
 
 
     @Operation(summary = "Update password")
@@ -103,12 +111,9 @@ public class DoiMatKhauApi {
             return ResponseEntity.ok(returnObject);
         }
         try {
-            log.info("Update password By Id!");
+            /* _________ STRATEGY PATTERN _________ */
 
-            returnObject.setStatus(ReturnObject.SUCCESS);
-            returnObject.setMessage("200");
-
-            /* get info user is logining*/
+            /* get info user is logining */
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             List<String> roleList = new ArrayList<>();
             if (principal instanceof UserDetails) {
@@ -117,78 +122,17 @@ public class DoiMatKhauApi {
                         .collect(Collectors.toList()));
             }
 
-            if(roleList.get(0).equals("ROLE_ADMIN")){
-                validatorAdmin.validateUpdatePasswordAdmin(updatePasswordDto);
+//            UserChangePW userChangePW = UserChangePWFactory.createUserToChangePW(roleList.get(0));
+//            userChangePW.updatePassword(updatePasswordDto);
+//
+            StrategyUpdatePassword strategy = UpdatePasswordFactory.createStrategyUpdatePW(roleList.get(0));
+            updatePasswordService.setStrategyUpdatePassword(strategy);
+            updatePasswordService.updatePassword(updatePasswordDto);
 
-                /* update PW UserEntity*/
-                UserEntity userEntity = userService.findById(updatePasswordDto.getId());
-                userEntity.setPassword(encoder.encode(updatePasswordDto.getMatKhauMoi()));
-                userService.updateUser(userEntity);
-
-                returnObject.setRetObj(userEntity);
-            }
-            else if(roleList.get(0).equals("ROLE_GIANGVIEN")){
-                validatorGiangVien.validateUpdatePasswordGiangVien(updatePasswordDto);
-
-//                GiangVienEntity getGiangVienByDB = (GiangVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new GiangVienDto());
-
-                UserEntity userEntity = userService.findById(updatePasswordDto.getId());
-                // maSV
-                String userName = userEntity.getUsername();
-                GiangVienEntity getGiangVienByDB = (GiangVienEntity) giangVienRepository.findByMaGv(userName);
-
-                /* update PW GiangVienEntity*/
-                getGiangVienByDB.setMatKhau(updatePasswordDto.getMatKhauMoi());
-                commonService.updateObject(getGiangVienByDB);
-
-                /* update PW UserEntity*/
-//                UserEntity userEntity = userService.findByUsername(getGiangVienByDB.getMaSv());
-                userEntity.setPassword(encoder.encode(updatePasswordDto.getMatKhauMoi()));
-                userService.updateUser(userEntity);
-
-                returnObject.setRetObj(getGiangVienByDB);
-
-//                validatorGiangVien.validateUpdatePasswordGiangVien(updatePasswordDto);
-////
-////                GiangVienEntity getGiangVienByDB = (GiangVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new GiangVienDto());
-////
-////                /* update PW GiangVienEntity*/
-////                getGiangVienByDB.setMatKhau(updatePasswordDto.getMatKhauMoi());
-////                commonService.updateObject(getGiangVienByDB);
-////
-////                /* update PW UserEntity*/
-////                UserEntity userEntity = userService.findByUsername(getGiangVienByDB.getMaGv());
-////                userEntity.setPassword(encoder.encode(updatePasswordDto.getMatKhauMoi()));
-////                userService.updateUser(userEntity);
-////
-////                returnObject.setRetObj(getGiangVienByDB);
-            }
-            else if(roleList.get(0).equals("ROLE_SINHVIEN")){
-                validatorSinhVien.validateUpdatePasswordSinhVien(updatePasswordDto);
-
-//                SinhVienEntity getSinhVienByDB = (SinhVienEntity) commonService.getObjectById(updatePasswordDto.getId(), new SinhVienDto());
-
-                UserEntity userEntity = userService.findById(updatePasswordDto.getId());
-                // maSV
-                String userName = userEntity.getUsername();
-                SinhVienEntity getSinhVienByDB = (SinhVienEntity) sinhVienRepository.findByMaSv(userName);
-
-                /* update PW SinhVienEntity*/
-                getSinhVienByDB.setMatKhau(updatePasswordDto.getMatKhauMoi());
-                commonService.updateObject(getSinhVienByDB);
-
-                /* update PW UserEntity*/
-//                UserEntity userEntity = userService.findByUsername(getSinhVienByDB.getMaSv());
-                userEntity.setPassword(encoder.encode(updatePasswordDto.getMatKhauMoi()));
-                userService.updateUser(userEntity);
-
-                returnObject.setRetObj(getSinhVienByDB);
-            }
-
+            /* _________ STRATEGY PATTERN _________ */
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-//            returnObject.setMessage(ex.getMessage());
             String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
             returnObject.setMessage(errorMessage);
         }

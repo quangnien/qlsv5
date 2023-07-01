@@ -1,7 +1,7 @@
 package com.qlsv5.security.jwt;
 
 import com.qlsv5.entity.TokenRefreshTokenPairEntity;
-import com.qlsv5.repository.TokenRefreshTokenPairRepository;
+import com.qlsv5.service.impl.repository.TokenRefreshTokenPairRepository;
 import com.qlsv5.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -15,9 +15,6 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 @Component

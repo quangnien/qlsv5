@@ -50,7 +50,6 @@ public class DangKyMonApi {
     @Autowired
     private KeHoachNamService keHoachNamService;
 
-
     /* CREATE */
     @Operation(summary = "Dang ky mon.")
     @PostMapping("/dang-ky-mon")
@@ -107,6 +106,12 @@ public class DangKyMonApi {
                 }
             }
 
+            /* begin validate montienquyet */
+//            if(listMaLopTcValid.size() > 0 ){
+//                List<String> listMaLopTcValid = validatorDiem.validateMHTQ(listMaLopTcValid,dangKyMonDto.getMaSv() );
+//            }
+            /* end validate montienquyet */
+
             DangKyMonDto dangKyMonDtoValid = new DangKyMonDto();
             if(listMaLopTcValid.size() > 0 ){
                 dangKyMonDtoValid.setMaSv(dangKyMonDto.getMaSv());
@@ -122,7 +127,6 @@ public class DangKyMonApi {
         }
         catch (Exception ex){
             returnObject.setStatus(ReturnObject.ERROR);
-//            returnObject.setMessage(ex.getMessage());
             String errorMessage = ex.getMessage().replace("For input string:", "").replace("\"", "");
             returnObject.setMessage(errorMessage);
         }

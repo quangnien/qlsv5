@@ -3,14 +3,12 @@ package com.qlsv5.validation;
 import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.DangKyMonDto;
 import com.qlsv5.dto.DiemDto;
-import com.qlsv5.dto.DsLopTcDto;
 import com.qlsv5.entity.DiemEntity;
 import com.qlsv5.entity.DsLopTcEntity;
 import com.qlsv5.entity.KeHoachNamEntity;
-import com.qlsv5.entity.MonHocEntity;
 import com.qlsv5.exception.BusinessException;
-import com.qlsv5.repository.*;
 import com.qlsv5.service.DsLopTcService;
+import com.qlsv5.service.impl.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +17,6 @@ import org.springframework.validation.Validator;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,13 +34,12 @@ public class ValidatorDiem implements Validator {
     private SinhVienRepository sinhVienRepository;
     @Autowired
     private DsLopTcRepository dsLopTcRepository;
-
+    @Autowired
+    private MHTQRepository mhtqRepository;
     @Autowired
     private KeHoachNamRepository keHoachNamRepository;
-
     @Autowired
     private MonHocRepository monHocRepository;
-
     @Autowired
     private DsLopTcService dsLopTcService;
 
@@ -303,6 +299,23 @@ public class ValidatorDiem implements Validator {
 //                throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);
 //            }
 //        }
+//    }
+
+//    @Transactional
+//    public List<String> validateMHTQ(List<String> listMaLopTc, String maSv) throws BusinessException {
+//        List<String> listMaLopTcValid = new ArrayList<>();
+//        for(String maLopTc : listMaLopTc){
+//            String maMh = dsLopTcRepository.getDsLopTcByMaLopTc(maLopTc).getMaMh();
+//            if(maMh != null){
+//                List<MHTQEntity> mhtqEntityList = mhtqRepository.findAllByMaMh(maMh);
+//                for(MHTQEntity mhtqEntity : mhtqEntityList){
+//                    DiemEntity diemEntity = diemRepository.getDiemByMaSvAndMaLopTc(mhtqEntity)
+//                }
+//            }
+//        }
+//
+//
+//        return true;
 //    }
 
 }

@@ -74,6 +74,9 @@ public class MasterDataExceptionConstant {
     /* Thong Ke */
     public static final String E_THONGKEDIEM_NOT_FOUND_THONGKEDIEM = "Invalid input!";
 
+    /* Mon Hoc Tien Quyet */
+    public static final String E_MONHOCTIENQUYET_NOT_FOUND_MONHOCTIENQUYET = "Môn học tiên quyết không tồn tại!";
+
 //    /* Common */
 //    public static final String COMMON_EMAIL_WRONG_FORMAT = "You entered the wrong format for email@gmail.com!";
 //    public static final String COMMON_EMAIL_IS_EXIST = "email is already in use!";
