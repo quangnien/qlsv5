@@ -20,6 +20,7 @@ import java.util.List;
 public interface MonHocRepository extends MongoRepository<MonHocEntity, String> {
     int countMonHocByMaMh(String maMonHoc);
     int countMonHocById(String id);
+    MonHocEntity findByMaMh(String maMh);
 
     @Query(value = "{'maMonHoc': ?0, '_id': {$ne: ?1}}", count = true)
     Long countMonHocByMaMhAndNotId(String maMonHoc, String id);
@@ -27,6 +28,7 @@ public interface MonHocRepository extends MongoRepository<MonHocEntity, String> 
     MonHocEntity getMonHocByMaMh(String maMh);
 
     Page<MonHocEntity> findAllByMaKhoa(String maKhoa, Pageable pageable);
+    List<MonHocEntity> findAllByMaKhoa(String maKhoa);
 
     List<MonHocEntity> findByTenMhLikeIgnoreCase(String keySearch);
 
