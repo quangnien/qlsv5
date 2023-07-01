@@ -1,4 +1,4 @@
-package com.qlsv5.repository;
+package com.qlsv5.service.impl.repository;
 
 import com.qlsv5.entity.MHTQEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;

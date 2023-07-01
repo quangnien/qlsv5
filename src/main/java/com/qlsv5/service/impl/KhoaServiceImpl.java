@@ -1,17 +1,14 @@
 package com.qlsv5.service.impl;
 
-import com.qlsv5.dto.KhoaDto;
 import com.qlsv5.entity.KhoaEntity;
-import com.qlsv5.repository.KhoaRepository;
+import com.qlsv5.service.impl.repository.KhoaRepository;
 import com.qlsv5.service.KhoaService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional(rollbackFor = Exception.class)

@@ -5,7 +5,7 @@
  * Author       ：phatvt
  * Change log   ：2018/01/31：01-00 phatvt create a new
  ******************************************************************************/
-package com.qlsv5.repository;
+package com.qlsv5.service.impl.repository;
 
 import com.qlsv5.entity.DsLopTcEntity;
 import org.springframework.data.domain.Page;

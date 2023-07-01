@@ -4,8 +4,8 @@ import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.UpdatePasswordDto;
 import com.qlsv5.entity.UserEntity;
 import com.qlsv5.exception.BusinessException;
-import com.qlsv5.repository.GiangVienRepository;
-import com.qlsv5.repository.KhoaRepository;
+import com.qlsv5.service.impl.repository.GiangVienRepository;
+import com.qlsv5.service.impl.repository.KhoaRepository;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,10 @@ public class ValidatorAdmin implements Validator {
     @Transactional
     public void validateUpdatePasswordAdmin(UpdatePasswordDto updatePasswordDto) throws BusinessException {
 
-        if(updatePasswordDto.getId() == null){
+//        if(updatePasswordDto.getId() == null){
+//            throw new BusinessException(MasterDataExceptionConstant.E_ADMIN_NOT_FOUND_ADMIN);
+//        }
+        if(updatePasswordDto.getUserName() == null){
             throw new BusinessException(MasterDataExceptionConstant.E_ADMIN_NOT_FOUND_ADMIN);
         }
         else if(updatePasswordDto.getMatKhauCu() == null || updatePasswordDto.getMatKhauCu().equals("")){
@@ -64,7 +67,8 @@ public class ValidatorAdmin implements Validator {
 //            throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_CONFIRM_PASSWORD);
 //        }
         else {
-            UserEntity userEntity = userService.findById(updatePasswordDto.getId());
+//            UserEntity userEntity = userService.findById(updatePasswordDto.getId());
+            UserEntity userEntity = userService.findByUsername(updatePasswordDto.getUserName());
 
 //            if(updatePasswordDto.getConfirmPassword().equals(updatePasswordDto.getMatKhau()) == false){
 //                throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_EQUAL_CONFIRM_PASSWORD);

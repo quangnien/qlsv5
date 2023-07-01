@@ -3,16 +3,13 @@ package com.qlsv5.validation;
 import com.qlsv5.common.FunctionCommon;
 import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.GiangVienDto;
-import com.qlsv5.dto.SinhVienDto;
 import com.qlsv5.dto.TkbDto;
 import com.qlsv5.dto.UpdatePasswordDto;
 import com.qlsv5.entity.GiangVienEntity;
-import com.qlsv5.entity.SinhVienEntity;
 import com.qlsv5.entity.UserEntity;
 import com.qlsv5.exception.BusinessException;
-import com.qlsv5.repository.KhoaRepository;
-import com.qlsv5.repository.LopRepository;
-import com.qlsv5.repository.GiangVienRepository;
+import com.qlsv5.service.impl.repository.KhoaRepository;
+import com.qlsv5.service.impl.repository.GiangVienRepository;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,7 +144,10 @@ public class ValidatorGiangVien implements Validator {
     @Transactional
     public void validateUpdatePasswordGiangVien(UpdatePasswordDto updatePasswordDto) throws BusinessException {
 
-        if(updatePasswordDto.getId() == null){
+//        if(updatePasswordDto.getId() == null){
+//            throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
+//        }
+        if(updatePasswordDto.getUserName() == null){
             throw new BusinessException(MasterDataExceptionConstant.E_GIANGVIEN_NOT_FOUND_GIANGVIEN);
         }
         else if(updatePasswordDto.getMatKhauCu() == null || updatePasswordDto.getMatKhauCu().equals("")){
@@ -163,7 +163,8 @@ public class ValidatorGiangVien implements Validator {
 //            throw new BusinessException(MasterDataExceptionConstant.E_COMMON_NOT_CONFIRM_PASSWORD);
 //        }
         else {
-            UserEntity userEntity = userService.findById(updatePasswordDto.getId());
+//            UserEntity userEntity = userService.findById(updatePasswordDto.getId());
+            UserEntity userEntity = userService.findByUsername(updatePasswordDto.getUserName());
 
             if(userEntity == null){
                 throw new BusinessException(MasterDataExceptionConstant.E_SINHVIEN_NOT_FOUND_SINHVIEN);

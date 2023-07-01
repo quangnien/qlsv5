@@ -3,14 +3,11 @@ package com.qlsv5.service.impl;
 import com.qlsv5.dto.MonHocModifyDto;
 import com.qlsv5.entity.MHTQEntity;
 import com.qlsv5.entity.MonHocEntity;
-import com.qlsv5.repository.MHTQRepository;
-import com.qlsv5.repository.MonHocRepository;
+import com.qlsv5.service.impl.repository.MHTQRepository;
+import com.qlsv5.service.impl.repository.MonHocRepository;
 import com.qlsv5.service.MonHocService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -4,7 +4,7 @@ import com.qlsv5.common.FunctionCommon;
 import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.KeHoachNamDto;
 import com.qlsv5.exception.BusinessException;
-import com.qlsv5.repository.KeHoachNamRepository;
+import com.qlsv5.service.impl.repository.KeHoachNamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

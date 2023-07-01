@@ -1,7 +1,7 @@
 package com.qlsv5.service.impl;
 
 import com.qlsv5.entity.TuanEntity;
-import com.qlsv5.repository.TuanRepository;
+import com.qlsv5.service.impl.repository.TuanRepository;
 import com.qlsv5.service.TuanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

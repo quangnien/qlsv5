@@ -1,9 +1,8 @@
 package com.qlsv5.schedule;
 
 import com.qlsv5.entity.TuanEntity;
-import com.qlsv5.repository.TuanRepository;
+import com.qlsv5.service.impl.repository.TuanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -12,7 +11,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.IsoFields;
 import java.time.temporal.WeekFields;
 
 /**
