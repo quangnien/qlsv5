@@ -5,4 +5,5 @@ import com.qlsv5.exception.BusinessException;
 
 public interface StrategyUpdatePassword {
     void updatePassword(UpdatePasswordDto updatePasswordDto) throws BusinessException;
+    String getRoleName();
 }

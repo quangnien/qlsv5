@@ -1,6 +1,7 @@
 package com.qlsv5.strategy;
 
 import com.qlsv5.dto.UpdatePasswordDto;
+import com.qlsv5.entity.ERole;
 import com.qlsv5.entity.GiangVienEntity;
 import com.qlsv5.entity.UserEntity;
 import com.qlsv5.exception.BusinessException;
@@ -15,16 +16,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class UpdatePasswordGiangVien implements StrategyUpdatePassword{
     @Autowired
-    public ValidatorGiangVien validatorGiangVien;
+    ValidatorGiangVien validatorGiangVien;
     @Autowired
-    public UserService userService;
+    UserService userService;
     @Autowired
-    public GiangVienService giangVienService;
+    GiangVienService giangVienService;
     @Autowired
-    public PasswordEncoder encoder;
+    PasswordEncoder encoder;
     @Autowired
-    public CommonService commonService;
-    @Override
+    CommonService commonService;
+
     public void updatePassword(UpdatePasswordDto updatePasswordDto) throws BusinessException {
 
         // validate
@@ -46,5 +47,10 @@ public class UpdatePasswordGiangVien implements StrategyUpdatePassword{
         /* update PW UserEntity*/
         userEntity.setPassword(encoder.encode(updatePasswordDto.getMatKhauMoi()));
         userService.updateUser(userEntity);
+    }
+
+    @Override
+    public String getRoleName() {
+        return ERole.ROLE_GIANGVIEN.toString();
     }
 }

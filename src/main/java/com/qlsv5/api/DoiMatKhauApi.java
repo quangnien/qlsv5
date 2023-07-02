@@ -3,16 +3,12 @@ package com.qlsv5.api;
 import com.qlsv5.common.ReturnObject;
 import com.qlsv5.dto.UpdatePasswordDto;
 import com.qlsv5.entity.SinhVienEntity;
-import com.qlsv5.factory.UserChangePW;
-import com.qlsv5.factory.UserChangePWFactory;
-import com.qlsv5.factoryMethod.UpdatePasswordFactory;
 import com.qlsv5.service.CommonService;
 import com.qlsv5.service.SinhVienService;
 import com.qlsv5.service.UserService;
 import com.qlsv5.service.impl.UpdatePasswordServiceImpl;
 import com.qlsv5.service.impl.repository.GiangVienRepository;
 import com.qlsv5.service.impl.repository.SinhVienRepository;
-import com.qlsv5.strategy.StrategyUpdatePassword;
 import com.qlsv5.validation.ValidatorAdmin;
 import com.qlsv5.validation.ValidatorGiangVien;
 import com.qlsv5.validation.ValidatorSinhVien;
@@ -74,20 +70,8 @@ public class DoiMatKhauApi {
     public ValidatorGiangVien validatorGiangVien;
     @Autowired
     public  ValidatorAdmin validatorAdmin;
-
-
-    /* _________ STRATEGY PATTERN _________ */
-//    @Autowired
-//    private final UpdatePasswordService updatePasswordService;
-//    private final UpdatePasswordServiceImpl updatePasswordService;
-//
-//    public DoiMatKhauApi(UpdatePasswordServiceImpl updatePasswordService) {
-//        this.updatePasswordService = updatePasswordService;
-//    }
     @Autowired
     private UpdatePasswordServiceImpl updatePasswordService;
-    /* _________ STRATEGY PATTERN _________ */
-
 
     @Operation(summary = "Update password")
     @PutMapping("/updatePassword")
@@ -122,12 +106,11 @@ public class DoiMatKhauApi {
                         .collect(Collectors.toList()));
             }
 
-//            UserChangePW userChangePW = UserChangePWFactory.createUserToChangePW(roleList.get(0));
-//            userChangePW.updatePassword(updatePasswordDto);
-//
-            StrategyUpdatePassword strategy = UpdatePasswordFactory.createStrategyUpdatePW(roleList.get(0));
-            updatePasswordService.setStrategyUpdatePassword(strategy);
-            updatePasswordService.updatePassword(updatePasswordDto);
+            updatePasswordService.updatePassword(updatePasswordDto, roleList.get(0));
+
+            returnObject.setStatus(ReturnObject.SUCCESS);
+            String errorMessage = "Đổi mật khẩu thành công!";
+            returnObject.setMessage(errorMessage);
 
             /* _________ STRATEGY PATTERN _________ */
         }
