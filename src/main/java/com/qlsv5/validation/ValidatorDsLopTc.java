@@ -6,7 +6,7 @@ import com.qlsv5.dto.DsLopTcDto;
 import com.qlsv5.entity.DsLopTcEntity;
 import com.qlsv5.entity.KeHoachNamEntity;
 import com.qlsv5.exception.BusinessException;
-import com.qlsv5.service.impl.repository.*;
+import com.qlsv5.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

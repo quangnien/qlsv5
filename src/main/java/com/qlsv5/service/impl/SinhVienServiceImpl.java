@@ -5,7 +5,7 @@ import com.qlsv5.dto.WrapTkbDto;
 import com.qlsv5.entity.*;
 import com.qlsv5.service.KeHoachNamService;
 import com.qlsv5.service.SinhVienService;
-import com.qlsv5.service.impl.repository.*;
+import com.qlsv5.repository.*;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.qlsv5.service.impl;
 
 import com.qlsv5.entity.KhoaEntity;
-import com.qlsv5.service.impl.repository.KhoaRepository;
+import com.qlsv5.repository.KhoaRepository;
 import com.qlsv5.service.KhoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -2,8 +2,8 @@ package com.qlsv5.service.impl;
 
 import com.qlsv5.entity.DiemEntity;
 import com.qlsv5.entity.DsLopTcEntity;
-import com.qlsv5.service.impl.repository.DiemRepository;
-import com.qlsv5.service.impl.repository.DsLopTcRepository;
+import com.qlsv5.repository.DiemRepository;
+import com.qlsv5.repository.DsLopTcRepository;
 import com.qlsv5.service.DiemService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

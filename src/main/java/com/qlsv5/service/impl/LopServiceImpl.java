@@ -1,7 +1,7 @@
 package com.qlsv5.service.impl;
 
 import com.qlsv5.entity.LopEntity;
-import com.qlsv5.service.impl.repository.LopRepository;
+import com.qlsv5.repository.LopRepository;
 import com.qlsv5.service.LopService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

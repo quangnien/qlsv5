@@ -1,7 +1,7 @@
 package com.qlsv5.service.impl;
 
 import com.qlsv5.entity.ChiTietLopTcEntity;
-import com.qlsv5.service.impl.repository.ChiTietLopTcRepository;
+import com.qlsv5.repository.ChiTietLopTcRepository;
 import com.qlsv5.service.ChiTietLopTcService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

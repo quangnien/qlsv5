@@ -5,7 +5,7 @@ import com.qlsv5.constant.MasterDataExceptionConstant;
 import com.qlsv5.dto.KhoaDto;
 import com.qlsv5.entity.KhoaEntity;
 import com.qlsv5.exception.BusinessException;
-import com.qlsv5.service.impl.repository.KhoaRepository;
+import com.qlsv5.repository.KhoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

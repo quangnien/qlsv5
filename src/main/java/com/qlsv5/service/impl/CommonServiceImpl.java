@@ -5,7 +5,7 @@ import com.qlsv5.entity.*;
 import com.qlsv5.enumdef.XepLoaiEnum;
 import com.qlsv5.payload.request.SignupRequest;
 import com.qlsv5.service.CommonService;
-import com.qlsv5.service.impl.repository.*;
+import com.qlsv5.repository.*;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

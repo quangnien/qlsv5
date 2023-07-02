@@ -1,7 +1,7 @@
 package com.qlsv5.security.jwt;
 
 import com.qlsv5.entity.TokenRefreshTokenPairEntity;
-import com.qlsv5.service.impl.repository.TokenRefreshTokenPairRepository;
+import com.qlsv5.repository.TokenRefreshTokenPairRepository;
 import com.qlsv5.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;

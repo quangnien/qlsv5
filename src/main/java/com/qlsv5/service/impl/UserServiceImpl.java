@@ -1,7 +1,7 @@
 package com.qlsv5.service.impl;
 
 import com.qlsv5.entity.UserEntity;
-import com.qlsv5.service.impl.repository.UserRepository;
+import com.qlsv5.repository.UserRepository;
 import com.qlsv5.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
