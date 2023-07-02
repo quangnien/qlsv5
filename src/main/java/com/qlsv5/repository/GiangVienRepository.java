@@ -5,18 +5,16 @@
  * Author       ：phatvt
  * Change log   ：2018/01/31：01-00 phatvt create a new
  ******************************************************************************/
-package com.qlsv5.service.impl.repository;
+package com.qlsv5.repository;
 
-import com.qlsv5.dto.TkbDto;
-import com.qlsv5.entity.GiangVienEntity;
-import com.qlsv5.entity.SinhVienEntity;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import java.util.Date;
-import java.util.List;
-import org.springframework.data.domain.Pageable;
+import com.qlsv5.entity.GiangVienEntity;
 
 public interface GiangVienRepository extends MongoRepository<GiangVienEntity, String> {
     int countGiangVienByMaGv(String maGiangVien);
